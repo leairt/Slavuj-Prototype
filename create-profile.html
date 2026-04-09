@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>славуј — create profile</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="photos/logo_sticker.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="photos/logo_sticker.png" />
+  <link rel="apple-touch-icon" href="photos/logo_sticker.png" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --muted: #666666;
+      --line: #dddddd;
+      --soft: #f5f5f5;
+      --dark: #171717;
+      --container: min(1120px, calc(100% - 40px));
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    body.is-ready {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body.is-leaving {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner,
+    .shell,
+    .footer-grid {
+      width: var(--container);
+      margin: 0 auto;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      height: 52px;
+      width: auto;
+      object-fit: contain;
+      transform: translateY(3px);
+    }
+
+    .shell {
+      padding: 16px 0 20px;
+    }
+
+    .wizard {
+      width: min(650px, 100%);
+      margin: 0 auto;
+      border: 1px solid var(--line);
+      padding: 18px;
+      min-height: min(500px, calc(100vh - 160px));
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 16px;
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.015), rgba(0, 0, 0, 0)),
+        #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
+    }
+
+    .wizard-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--line);
+    }
+
+    .progress-dot.is-active {
+      background: var(--text);
+    }
+
+    .wizard-count {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .wizard-body {
+      position: relative;
+      min-height: 300px;
+    }
+
+    .step {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-rows: 1fr;
+      gap: 10px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(12px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .step.is-active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+
+    .step-head {
+      display: grid;
+      gap: 2px;
+    }
+
+    .step-title {
+      font-size: clamp(1.35rem, 3vw, 1.9rem);
+      line-height: 0.96;
+      letter-spacing: -0.06em;
+      max-width: none;
+      white-space: nowrap;
+    }
+
+    .step-shell {
+      display: grid;
+      align-content: start;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      min-height: 100%;
+      border-radius: 0;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04);
+    }
+
+    .step[data-step="1"] .step-shell {
+      align-content: center;
+    }
+
+    .step[data-step="1"] .step-head {
+      margin-top: -18px;
+    }
+
+    .step-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(180px, 0.8fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .step-side {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .field-list {
+      display: grid;
+      gap: 8px;
+      width: min(360px, 100%);
+      justify-self: center;
+    }
+
+    .field input {
+      width: 100%;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--text);
+      background: #ffffff;
+      color: var(--text);
+      font: inherit;
+      border-radius: 0;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.03);
+    }
+
+    .avatar-upload {
+      display: grid;
+      grid-template-columns: minmax(96px, 1fr) minmax(0, 2fr);
+      gap: 18px;
+      align-items: center;
+      min-height: 168px;
+    }
+
+    .avatar-preview {
+      width: 96px;
+      height: 96px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      object-fit: cover;
+      object-position: 36% 18%;
+      transform: scale(1.58);
+      overflow: hidden;
+      background: #ffffff;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .avatar-picker {
+      position: relative;
+      width: fit-content;
+      display: flex;
+      justify-content: center;
+      justify-self: center;
+    }
+
+    .upload-label {
+      position: absolute;
+      right: -24px;
+      bottom: -22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--text);
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--text);
+      font-size: 1.7rem;
+      line-height: 1;
+      cursor: default;
+      pointer-events: none;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    .upload-input {
+      display: none;
+    }
+
+    .username-block {
+      display: grid;
+      align-content: center;
+      justify-items: start;
+      gap: 8px;
+    }
+
+    .username-field {
+      width: min(320px, 100%);
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--text);
+      background: #ffffff;
+      color: var(--text);
+      font: inherit;
+      border-radius: 0;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.03);
+    }
+
+    .genre-search {
+      width: 100%;
+      min-height: 42px;
+      padding: 0 14px 0 44px;
+      border: 1px solid var(--text);
+      background: #ffffff;
+      color: var(--text);
+      font: inherit;
+      border-radius: 0;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.03);
+    }
+
+    .search-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .search-icon::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 10px;
+      height: 10px;
+      border: 1.5px solid var(--muted);
+      border-radius: 999px;
+    }
+
+    .search-icon::after {
+      content: "";
+      position: absolute;
+      right: 1px;
+      bottom: 1px;
+      width: 6px;
+      height: 1.5px;
+      background: var(--muted);
+      transform: rotate(45deg);
+      transform-origin: right center;
+    }
+
+    .selected-genres,
+    .genre-results {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .genre-block {
+      display: grid;
+      gap: 12px;
+    }
+
+    .genre-group {
+      display: grid;
+      gap: 8px;
+    }
+
+    .genre-group.results-group {
+      width: 100%;
+      min-height: 0;
+    }
+
+    .group-title {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .genre-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--text);
+      font-size: 0.82rem;
+      cursor: pointer;
+      border-radius: 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .genre-chip.is-selected {
+      border-color: var(--text);
+      background: var(--soft);
+    }
+
+    .genre-chip.is-disabled {
+      opacity: 0.45;
+    }
+
+    .genre-chip.is-search-result::before {
+      content: "+";
+      margin-right: 8px;
+      color: var(--muted);
+    }
+
+    .results-scroll {
+      max-height: 152px;
+      overflow-y: auto;
+      padding-right: 6px;
+      scrollbar-width: thin;
+      scrollbar-color: #bcbcbc transparent;
+    }
+
+    .results-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .results-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .results-scroll::-webkit-scrollbar-thumb {
+      background: #bcbcbc;
+    }
+
+    .chip-remove {
+      margin-left: 10px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .check-list {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .check-list li {
+      padding-top: 8px;
+    }
+
+    .review-list {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .review-layout {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .review-reveal,
+    .review-row {
+      display: grid;
+      gap: 12px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    .review-row {
+      grid-template-columns: 88px 1fr;
+      align-items: center;
+      padding: 6px 0;
+    }
+
+    .review-reveal.is-visible,
+    .review-row.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .review-key {
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .review-value {
+      color: var(--text);
+      font-size: 0.92rem;
+      line-height: 1.35;
+    }
+
+    .review-avatar {
+      width: 120px;
+      height: 120px;
+      aspect-ratio: 1 / 1;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      object-fit: cover;
+      object-position: 36% 18%;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+      justify-self: center;
+    }
+
+    .review-genres {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 4px;
+    }
+
+    .wizard-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 0;
+      min-height: 46px;
+    }
+
+    .wizard-actions-left,
+    .wizard-actions-right {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--text);
+      background: #ffffff;
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+      font-size: 1.2rem;
+      line-height: 1;
+      border-radius: 0;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+      position: relative;
+      color: var(--text);
+    }
+
+    .nav-arrow.primary {
+      background: var(--text);
+      color: #ffffff;
+    }
+
+    .nav-text-button {
+      min-width: 152px;
+      padding: 0 18px;
+      width: auto;
+      font-size: 0.92rem;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-text-button::before {
+      display: none;
+    }
+
+    .nav-arrow[disabled] {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    .nav-arrow::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      position: absolute;
+    }
+
+    .nav-arrow.prev::before {
+      transform: rotate(135deg);
+      margin-left: 4px;
+    }
+
+    .nav-arrow.next::before,
+    .nav-arrow.finish::before {
+      transform: rotate(-45deg);
+      margin-right: 4px;
+    }
+
+    .nav-arrow.skip::before,
+    .nav-arrow.skip::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      position: absolute;
+      transform: rotate(-45deg);
+    }
+
+    .nav-arrow.skip::before {
+      margin-right: 8px;
+    }
+
+    .nav-arrow.skip::after {
+      margin-right: -2px;
+    }
+
+    .footer {
+      background: #171717;
+      padding: 24px 0 36px;
+      margin-top: 0;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+    }
+
+    .footer-left {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .footer-grid h3 {
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    .footer-grid ul {
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+
+    .footer-grid p,
+    .footer-grid li,
+    .footer-credit {
+      color: rgba(255,255,255,0.72);
+    }
+
+    .footer-logo {
+      width: 120px;
+      height: auto;
+      object-fit: contain;
+      margin-bottom: 14px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 8px;
+      text-align: right;
+    }
+
+    .footer-credit {
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 860px) {
+      .step-split,
+      .wizard-actions,
+      .footer-grid,
+      .footer-left {
+        grid-template-columns: 1fr;
+      }
+
+      .wizard-actions {
+        display: grid;
+      }
+
+      .wizard {
+        min-height: auto;
+      }
+
+      .wizard-body {
+        min-height: 320px;
+      }
+
+      .avatar-upload {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .username-block {
+        justify-items: center;
+      }
+
+      .footer-brand {
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .selected-genres,
+      .genre-results {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="photos/logo.png" alt="славуј logo" />
+        <img class="brand-name" src="photos/name.png" alt="славуј" />
+      </a>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="onboarding">
+      <div class="wizard">
+        <div class="wizard-top">
+          <div class="progress" aria-label="Create profile steps">
+            <span class="progress-dot is-active"></span>
+            <span class="progress-dot"></span>
+            <span class="progress-dot"></span>
+            <span class="progress-dot"></span>
+          </div>
+          <span class="wizard-count" id="wizard-count">1 / 4</span>
+        </div>
+
+        <div class="wizard-body">
+          <section class="step is-active" data-step="1">
+            <div class="step-shell">
+              <div class="step-head">
+                <h2 class="step-title">Create account.</h2>
+              </div>
+              <div class="field-list">
+                <div class="field">
+                  <label class="field-label" for="create-email">Email</label>
+                  <input id="create-email" type="email" placeholder="mark0vka@gmail.com" value="mark0vka@gmail.com" />
+                </div>
+                <div class="field">
+                  <label class="field-label" for="create-password">Password</label>
+                  <input id="create-password" type="password" placeholder="Password" minlength="12" pattern="(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{12,}" value="Mark0vka!2026" />
+                </div>
+                <div class="field">
+                  <label class="field-label" for="repeat-password">Repeat password</label>
+                  <input id="repeat-password" type="password" placeholder="Repeat password" value="Mark0vka!2026" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="step" data-step="2">
+            <div class="step-shell">
+              <div class="step-head">
+                <h2 class="step-title">Your profile.</h2>
+              </div>
+              <div class="avatar-upload">
+                <div class="avatar-picker">
+                  <img class="avatar-preview" id="avatar-preview" src="photos/account_profile.jpeg" alt="Profile preview" />
+                  <label class="upload-label" for="avatar-input" aria-hidden="true">+</label>
+                  <input class="upload-input" id="avatar-input" type="file" accept="image/*" />
+                </div>
+                <div class="username-block">
+                  <label class="field-label" for="profile-username">Username</label>
+                  <input class="username-field" id="profile-username" type="text" value="mark0vka" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="step" data-step="3">
+            <div class="step-shell">
+              <div class="step-head">
+                <h2 class="step-title">Make the taste yours.</h2>
+              </div>
+              <div class="search-wrap">
+                <span class="search-icon" aria-hidden="true"></span>
+                <input class="genre-search" id="genre-search" type="search" placeholder="Search genres" />
+              </div>
+              <div class="genre-block">
+                <div class="genre-group">
+                  <span class="group-title">Selected</span>
+                  <div class="selected-genres">
+                    <button class="genre-chip is-selected" type="button">rock <span class="chip-remove">×</span></button>
+                    <button class="genre-chip is-selected" type="button">grunge <span class="chip-remove">×</span></button>
+                    <button class="genre-chip is-selected" type="button">alternative rock <span class="chip-remove">×</span></button>
+                  </div>
+                </div>
+                <div class="genre-group results-group">
+                  <span class="group-title">Results</span>
+                  <div class="results-scroll">
+                    <div class="genre-results">
+                      <button class="genre-chip is-search-result is-selected is-disabled" type="button" data-genre="rock">rock</button>
+                      <button class="genre-chip is-search-result is-selected is-disabled" type="button" data-genre="grunge">grunge</button>
+                      <button class="genre-chip is-search-result is-selected is-disabled" type="button" data-genre="alternative rock">alternative rock</button>
+                      <button class="genre-chip is-search-result" type="button" data-genre="classic rock">classic rock</button>
+                      <button class="genre-chip is-search-result" type="button" data-genre="indie rock">indie rock</button>
+                      <button class="genre-chip is-search-result" type="button" data-genre="garage rock">garage rock</button>
+                      <button class="genre-chip is-search-result" type="button" data-genre="post-punk">post-punk</button>
+                      <button class="genre-chip is-search-result" type="button" data-genre="new wave">new wave</button>
+                      <button class="genre-chip is-search-result" type="button" data-genre="dance pop">dance pop</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="step" data-step="4">
+            <div class="step-shell">
+              <div class="step-head">
+                <h2 class="step-title">Review.</h2>
+              </div>
+              <div class="review-layout">
+                <img class="review-avatar review-reveal" data-review-row id="review-avatar" src="photos/account_profile.jpeg" alt="Review avatar" />
+                <ul class="review-list">
+                  <li class="review-row" data-review-row>
+                    <span class="review-key">Email</span>
+                    <span class="review-value" id="review-email">mark0vka@gmail.com</span>
+                  </li>
+                  <li class="review-row" data-review-row>
+                    <span class="review-key">Username</span>
+                    <span class="review-value" id="review-username">mark0vka</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="review-row" data-review-row>
+                <span class="review-key">Genres</span>
+                <div class="review-genres" id="review-genres">
+                  <span class="genre-chip is-selected">rock</span>
+                  <span class="genre-chip is-selected">grunge</span>
+                  <span class="genre-chip is-selected">alternative rock</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="wizard-actions">
+          <div class="wizard-actions-left">
+            <button class="nav-arrow prev" id="back-step" type="button" disabled aria-label="Previous step"></button>
+          </div>
+          <div class="wizard-actions-right">
+            <button class="nav-arrow primary next" id="next-step" type="button" aria-label="Next step"></button>
+            <a class="nav-arrow nav-text-button primary finish" id="finish-step" href="account.html" style="display:none;" aria-label="Create profile">Create profile</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-left">
+        <div><h3>Project</h3><p>Univerzitet u Beogradu</p><p>Elektrotehnicki fakultet</p><p>Principi softverskog inženjerstva</p></div>
+        <div><h3>Team Slavujci</h3><ul><li>Dusan Korizma</li><li>Lea Irt</li><li>Marko Misovski</li><li>Mark Možarovski</li></ul></div>
+      </div>
+      <div class="footer-brand"><img class="footer-logo" src="photos/logo_black.png" alt="slavuj black logo" /><p class="footer-credit">Illustrations by Lea Irt</p></div>
+    </div>
+  </footer>
+
+  <script>
+    requestAnimationFrame(() => {
+      document.body.classList.add("is-ready");
+    });
+
+    const currentFile = window.location.pathname.split("/").pop() || "index.html";
+
+    document.querySelectorAll('a[href]').forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      if (href.startsWith("#")) return;
+
+      link.addEventListener("click", (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+        if (link.classList.contains("brand") && currentFile === "index.html") {
+          event.preventDefault();
+          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+          return;
+        }
+
+        event.preventDefault();
+        document.body.classList.remove("is-ready");
+        document.body.classList.add("is-leaving");
+        window.setTimeout(() => {
+          window.location.href = link.href;
+        }, 180);
+      });
+    });
+
+    const steps = Array.from(document.querySelectorAll(".step"));
+    const dots = Array.from(document.querySelectorAll(".progress-dot"));
+    const count = document.querySelector("#wizard-count");
+    const backStep = document.querySelector("#back-step");
+    const nextStep = document.querySelector("#next-step");
+    const finishStep = document.querySelector("#finish-step");
+    const genreSearch = document.querySelector("#genre-search");
+    const genreButtons = Array.from(document.querySelectorAll("[data-genre]"));
+    const avatarInput = document.querySelector("#avatar-input");
+    const avatarPreview = document.querySelector("#avatar-preview");
+    const emailInput = document.querySelector("#create-email");
+    const usernameInput = document.querySelector("#profile-username");
+    const reviewEmail = document.querySelector("#review-email");
+    const reviewUsername = document.querySelector("#review-username");
+    const reviewGenres = document.querySelector("#review-genres");
+    const reviewAvatar = document.querySelector("#review-avatar");
+    const reviewRows = Array.from(document.querySelectorAll("[data-review-row]"));
+    let currentStepIndex = 0;
+    let reviewTimerIds = [];
+
+    const getSelectedGenres = () =>
+      Array.from(document.querySelectorAll(".selected-genres .genre-chip"))
+        .map((chip) => chip.childNodes[0].textContent.trim())
+        .filter(Boolean);
+
+    const syncReview = () => {
+      if (reviewEmail && emailInput) {
+        reviewEmail.textContent = emailInput.value || "mark0vka@gmail.com";
+      }
+
+      if (reviewUsername && usernameInput) {
+        reviewUsername.textContent = usernameInput.value || "mark0vka";
+      }
+
+      if (reviewGenres) {
+        const selected = getSelectedGenres();
+        reviewGenres.innerHTML = selected.length
+          ? selected.map((genre) => `<span class="genre-chip is-selected">${genre}</span>`).join("")
+          : '<span class="genre-chip">No genres selected</span>';
+      }
+
+      if (reviewAvatar && avatarPreview) {
+        reviewAvatar.src = avatarPreview.src;
+      }
+    };
+
+    const revealReviewRows = () => {
+      reviewTimerIds.forEach((id) => window.clearTimeout(id));
+      reviewTimerIds = [];
+      reviewRows.forEach((row) => row.classList.remove("is-visible"));
+      reviewRows.forEach((row, index) => {
+        const timerId = window.setTimeout(() => {
+          row.classList.add("is-visible");
+        }, index * 120);
+        reviewTimerIds.push(timerId);
+      });
+    };
+
+    const renderStep = () => {
+      steps.forEach((step, index) => {
+        step.classList.toggle("is-active", index === currentStepIndex);
+      });
+
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("is-active", index === currentStepIndex);
+      });
+
+      if (count) {
+        count.textContent = `${currentStepIndex + 1} / ${steps.length}`;
+      }
+
+      if (backStep) {
+        backStep.disabled = currentStepIndex === 0;
+        backStep.style.visibility = currentStepIndex === 0 ? "hidden" : "visible";
+      }
+
+      const isLast = currentStepIndex === steps.length - 1;
+      if (nextStep) {
+        nextStep.style.display = isLast ? "none" : "inline-flex";
+      }
+
+      if (finishStep) {
+        finishStep.style.display = isLast ? "inline-flex" : "none";
+      }
+
+      if (isLast) {
+        syncReview();
+        revealReviewRows();
+      } else {
+        reviewTimerIds.forEach((id) => window.clearTimeout(id));
+        reviewTimerIds = [];
+        reviewRows.forEach((row) => row.classList.remove("is-visible"));
+      }
+    };
+
+    if (backStep) {
+      backStep.addEventListener("click", () => {
+        currentStepIndex = Math.max(0, currentStepIndex - 1);
+        renderStep();
+      });
+    }
+
+    if (nextStep) {
+      nextStep.addEventListener("click", () => {
+        currentStepIndex = Math.min(steps.length - 1, currentStepIndex + 1);
+        renderStep();
+      });
+    }
+
+    if (genreSearch) {
+      genreSearch.addEventListener("input", () => {
+        const term = genreSearch.value.trim().toLowerCase();
+        genreButtons.forEach((button) => {
+          const genre = (button.dataset.genre || "").toLowerCase();
+          button.style.display = genre.includes(term) ? "inline-flex" : "none";
+        });
+      });
+    }
+
+    if (avatarInput && avatarPreview) {
+      avatarInput.addEventListener("change", () => {
+        const [file] = avatarInput.files || [];
+        if (!file) return;
+        avatarPreview.src = URL.createObjectURL(file);
+        syncReview();
+      });
+    }
+
+    if (emailInput) {
+      emailInput.addEventListener("input", syncReview);
+    }
+
+    if (usernameInput) {
+      usernameInput.addEventListener("input", syncReview);
+    }
+
+    renderStep();
+  </script>
+</body>
+</html>

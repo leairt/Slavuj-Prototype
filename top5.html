@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>славуј — top 5</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="photos/logo_sticker.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="photos/logo_sticker.png" />
+  <link rel="apple-touch-icon" href="photos/logo_sticker.png" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --muted: #666666;
+      --line: #dddddd;
+      --soft: #f5f5f5;
+      --dark: #171717;
+      --container: min(1120px, calc(100% - 40px));
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    body.is-ready {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body.is-leaving {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner,
+    .shell,
+    .footer-grid {
+      width: var(--container);
+      margin: 0 auto;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      height: 52px;
+      width: auto;
+      object-fit: contain;
+      transform: translateY(3px);
+    }
+
+    .shell {
+      padding: 0 0 40px;
+    }
+
+    .game {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      align-items: start;
+    }
+
+    .top5-page {
+      display: grid;
+      gap: 22px;
+    }
+
+    .game-strip {
+      background: #171717;
+      color: #ffffff;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      padding: 24px calc(50vw - min(560px, calc(100% - 20px)));
+    }
+
+    .game-card {
+      padding: 20px;
+      display: grid;
+      gap: 18px;
+      min-height: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    .game-strip .hero-copy h1,
+    .game-strip .hero-meta,
+    .game-strip .guess-label,
+    .game-strip .guess-feedback,
+    .game-strip .slot-title,
+    .game-strip .stat-value {
+      color: #ffffff;
+    }
+
+    .game-strip .artist-tag,
+    .game-strip .stat-label,
+    .game-strip .slot-streams {
+      color: #ffffff;
+    }
+
+    .game-strip .eyebrow {
+      border-color: #ffffff;
+      background: #ffffff;
+      color: #171717;
+    }
+
+    .game-strip .stat,
+    .game-strip .guess-input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: none;
+    }
+
+    .game-strip .answer-slot {
+      background: #ffffff;
+      border: 1px solid #ffffff;
+      box-shadow: none;
+    }
+
+    .game-strip .guess-input {
+      color: #ffffff;
+    }
+
+    .game-strip .guess-input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .game-strip .answer-slot.is-filled {
+      background: #171717;
+      border-color: rgba(255, 255, 255, 0.24);
+      box-shadow: none;
+    }
+
+    .game-strip .answer-slot.is-filled .slot-index {
+      color: #ffffff;
+    }
+
+    .game-strip .answer-slot:not(.is-filled) .slot-index {
+      color: #171717;
+    }
+
+    .game-strip .slot-placeholder,
+    .game-strip .answer-slot:not(.is-filled) .slot-streams {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 10px;
+      border: 1px solid var(--text);
+      background: #ffffff;
+      color: #171717;
+      font-size: 0.76rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      width: fit-content;
+      margin-bottom: 14px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .artist-art {
+      aspect-ratio: 1 / 1;
+      min-height: 180px;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.18)), url("photos/spotify/ekv.png") center center / cover no-repeat;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+    }
+
+    .artist-art::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 44%;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.62));
+    }
+
+    .artist-tag {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      z-index: 1;
+      color: #ffffff;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .hero-copy {
+      display: grid;
+      align-content: space-between;
+      gap: 10px;
+      padding-left: 12px;
+      min-width: 0;
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(1.2rem, 3.4vw, 2.1rem);
+      line-height: 0.9;
+      letter-spacing: -0.085em;
+      max-width: none;
+      white-space: nowrap;
+    }
+
+    .hero-meta {
+      margin-top: 6px;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .stat {
+      min-height: 58px;
+      padding: 10px;
+      background: var(--soft);
+      display: grid;
+      align-content: space-between;
+      gap: 6px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .stat:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.06);
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      font-size: clamp(0.95rem, 2.4vw, 1.35rem);
+      letter-spacing: -0.06em;
+      line-height: 0.95;
+    }
+
+    .timer-stat {
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        "label label"
+        "value toggle";
+      align-items: center;
+      column-gap: 8px;
+      row-gap: 6px;
+    }
+
+    .timer-stat .stat-label {
+      grid-area: label;
+    }
+
+    .timer-stat .stat-value {
+      grid-area: value;
+    }
+
+    .timer-toggle {
+      grid-area: toggle;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      appearance: none;
+      -webkit-appearance: none;
+      box-shadow: none;
+      cursor: pointer;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .timer-toggle::before,
+    .timer-toggle::after {
+      content: "";
+      display: block;
+      width: 3px;
+      height: 12px;
+      background: #ffffff;
+      border-radius: 999px;
+      transition: transform 0.18s ease, opacity 0.18s ease;
+    }
+
+    .timer-toggle::before {
+      margin-right: 4px;
+    }
+
+    .timer-toggle:hover {
+      opacity: 0.78;
+      transform: translateY(-1px);
+    }
+
+    .timer-toggle:focus,
+    .timer-toggle:focus-visible {
+      outline: none;
+      box-shadow: none;
+    }
+
+    .timer-toggle.is-paused {
+      opacity: 0.85;
+    }
+
+    .timer-toggle:disabled {
+      opacity: 0.35;
+      cursor: default;
+      pointer-events: none;
+      transform: none;
+    }
+
+    .guess-zone {
+      display: grid;
+      gap: 10px;
+      width: min(560px, 100%);
+      justify-self: center;
+    }
+
+    .guess-label {
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .guess-input-wrap {
+      position: relative;
+    }
+
+    .guess-input {
+      width: 100%;
+      min-height: 54px;
+      padding: 0 18px;
+      border: 1px solid var(--text);
+      background: #ffffff;
+      color: var(--text);
+      font: inherit;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.05);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .guess-input:focus {
+      outline: none;
+      transform: translateY(-1px);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.08);
+    }
+
+    .guess-feedback {
+      display: none;
+    }
+
+    .answer-grid {
+      display: grid;
+      gap: 8px;
+      width: min(560px, 100%);
+      justify-self: center;
+    }
+
+    .answer-slot {
+      width: 100%;
+      min-width: 0;
+      min-height: 58px;
+      height: 58px;
+      min-height: 58px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: 18px 42px 1fr;
+      gap: 12px;
+      align-items: center;
+      transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .answer-slot.is-filled {
+      border-color: var(--text);
+      background: var(--soft);
+      transform: none;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .slot-index {
+      font-size: 0.88rem;
+      letter-spacing: -0.04em;
+      color: var(--muted);
+    }
+
+    .slot-cover {
+      width: 42px;
+      height: 42px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      flex: 0 0 auto;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+    }
+
+    .answer-slot.is-filled .slot-cover {
+      opacity: 1;
+    }
+
+    .slot-copy {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .slot-title {
+      font-size: 0.92rem;
+      letter-spacing: -0.02em;
+      min-height: 1em;
+      line-height: 1.1;
+    }
+
+    .slot-placeholder {
+      display: block;
+      width: 100%;
+      height: 12px;
+      background: #4a4a4a;
+    }
+
+    .slot-streams {
+      color: var(--muted);
+      font-size: 0.72rem;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+      min-height: 1em;
+    }
+
+    .answer-slot.is-filled .slot-streams {
+      opacity: 1;
+    }
+
+    .answer-slot:not(.is-filled) .slot-streams {
+      display: block;
+      width: 78px;
+      height: 10px;
+      background: #4a4a4a;
+      color: transparent;
+      overflow: hidden;
+    }
+
+    .related {
+      display: grid;
+      gap: 12px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      line-height: 0.94;
+      letter-spacing: -0.08em;
+    }
+
+    .quiz-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .quiz-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--text);
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .quiz-row:hover,
+    .quiz-row:focus-visible {
+      transform: translateY(-3px);
+      background: var(--soft);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+    }
+
+    .quiz-cover {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .quiz-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .quiz-badge {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 24px;
+      padding: 0 8px;
+      border: 1px solid #4a4a4a;
+      background: #4a4a4a;
+      color: #ffffff;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .quiz-copy {
+      align-self: start;
+      padding-top: 6px;
+    }
+
+    .quiz-copy strong {
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      font-size: 1.05rem;
+      letter-spacing: -0.05em;
+      line-height: 0.95;
+      font-weight: 700;
+    }
+
+    .quiz-meta-line {
+      margin-top: 10px;
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    .footer {
+      background: #171717;
+      padding: 24px 0 36px;
+      margin-top: 0;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+    }
+
+    .footer-left {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .footer-grid h3 {
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    .footer-grid ul {
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+
+    .footer-grid p,
+    .footer-grid li,
+    .footer-credit {
+      color: rgba(255,255,255,0.72);
+    }
+
+    .footer-logo {
+      width: 120px;
+      height: auto;
+      object-fit: contain;
+      margin-bottom: 14px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 8px;
+      text-align: right;
+    }
+
+    .footer-credit {
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 920px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .section-head {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .section-head p {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .footer-grid,
+      .footer-left {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-brand {
+        align-items: flex-start;
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        padding: 24px 0 40px;
+      }
+
+      .game-card,
+      .side-card {
+        padding: 18px;
+      }
+
+      .stats-row {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy {
+        padding-left: 0;
+      }
+
+      .quiz-list {
+        grid-template-columns: 1fr;
+      }
+
+      .answer-slot {
+        grid-template-columns: 18px 36px 1fr;
+      }
+
+      .slot-cover {
+        width: 36px;
+        height: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="photos/logo.png" alt="славуј logo" />
+        <img class="brand-name" src="photos/name.png" alt="славуј" />
+      </a>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div class="top5-page">
+      <section class="game-strip">
+        <section class="game">
+          <div class="game-card">
+            <div class="hero">
+            <div class="artist-art">
+            </div>
+            <div class="hero-copy">
+              <div>
+                <span class="eyebrow">TOP 5</span>
+                <h1>Can you name Ekatarina Velika's top 5?</h1>
+                <div class="hero-meta">Artist: Ekatarina Velika</div>
+              </div>
+
+                <div class="stats-row">
+                  <div class="stat timer-stat">
+                    <span class="stat-label">Timer</span>
+                    <strong class="stat-value" id="timer">00:00</strong>
+                    <button class="timer-toggle" id="timer-toggle" type="button" aria-label="Pause timer" aria-pressed="false"></button>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-label">Found</span>
+                    <strong class="stat-value" id="found-count">0/5</strong>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-label">Mode</span>
+                    <strong class="stat-value" id="mode-value">Live</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="guess-zone">
+              <label class="guess-label" for="guess-input">Guess a song.</label>
+              <div class="guess-input-wrap">
+                <input class="guess-input" id="guess-input" type="text" autocomplete="off" placeholder="Start typing..." />
+              </div>
+              <p class="guess-feedback" id="guess-feedback"></p>
+            </div>
+
+            <div class="answer-grid" id="answer-grid">
+              <div class="answer-slot" data-answer="krug" data-rank="1">
+                <span class="slot-index">1</span>
+                <img class="slot-cover" src="photos/spotify/ekv2.png" alt="EKV cover" />
+                <div class="slot-copy">
+                  <span class="slot-title"><span class="slot-placeholder"></span></span>
+                  <span class="slot-streams">2.200.741</span>
+                </div>
+              </div>
+              <div class="answer-slot" data-answer="ti si sav moj bol" data-rank="2">
+                <span class="slot-index">2</span>
+                <img class="slot-cover" src="photos/spotify/ekv.png" alt="EKV cover" />
+                <div class="slot-copy">
+                  <span class="slot-title"><span class="slot-placeholder"></span></span>
+                  <span class="slot-streams">15.2M</span>
+                </div>
+              </div>
+              <div class="answer-slot" data-answer="ljubav" data-rank="3">
+                <span class="slot-index">3</span>
+                <img class="slot-cover" src="photos/spotify/ekv.png" alt="EKV cover" />
+                <div class="slot-copy">
+                  <span class="slot-title"><span class="slot-placeholder"></span></span>
+                  <span class="slot-streams">13.9M</span>
+                </div>
+              </div>
+              <div class="answer-slot" data-answer="zemlja" data-rank="4">
+                <span class="slot-index">4</span>
+                <img class="slot-cover" src="photos/spotify/ekv.png" alt="EKV cover" />
+                <div class="slot-copy">
+                  <span class="slot-title"><span class="slot-placeholder"></span></span>
+                  <span class="slot-streams">1.378.933</span>
+                </div>
+              </div>
+              <div class="answer-slot" data-answer="oci boje meda" data-rank="5">
+                <span class="slot-index">5</span>
+                <img class="slot-cover" src="photos/spotify/ekv.png" alt="EKV cover" />
+                <div class="slot-copy">
+                  <span class="slot-title"><span class="slot-placeholder"></span></span>
+                  <span class="slot-streams">11.1M</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="related">
+        <div class="section-head">
+          <div>
+            <h2>Keep the run going.</h2>
+          </div>
+        </div>
+
+        <div class="quiz-list">
+          <a class="quiz-row" href="top5.html">
+            <div class="quiz-cover">
+              <img src="photos/spotify/haustor.png" alt="Haustor quiz cover" />
+            </div>
+            <div class="quiz-copy">
+              <span class="quiz-badge">Top 5</span>
+              <strong>Can you name Haustor's top 5?</strong>
+              <div class="quiz-meta-line">Artist: Haustor</div>
+            </div>
+          </a>
+
+          <a class="quiz-row" href="fancheck.html">
+            <div class="quiz-cover">
+              <img src="photos/spotify/goblini.png" alt="Goblini quiz cover" />
+            </div>
+            <div class="quiz-copy">
+              <span class="quiz-badge">Fan Check</span>
+              <strong>Are you really Goblini's No.1 fan?</strong>
+              <div class="quiz-meta-line">Artist: Goblini</div>
+            </div>
+          </a>
+
+          <a class="quiz-row" href="imposter.html">
+            <div class="quiz-cover">
+              <img src="photos/spotify/ekv.png" alt="EKV album quiz cover" />
+            </div>
+            <div class="quiz-copy">
+              <span class="quiz-badge">Imposter</span>
+              <strong>Which track does not belong on Ljubav?</strong>
+              <div class="quiz-meta-line">Album: Ljubav</div>
+            </div>
+          </a>
+
+          <a class="quiz-row" href="imposter.html">
+            <div class="quiz-cover">
+              <img src="photos/spotify/paket.png" alt="Ex-yu rock quiz cover" />
+            </div>
+            <div class="quiz-copy">
+              <span class="quiz-badge">Fan Check</span>
+              <strong>How well do you know ex-yu rock?</strong>
+              <div class="quiz-meta-line">Genre: ex-yu rock</div>
+            </div>
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-left">
+        <div>
+          <h3>Project</h3>
+          <p>Univerzitet u Beogradu</p>
+          <p>Elektrotehnicki fakultet</p>
+          <p>Principi softverskog inženjerstva</p>
+        </div>
+        <div>
+          <h3>Team Slavujci</h3>
+          <ul>
+            <li>Dusan Korizma</li>
+            <li>Lea Irt</li>
+            <li>Marko Misovski</li>
+            <li>Mark Možarovski</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-brand">
+        <img class="footer-logo" src="photos/logo_black.png" alt="slavuj black logo" />
+        <p class="footer-credit">Illustrations by Lea Irt</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    requestAnimationFrame(() => document.body.classList.add("is-ready"));
+
+    const currentFile = window.location.pathname.split("/").pop() || "index.html";
+
+    document.querySelectorAll('a[href]').forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      if (href.startsWith("#")) return;
+
+      link.addEventListener("click", (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+        if (link.classList.contains("brand") && currentFile === "index.html") {
+          event.preventDefault();
+          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+          return;
+        }
+
+        event.preventDefault();
+        document.body.classList.remove("is-ready");
+        document.body.classList.add("is-leaving");
+        window.setTimeout(() => {
+          window.location.href = link.href;
+        }, 180);
+      });
+    });
+
+    const answers = [
+      { rank: 1, label: "Krug", key: "krug" },
+      { rank: 2, label: "Ti si sav moj bol", key: "ti si sav moj bol" },
+      { rank: 3, label: "Ljubav", key: "ljubav" },
+      { rank: 4, label: "Zemlja", key: "zemlja" },
+      { rank: 5, label: "Oci boje meda", key: "oci boje meda", alt: ["oči boje meda"] }
+    ];
+
+    const guessInput = document.querySelector("#guess-input");
+    const guessFeedback = document.querySelector("#guess-feedback");
+    const timerNode = document.querySelector("#timer");
+    const timerToggle = document.querySelector("#timer-toggle");
+    const modeValue = document.querySelector("#mode-value");
+    const foundCount = document.querySelector("#found-count");
+    const answerSlots = Array.from(document.querySelectorAll(".answer-slot"));
+
+    let found = new Set();
+    let elapsedMs = 0;
+    let runStartedAt = Date.now();
+    let timerId = null;
+    let finished = false;
+    let paused = false;
+
+    const normalize = (value) =>
+      value
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9\\s]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    const formatTime = (totalSeconds) => {
+      const mins = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+      const secs = String(totalSeconds % 60).padStart(2, "0");
+      return `${mins}:${secs}`;
+    };
+
+    const updateTimer = () => {
+      const liveElapsedMs = paused ? elapsedMs : elapsedMs + (Date.now() - runStartedAt);
+      const elapsed = Math.floor(liveElapsedMs / 1000);
+      if (timerNode) timerNode.textContent = formatTime(elapsed);
+    };
+
+    const syncPauseUi = () => {
+      if (timerToggle) {
+        timerToggle.disabled = finished;
+        timerToggle.classList.toggle("is-paused", paused);
+        timerToggle.setAttribute("aria-pressed", paused ? "true" : "false");
+        timerToggle.setAttribute("aria-label", paused ? "Resume timer" : "Pause timer");
+      }
+
+      if (modeValue) {
+        modeValue.textContent = paused ? "Paused" : "Live";
+      }
+
+      if (guessInput && !finished) {
+        guessInput.disabled = false;
+        guessInput.placeholder = "Start typing...";
+      }
+
+      if (guessFeedback && !finished && paused) {
+        guessFeedback.textContent = "Timer paused.";
+        guessFeedback.classList.remove("is-good");
+      }
+    };
+
+    const updateProgress = () => {
+      if (foundCount) foundCount.textContent = `${found.size}/5`;
+    };
+
+    const togglePause = () => {
+      if (finished) return;
+
+      if (paused) {
+        runStartedAt = Date.now();
+        paused = false;
+      } else {
+        elapsedMs += Date.now() - runStartedAt;
+        paused = true;
+      }
+
+      updateTimer();
+      syncPauseUi();
+    };
+
+    const revealAnswer = (answer) => {
+      const slot = answerSlots.find((item) => Number(item.dataset.rank) === answer.rank);
+      if (!slot) return;
+
+      const title = slot.querySelector(".slot-title");
+
+      slot.classList.add("is-filled");
+      title.textContent = answer.label;
+    };
+
+    const initialFound = ["krug", "zemlja"];
+    initialFound.forEach((key) => {
+      const answer = answers.find((item) => item.key === key);
+      if (!answer) return;
+      found.add(answer.key);
+      revealAnswer(answer);
+    });
+
+    const finalizeRun = () => {
+      if (!paused) {
+        elapsedMs += Date.now() - runStartedAt;
+      }
+
+      finished = true;
+      window.clearInterval(timerId);
+      paused = false;
+
+      const elapsed = Math.floor(elapsedMs / 1000);
+
+      if (guessFeedback) {
+        guessFeedback.textContent = `All five found in ${formatTime(elapsed)}.`;
+        guessFeedback.classList.add("is-good");
+      }
+      if (guessInput) {
+        guessInput.blur();
+        guessInput.disabled = true;
+        guessInput.placeholder = "Run complete";
+      }
+      if (timerToggle) {
+        timerToggle.disabled = true;
+        timerToggle.classList.remove("is-paused");
+        timerToggle.setAttribute("aria-pressed", "false");
+        timerToggle.setAttribute("aria-label", "Timer finished");
+      }
+      if (modeValue) {
+        modeValue.textContent = "Done";
+      }
+    };
+
+    if (guessInput) {
+      guessInput.addEventListener("input", () => {
+        if (finished) return;
+
+        const value = normalize(guessInput.value);
+        if (!value) {
+          if (guessFeedback && !finished) {
+            guessFeedback.textContent = "Top 5 waits for exact song titles.";
+            guessFeedback.classList.remove("is-good");
+          }
+          return;
+        }
+
+        const match = answers.find((answer) => {
+          const variants = [answer.key, ...(answer.alt || [])];
+          return variants.includes(value);
+        });
+
+        if (!match || found.has(match.key)) return;
+
+        found.add(match.key);
+        revealAnswer(match);
+        updateProgress();
+        guessInput.value = "";
+
+        if (guessFeedback) {
+          guessFeedback.textContent = `${match.label} locked in at #${match.rank}.`;
+          guessFeedback.classList.add("is-good");
+        }
+
+        if (found.size === answers.length) {
+          finalizeRun();
+        }
+      });
+    }
+
+    if (timerToggle) {
+      timerToggle.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        togglePause();
+      });
+
+      timerToggle.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        togglePause();
+      });
+    }
+
+    updateTimer();
+    updateProgress();
+    syncPauseUi();
+    timerId = window.setInterval(updateTimer, 1000);
+  </script>
+</body>
+</html>

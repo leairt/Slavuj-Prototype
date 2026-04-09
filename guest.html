@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>славуј — guest</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="photos/logo_sticker.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="photos/logo_sticker.png" />
+  <link rel="apple-touch-icon" href="photos/logo_sticker.png" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --muted: #666666;
+      --line: #dddddd;
+      --soft: #f5f5f5;
+      --dark: #171717;
+      --dark-line: rgba(255, 255, 255, 0.16);
+      --dark-muted: rgba(255, 255, 255, 0.68);
+      --container: min(1120px, calc(100% - 40px));
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    body.is-ready {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body.is-leaving {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .container {
+      width: var(--container);
+      margin: 0 auto;
+    }
+
+    .topbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      width: var(--container);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      height: 52px;
+      width: auto;
+      object-fit: contain;
+      transform: translateY(3px);
+    }
+
+    .topbar-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 40px;
+      font-size: 0.9rem;
+    }
+
+    .user-avatar {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      flex: 0 0 auto;
+      overflow: hidden;
+      object-fit: cover;
+    }
+
+    .user-label {
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    main {
+      padding: 0 0 48px;
+    }
+
+    .hero {
+      margin-bottom: 20px;
+      min-height: 1px;
+    }
+
+    .game-card p,
+    .game-meta span,
+    .quiz-row p,
+    .group-panel p {
+      color: var(--muted);
+    }
+
+    .hero p {
+      max-width: 30rem;
+      font-size: 1rem;
+    }
+
+    .mode-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--text);
+      font-size: 0.88rem;
+    }
+
+    .games-shell {
+      display: grid;
+      gap: 0;
+    }
+
+    .top-modes {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.9fr);
+      gap: 0;
+      align-items: stretch;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+    }
+
+    .game-section {
+      padding: 28px 0;
+    }
+
+    .section-head {
+      margin-bottom: 18px;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .creative-section {
+      background: var(--dark);
+      color: #ffffff;
+      padding: 28px 28px calc(28px + 1px) calc(50vw - min(560px, calc(100% - 20px)));
+    }
+
+    .creative-section .section-label {
+      color: #ffffff;
+    }
+
+    .creative-section .game-card {
+      background: transparent;
+      border-color: var(--dark-line);
+      color: #ffffff;
+    }
+
+    .creative-section .game-card:hover,
+    .creative-section .game-card:focus-visible {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .creative-section .game-number,
+    .creative-section .game-card p,
+    .creative-section .game-meta span {
+      color: var(--dark-muted);
+    }
+
+    .creative-section .game-meta {
+      border-top-color: var(--dark-line);
+    }
+
+    .quiz-section {
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    .group-section {
+      background: #3a3a3a;
+      color: #ffffff;
+      padding: 28px calc(50vw - min(560px, calc(100% - 20px))) calc(28px + 1px) 56px;
+    }
+
+    .group-section .section-label {
+      color: #ffffff;
+    }
+
+    .creative-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .game-card {
+      position: relative;
+      min-height: 220px;
+      padding: 18px;
+      border: 1px solid var(--text);
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .game-card:hover,
+    .game-card:focus-visible {
+      transform: translateY(-3px);
+      background: var(--soft);
+    }
+
+    .game-number {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .game-title {
+      font-size: clamp(1.5rem, 3vw, 2.3rem);
+      line-height: 0.92;
+      letter-spacing: -0.07em;
+      margin-bottom: 10px;
+    }
+
+    .game-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      font-size: 0.88rem;
+    }
+
+    .game-card.tall {
+      min-height: 220px;
+    }
+
+    .game-card.wide {
+      min-height: 220px;
+    }
+
+    .quiz-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .quiz-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 28px;
+    }
+
+    .page-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 42px;
+      height: 42px;
+      padding: 0 12px;
+      border: 1px solid var(--text);
+      background: #ffffff;
+      color: var(--text);
+      font: inherit;
+      cursor: default;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .page-button:hover,
+    .page-button:focus-visible {
+      background: #ffffff;
+      transform: none;
+    }
+
+    .page-button.is-active {
+      background: var(--text);
+      color: #ffffff;
+    }
+
+    .page-button.is-muted {
+      border-color: var(--line);
+      color: var(--muted);
+    }
+
+    .quiz-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 18px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid var(--text);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .quiz-row:hover,
+    .quiz-row:focus-visible {
+      transform: translateY(-3px);
+      background: var(--soft);
+    }
+
+    .quiz-cover {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .quiz-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .quiz-badge {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 24px;
+      padding: 0 8px;
+      border: 1px solid #4a4a4a;
+      background: #4a4a4a;
+      color: #ffffff;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .quiz-meta-line {
+      margin-top: 14px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .quiz-copy strong,
+    .group-panel strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 2.3rem;
+      letter-spacing: -0.05em;
+      line-height: 0.95;
+    }
+
+    .quiz-go {
+      display: none;
+    }
+
+    .quiz-copy strong {
+      font-size: 1.25rem;
+      margin-top: 12px;
+      margin-bottom: 8px;
+    }
+
+    .quiz-copy p {
+      display: none;
+    }
+
+    .quiz-copy {
+      align-self: start;
+      padding-top: 6px;
+    }
+
+    .group-panel {
+      min-height: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 28px;
+      transition: transform 0.2s ease, background 0.2s ease;
+      text-align: left;
+    }
+
+    .group-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 16px;
+      border: 1px solid #ffffff;
+      background: #ffffff;
+      color: #171717;
+      font-size: 0.9rem;
+      font-weight: 700;
+      align-self: flex-start;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .group-cta::before {
+      content: "";
+      width: 0;
+      height: 0;
+      margin-right: 10px;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 10px solid #171717;
+    }
+
+    .group-cta:hover,
+    .group-cta:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.08);
+    }
+
+    @media (max-width: 860px) {
+      .hero,
+      .section-head,
+      .top-modes,
+      .creative-grid,
+      .group-panel,
+      .quiz-row,
+      .quiz-list {
+        grid-template-columns: 1fr;
+      }
+
+      .group-side {
+        justify-items: start;
+      }
+
+      .group-section {
+        padding: 28px calc(50vw - min(560px, calc(100% - 20px)));
+      }
+
+      .creative-section {
+        padding: 28px calc(50vw - min(560px, calc(100% - 20px)));
+      }
+    }
+    .footer { background: #171717; padding: 24px 0 36px; margin-top: 0; }
+    .footer-grid { width: var(--container); margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; }
+    .footer-left { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .footer-grid h3 { font-size: 0.92rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; color: #ffffff; }
+    .footer-grid ul { list-style: none; display: grid; gap: 6px; }
+    .footer-grid p, .footer-grid li, .footer-credit { color: rgba(255,255,255,0.72); }
+    .footer-logo { width: 120px; height: auto; object-fit: contain; margin-bottom: 14px; }
+    .footer-brand { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 8px; text-align: right; }
+    .footer-credit { font-size: 0.9rem; }
+    @media (max-width: 900px) { .footer-grid, .footer-left { grid-template-columns: 1fr; } .footer-brand { align-items: flex-start; text-align: left; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="photos/logo.png" alt="славуј logo" />
+        <img class="brand-name" src="photos/name.png" alt="славуј" />
+      </a>
+      <div class="topbar-user" aria-label="Guest user">
+        <img class="user-avatar" src="photos/guest_profile.webp" alt="Guest profile" />
+        <span class="user-label">Guest</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <section class="games-shell">
+        <div class="top-modes">
+          <div class="game-section creative-section">
+            <div class="section-head">
+              <span class="section-label">Creative games</span>
+            </div>
+            <div class="creative-grid">
+              <a class="game-card tall" href="guest-paint.html">
+                <span class="game-number">01</span>
+                <div>
+                  <h2 class="game-title">Paint</h2>
+                  <p>Choose a color. Build a mood.</p>
+                </div>
+                <div class="game-meta">
+                  <span>Creative</span>
+                  <span>Play</span>
+                </div>
+              </a>
+
+              <a class="game-card wide" href="guest-paint.html">
+                <span class="game-number">02</span>
+                <div>
+                  <h2 class="game-title">Snake</h2>
+                  <p>Chain song titles into one flowing playlist.</p>
+                </div>
+                <div class="game-meta">
+                  <span>Wordplay</span>
+                  <span>Play</span>
+                </div>
+              </a>
+
+              <a class="game-card wide" href="guest-paint.html">
+                <span class="game-number">03</span>
+                <div>
+                  <h2 class="game-title">Secret Message</h2>
+                  <p>Hide a message through song initials.</p>
+                </div>
+                <div class="game-meta">
+                  <span>Message</span>
+                  <span>Play</span>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="game-section group-section">
+            <div class="section-head">
+              <span class="section-label">Group play</span>
+            </div>
+            <a class="group-panel" href="guest-group.html">
+              <strong>Create or join a group game.</strong>
+              <span class="group-cta">Start</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="game-section quiz-section">
+          <div class="section-head">
+            <span class="section-label">Quizzes</span>
+          </div>
+          <div class="quiz-list">
+            <a class="quiz-row" href="top5.html" data-search="top 5 the weeknd artist global hits">
+              <div class="quiz-cover"><img src="photos/guest/weeknd.png" alt="The Weeknd cover" /></div>
+              <div class="quiz-copy">
+                <span class="quiz-badge">Top 5</span>
+                <strong>Can you name The Weeknd's top 5?</strong>
+                <span class="quiz-meta-line">Artist: The Weeknd</span>
+              </div>
+              <span class="quiz-go">Open</span>
+            </a>
+
+            <a class="quiz-row" href="fancheck.html" data-search="fan check ariana grande artist pop">
+              <div class="quiz-cover"><img src="photos/guest/ariana_grande.png" alt="Ariana Grande cover" /></div>
+              <div class="quiz-copy">
+                <span class="quiz-badge">Fan Check</span>
+                <strong>Are you really Ariana Grande's No.1 fan?</strong>
+                <span class="quiz-meta-line">Artist: Ariana Grande</span>
+              </div>
+              <span class="quiz-go">Open</span>
+            </a>
+
+            <a class="quiz-row" href="imposter.html" data-search="imposter lady gaga artist pop">
+              <div class="quiz-cover"><img src="photos/guest/lady_gaga.png" alt="Lady Gaga cover" /></div>
+              <div class="quiz-copy">
+                <span class="quiz-badge">Imposter</span>
+                <strong>Which one is not a Lady Gaga song?</strong>
+                <span class="quiz-meta-line">Artist: Lady Gaga</span>
+              </div>
+              <span class="quiz-go">Open</span>
+            </a>
+
+            <a class="quiz-row" href="top5.html" data-search="top 5 taylor swift artist pop">
+              <div class="quiz-cover"><img src="photos/guest/taylor_swift.png" alt="Taylor Swift cover" /></div>
+              <div class="quiz-copy">
+                <span class="quiz-badge">Top 5</span>
+                <strong>Can you name Taylor Swift's top 5?</strong>
+                <span class="quiz-meta-line">Artist: Taylor Swift</span>
+              </div>
+              <span class="quiz-go">Open</span>
+            </a>
+
+            <a class="quiz-row" href="imposter.html" data-search="imposter alternative rock genre nirvana">
+              <div class="quiz-cover"><img src="photos/guest/nirvana.png" alt="Nirvana cover" /></div>
+              <div class="quiz-copy">
+                <span class="quiz-badge">Imposter</span>
+                <strong>Which track does not belong on Nevermind?</strong>
+                <span class="quiz-meta-line">Album: Nevermind</span>
+              </div>
+              <span class="quiz-go">Open</span>
+            </a>
+
+            <a class="quiz-row" href="fancheck.html" data-search="fan check dua lipa genre dance pop">
+              <div class="quiz-cover"><img src="photos/guest/dua_lipa.png" alt="Dua Lipa cover" /></div>
+              <div class="quiz-copy">
+                <span class="quiz-badge">Fan Check</span>
+                <strong>Are you really a Dua Lipa fan?</strong>
+                <span class="quiz-meta-line">Genre: dance pop</span>
+              </div>
+              <span class="quiz-go">Open</span>
+            </a>
+          </div>
+          <div class="quiz-pagination" aria-label="Quiz pagination">
+            <button class="page-button is-muted" type="button" aria-label="Previous page">‹</button>
+            <button class="page-button is-active" type="button" data-page="1" aria-label="Page 1">1</button>
+            <button class="page-button" type="button" data-page="2" aria-label="Page 2">2</button>
+            <button class="page-button" type="button" data-page="3" aria-label="Page 3">3</button>
+            <button class="page-button" type="button" data-page="4" aria-label="Page 4">4</button>
+            <button class="page-button is-muted" type="button" aria-label="More pages">…</button>
+            <button class="page-button is-muted" type="button" aria-label="Next page">›</button>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-left">
+        <div><h3>Project</h3><p>Univerzitet u Beogradu</p><p>Elektrotehnicki fakultet</p><p>Principi softverskog inženjerstva</p></div>
+        <div><h3>Team Slavujci</h3><ul><li>Dusan Korizma</li><li>Lea Irt</li><li>Marko Misovski</li><li>Mark Možarovski</li></ul></div>
+      </div>
+      <div class="footer-brand"><img class="footer-logo" src="photos/logo_black.png" alt="slavuj black logo" /><p class="footer-credit">Illustrations by Lea Irt</p></div>
+    </div>
+  </footer>
+  <script>
+    requestAnimationFrame(() => {
+      document.body.classList.add("is-ready");
+    });
+
+    const currentFile = window.location.pathname.split("/").pop() || "index.html";
+
+    document.querySelectorAll('a[href]').forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      if (href.startsWith("#")) return;
+
+      link.addEventListener("click", (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+        if (link.classList.contains("brand") && currentFile === "index.html") {
+          event.preventDefault();
+          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+          return;
+        }
+
+        event.preventDefault();
+        document.body.classList.remove("is-ready");
+        document.body.classList.add("is-leaving");
+        window.setTimeout(() => {
+          window.location.href = link.href;
+        }, 180);
+      });
+    });
+
+  </script>
+</body>
+</html>

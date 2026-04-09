@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>славуј — fan check</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="photos/logo_sticker.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="photos/logo_sticker.png" />
+  <link rel="apple-touch-icon" href="photos/logo_sticker.png" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --muted: #666666;
+      --line: #dddddd;
+      --soft: #f5f5f5;
+      --dark: #171717;
+      --container: min(1120px, calc(100% - 40px));
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    body.is-ready {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body.is-leaving {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner,
+    .shell,
+    .footer-grid {
+      width: var(--container);
+      margin: 0 auto;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      height: 52px;
+      width: auto;
+      object-fit: contain;
+      transform: translateY(3px);
+    }
+
+    .shell {
+      padding: 0 0 40px;
+    }
+
+    .fancheck-page {
+      display: grid;
+      gap: 22px;
+    }
+
+    .game-strip {
+      background: #171717;
+      color: #ffffff;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      padding: 24px calc(50vw - min(560px, calc(100% - 20px)));
+    }
+
+    .game-card {
+      padding: 20px;
+      display: grid;
+      gap: 18px;
+      min-height: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 10px;
+      border: 1px solid #ffffff;
+      background: #ffffff;
+      color: #171717;
+      font-size: 0.76rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      width: fit-content;
+      margin-bottom: 14px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .artist-art {
+      aspect-ratio: 1 / 1;
+      min-height: 180px;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.18)), url("photos/spotify/ekv.png") center center / cover no-repeat;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+    }
+
+    .artist-art::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 44%;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.62));
+    }
+
+    .hero-copy {
+      display: grid;
+      align-content: space-between;
+      gap: 10px;
+      padding-left: 12px;
+      min-width: 0;
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(1.2rem, 3.4vw, 2.1rem);
+      line-height: 0.9;
+      letter-spacing: -0.085em;
+      max-width: none;
+      white-space: nowrap;
+      color: #ffffff;
+    }
+
+    .hero-meta {
+      margin-top: 6px;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .stat {
+      min-height: 58px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      display: grid;
+      align-content: space-between;
+      gap: 6px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .stat:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.06);
+    }
+
+    .stat-label {
+      color: #ffffff;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      font-size: clamp(0.95rem, 2.4vw, 1.35rem);
+      letter-spacing: -0.06em;
+      line-height: 0.95;
+      color: #ffffff;
+    }
+
+    .timer-stat {
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        "label label"
+        "value toggle";
+      align-items: center;
+      column-gap: 8px;
+      row-gap: 6px;
+    }
+
+    .timer-stat .stat-label {
+      grid-area: label;
+    }
+
+    .timer-stat .stat-value {
+      grid-area: value;
+    }
+
+    .timer-toggle {
+      grid-area: toggle;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      appearance: none;
+      -webkit-appearance: none;
+      box-shadow: none;
+      cursor: pointer;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .timer-toggle::before,
+    .timer-toggle::after {
+      content: "";
+      display: block;
+      width: 3px;
+      height: 12px;
+      background: #ffffff;
+      border-radius: 999px;
+      transition: transform 0.18s ease, opacity 0.18s ease;
+    }
+
+    .timer-toggle::before {
+      margin-right: 4px;
+    }
+
+    .timer-toggle:hover {
+      opacity: 0.78;
+      transform: translateY(-1px);
+    }
+
+    .timer-toggle:focus,
+    .timer-toggle:focus-visible {
+      outline: none;
+      box-shadow: none;
+    }
+
+    .timer-toggle.is-paused {
+      opacity: 0.85;
+    }
+
+    .timer-toggle:disabled {
+      opacity: 0.35;
+      cursor: default;
+      pointer-events: none;
+      transform: none;
+    }
+
+    .prompt-zone {
+      display: grid;
+      gap: 10px;
+      width: min(560px, 100%);
+      justify-self: center;
+    }
+
+    .question-step {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .question-title {
+      font-size: 1rem;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      color: #ffffff;
+    }
+
+    .feedback {
+      min-height: 1em;
+      font-size: 0.88rem;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .feedback.is-good {
+      color: #ffffff;
+    }
+
+    .question-media {
+      width: min(560px, 100%);
+      justify-self: center;
+      display: none;
+      min-height: 152px;
+      margin-top: -6px;
+      margin-bottom: -2px;
+    }
+
+    .question-media.is-tight {
+      margin-bottom: -40px;
+    }
+
+    .question-media.is-ultra-tight {
+      margin-bottom: -74px;
+    }
+
+    .question-media.is-visible {
+      display: grid;
+    }
+
+    .question-media-card {
+      width: 100%;
+      height: 152px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+    }
+
+    .question-media-card img,
+    .question-media-card iframe {
+      width: 100%;
+      display: block;
+      border: 0;
+    }
+
+    .question-media-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .question-media-card iframe {
+      height: 152px;
+    }
+
+    .question-media-card.is-strip {
+      height: 72px;
+    }
+
+    .question-media-card.is-audio {
+      height: 38px;
+    }
+
+    .question-media-card.is-strip img {
+      object-position: center 38%;
+    }
+
+    .mock-audio {
+      height: 100%;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mock-audio-time {
+      font-size: 0.78rem;
+      color: #ffffff;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    .mock-audio-bar {
+      position: relative;
+      flex: 1;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.16);
+      overflow: hidden;
+    }
+
+    .mock-audio-bar::after {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 30%;
+      background: #ffffff;
+    }
+
+    .mock-audio-controls {
+      display: contents;
+    }
+
+    .mock-play {
+      width: 16px;
+      height: 16px;
+      border: 0;
+      background: transparent;
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .mock-play::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-38%, -50%);
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 8px solid #ffffff;
+    }
+
+    .option-grid {
+      display: grid;
+      gap: 8px;
+      width: min(560px, 100%);
+      justify-self: center;
+    }
+
+    .option-card {
+      width: 100%;
+      min-width: 0;
+      min-height: 58px;
+      height: 58px;
+      padding: 0 16px;
+      border: 1px solid #ffffff;
+      background: #ffffff;
+      display: grid;
+      align-items: center;
+      transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+      position: relative;
+    }
+
+    .option-card:hover {
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .option-title {
+      font-size: 0.92rem;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: #171717;
+    }
+
+    .option-card.is-correct,
+    .option-card.is-wrong {
+      box-shadow: none;
+    }
+
+    .option-card.is-correct {
+      background: #171717;
+      border-color: rgba(255, 255, 255, 0.24);
+    }
+
+    .option-card.is-correct .option-title {
+      color: #ffffff;
+    }
+
+    .option-card.is-correct::after {
+      content: "Correct";
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .option-card.is-wrong {
+      border-color: #171717;
+    }
+
+    .option-card:disabled {
+      cursor: default;
+    }
+
+    .related {
+      display: grid;
+      gap: 12px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      line-height: 0.94;
+      letter-spacing: -0.08em;
+    }
+
+    .quiz-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .quiz-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--text);
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .quiz-row:hover,
+    .quiz-row:focus-visible {
+      transform: translateY(-3px);
+      background: var(--soft);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+    }
+
+    .quiz-cover {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .quiz-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .quiz-badge {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 24px;
+      padding: 0 8px;
+      border: 1px solid #4a4a4a;
+      background: #4a4a4a;
+      color: #ffffff;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .quiz-copy {
+      align-self: start;
+      padding-top: 6px;
+      min-width: 0;
+    }
+
+    .quiz-copy strong {
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      font-size: 1.05rem;
+      letter-spacing: -0.05em;
+      line-height: 0.95;
+      font-weight: 700;
+    }
+
+    .quiz-meta-line {
+      margin-top: 10px;
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    .footer {
+      background: #171717;
+      padding: 24px 0 36px;
+      margin-top: 0;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+    }
+
+    .footer-left {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .footer-grid h3 {
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    .footer-grid p,
+    .footer-grid li,
+    .footer-credit {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .footer-grid ul {
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+
+    .footer-logo {
+      width: 120px;
+      height: auto;
+      object-fit: contain;
+      margin-bottom: 14px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 8px;
+      text-align: right;
+    }
+
+    .footer-credit {
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy {
+        padding-left: 0;
+      }
+
+      .footer-grid,
+      .footer-left {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-brand {
+        align-items: flex-start;
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        padding: 24px 0 40px;
+      }
+
+      .game-card {
+        padding: 18px;
+      }
+
+      .stats-row,
+      .quiz-list {
+        grid-template-columns: 1fr;
+      }
+
+      .option-card {
+        height: auto;
+        min-height: 58px;
+        padding-top: 14px;
+        padding-bottom: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="photos/logo.png" alt="славуј logo" />
+        <img class="brand-name" src="photos/name.png" alt="славуј" />
+      </a>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div class="fancheck-page">
+      <section class="game-strip">
+        <section class="game-card">
+          <div class="hero">
+            <div class="artist-art"></div>
+            <div class="hero-copy">
+              <div>
+                <span class="eyebrow">FAN CHECK</span>
+                <h1>Are you really EKV's No.1 fan?</h1>
+                <div class="hero-meta">Artist: Ekatarina Velika</div>
+              </div>
+
+              <div class="stats-row">
+                <div class="stat timer-stat">
+                  <span class="stat-label">Timer</span>
+                  <strong class="stat-value" id="timer">00:00</strong>
+                  <button class="timer-toggle" id="timer-toggle" type="button" aria-label="Pause timer" aria-pressed="false"></button>
+                </div>
+                <div class="stat">
+                  <span class="stat-label">Result</span>
+                  <strong class="stat-value" id="result-value">Pending</strong>
+                </div>
+                <div class="stat">
+                  <span class="stat-label">Mode</span>
+                  <strong class="stat-value" id="mode-value">Live</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="prompt-zone">
+            <div class="question-step" id="question-step">Question 1 / 5</div>
+            <p class="question-title" id="question-title">Loading question.</p>
+            <p class="feedback" id="feedback"></p>
+          </div>
+
+          <div class="question-media" id="question-media"></div>
+
+          <div class="option-grid">
+            <button class="option-card" type="button" data-option-index="0">
+              <span class="option-title">Option A</span>
+            </button>
+
+            <button class="option-card" type="button" data-option-index="1">
+              <span class="option-title">Option B</span>
+            </button>
+
+            <button class="option-card" type="button" data-option-index="2">
+              <span class="option-title">Option C</span>
+            </button>
+
+            <button class="option-card" type="button" data-option-index="3">
+              <span class="option-title">Option D</span>
+            </button>
+          </div>
+        </section>
+      </section>
+
+      <section class="related">
+        <div class="section-head">
+          <div>
+            <h2>Keep the run going.</h2>
+          </div>
+        </div>
+
+        <div class="quiz-list">
+          <a class="quiz-row" href="top5.html">
+            <div class="quiz-cover">
+              <img src="photos/spotify/haustor.png" alt="Haustor quiz cover" />
+            </div>
+            <div class="quiz-copy">
+              <span class="quiz-badge">Top 5</span>
+              <strong>Can you name Haustor's top 5?</strong>
+              <div class="quiz-meta-line">Artist: Haustor</div>
+            </div>
+          </a>
+
+          <a class="quiz-row" href="fancheck.html">
+            <div class="quiz-cover">
+              <img src="photos/spotify/goblini.png" alt="Goblini quiz cover" />
+            </div>
+            <div class="quiz-copy">
+              <span class="quiz-badge">Fan Check</span>
+              <strong>Are you really Goblini's No.1 fan?</strong>
+              <div class="quiz-meta-line">Artist: Goblini</div>
+            </div>
+          </a>
+
+          <a class="quiz-row" href="imposter.html">
+            <div class="quiz-cover">
+              <img src="photos/spotify/ekv.png" alt="EKV album quiz cover" />
+            </div>
+            <div class="quiz-copy">
+              <span class="quiz-badge">Imposter</span>
+              <strong>Which track does not belong on Ljubav?</strong>
+              <div class="quiz-meta-line">Album: Ljubav</div>
+            </div>
+          </a>
+
+          <a class="quiz-row" href="imposter.html">
+            <div class="quiz-cover">
+              <img src="photos/spotify/paket.png" alt="Ex-yu rock quiz cover" />
+            </div>
+            <div class="quiz-copy">
+              <span class="quiz-badge">Fan Check</span>
+              <strong>How well do you know ex-yu rock?</strong>
+              <div class="quiz-meta-line">Genre: ex-yu rock</div>
+            </div>
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-left">
+        <div>
+          <h3>Project</h3>
+          <p>Univerzitet u Beogradu</p>
+          <p>Elektrotehnicki fakultet</p>
+          <p>Principi softverskog inženjerstva</p>
+        </div>
+        <div>
+          <h3>Team Slavujci</h3>
+          <ul>
+            <li>Dusan Korizma</li>
+            <li>Lea Irt</li>
+            <li>Marko Misovski</li>
+            <li>Mark Možarovski</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-brand">
+        <img class="footer-logo" src="photos/logo_black.png" alt="slavuj black logo" />
+        <p class="footer-credit">Illustrations by Lea Irt</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    requestAnimationFrame(() => document.body.classList.add("is-ready"));
+
+    const currentFile = window.location.pathname.split("/").pop() || "index.html";
+
+    document.querySelectorAll('a[href]').forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      if (href.startsWith("#")) return;
+
+      link.addEventListener("click", (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+        if (link.classList.contains("brand") && currentFile === "index.html") {
+          event.preventDefault();
+          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+          return;
+        }
+
+        event.preventDefault();
+        document.body.classList.remove("is-ready");
+        document.body.classList.add("is-leaving");
+        window.setTimeout(() => {
+          window.location.href = link.href;
+        }, 180);
+      });
+    });
+
+    const questionStep = document.querySelector("#question-step");
+    const questionTitle = document.querySelector("#question-title");
+    const feedback = document.querySelector("#feedback");
+    const questionMedia = document.querySelector("#question-media");
+    const timerNode = document.querySelector("#timer");
+    const timerToggle = document.querySelector("#timer-toggle");
+    const resultValue = document.querySelector("#result-value");
+    const modeValue = document.querySelector("#mode-value");
+    const optionCards = Array.from(document.querySelectorAll(".option-card"));
+    const questions = [
+      {
+        prompt: "Which of these songs IS currently in EKV's TOP 5 Spotify tracks?",
+        options: ["Krug", "Kao da je bilo nekad", "7 dana", "Voda"],
+        correctIndex: 0,
+        explanation: "Correct. Krug appears among EKV's top Spotify tracks.",
+        type: "track"
+      },
+      {
+        prompt: "Which of these songs IS on the album Samo par godina za nas?",
+        options: ["Par godina za nas", "Ljubav", "Zemlja", "Zid"],
+        correctIndex: 0,
+        explanation: "Correct. Par godina za nas is on Samo par godina za nas.",
+        type: "album-track"
+      },
+      {
+        prompt: "This image IS part of which album cover?",
+        options: ["Samo par godina za nas", "Dum dum", "Ljubav", "Neko nas posmatra"],
+        correctIndex: 0,
+        explanation: "Correct. The cover shown is Samo par godina za nas.",
+        type: "cover",
+        media: {
+          kind: "image",
+          src: "photos/spotify/ekv2.png",
+          alt: "EKV album cover detail",
+          variant: "strip"
+        }
+      },
+      {
+        prompt: "Listen to the Spotify preview and pick the track that IS playing.",
+        options: ["Par godina za nas", "Krug", "Zemlja", "Ti si sav moj bol"],
+        correctIndex: 1,
+        explanation: "Correct. The Spotify embed preview is for Krug.",
+        type: "audio",
+        media: {
+          kind: "mock-audio",
+          time: "0:03 / 0:10",
+        }
+      },
+      {
+        prompt: "Which of these songs IS NOT by Ekatarina Velika?",
+        options: ["Par godina za nas", "Krug", "Ti si sav moj bol", "Ona se budi"],
+        correctIndex: 3,
+        explanation: "Correct. Ona se budi IS NOT by Ekatarina Velika.",
+        type: "imposter-artist"
+      }
+    ];
+    let elapsedMs = 0;
+    let runStartedAt = Date.now();
+    let timerId = null;
+    let finished = false;
+    let paused = false;
+    let currentQuestionIndex = 0;
+    let correctAnswers = 0;
+    let locked = false;
+
+    const formatTime = (totalSeconds) => {
+      const mins = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+      const secs = String(totalSeconds % 60).padStart(2, "0");
+      return `${mins}:${secs}`;
+    };
+
+    const updateTimer = () => {
+      const liveElapsedMs = paused ? elapsedMs : elapsedMs + (Date.now() - runStartedAt);
+      const elapsed = Math.floor(liveElapsedMs / 1000);
+      if (timerNode) timerNode.textContent = formatTime(elapsed);
+    };
+
+    const syncPauseUi = () => {
+      if (timerToggle) {
+        timerToggle.disabled = finished;
+        timerToggle.classList.toggle("is-paused", paused);
+        timerToggle.setAttribute("aria-pressed", paused ? "true" : "false");
+        timerToggle.setAttribute("aria-label", paused ? "Resume timer" : "Pause timer");
+      }
+
+      if (resultValue) {
+        resultValue.textContent = `${correctAnswers}/${questions.length}`;
+      }
+
+      if (modeValue) {
+        modeValue.textContent = finished ? "Done" : paused ? "Paused" : "Live";
+      }
+    };
+
+    const togglePause = () => {
+      if (finished) return;
+
+      if (paused) {
+        runStartedAt = Date.now();
+        paused = false;
+      } else {
+        elapsedMs += Date.now() - runStartedAt;
+        paused = true;
+      }
+
+      updateTimer();
+      syncPauseUi();
+    };
+
+    const finalizeRun = () => {
+      if (!paused) {
+        elapsedMs += Date.now() - runStartedAt;
+      }
+
+      finished = true;
+      window.clearInterval(timerId);
+      paused = false;
+      updateTimer();
+      syncPauseUi();
+    };
+
+    const renderQuestion = () => {
+      const question = questions[currentQuestionIndex];
+      if (!question) return;
+
+      locked = false;
+
+      if (feedback) {
+        feedback.textContent = "";
+        feedback.classList.remove("is-good");
+      }
+
+      if (questionStep) {
+        questionStep.textContent = `Question ${currentQuestionIndex + 1} / ${questions.length}`;
+      }
+
+      if (questionTitle) {
+        questionTitle.textContent = question.prompt;
+      }
+
+      if (questionMedia) {
+        questionMedia.innerHTML = "";
+        questionMedia.classList.remove("is-visible");
+
+        if (question.media?.kind === "image") {
+          questionMedia.innerHTML = `
+            <div class="question-media-card ${question.media.variant === "strip" ? "is-strip" : ""}">
+              <img src="${question.media.src}" alt="${question.media.alt || "Question image"}" />
+            </div>
+          `;
+          questionMedia.classList.add("is-visible");
+          questionMedia.classList.toggle("is-tight", question.media.variant === "strip");
+          questionMedia.classList.toggle("is-ultra-tight", question.media.variant === "strip");
+        }
+
+        if (question.media?.kind === "iframe") {
+          questionMedia.innerHTML = `
+            <div class="question-media-card">
+              <iframe
+                src="${question.media.src}"
+                title="${question.media.title || "Spotify preview"}"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"></iframe>
+            </div>
+          `;
+          questionMedia.classList.add("is-visible");
+          questionMedia.classList.remove("is-tight");
+          questionMedia.classList.remove("is-ultra-tight");
+        }
+
+        if (question.media?.kind === "mock-audio") {
+          questionMedia.innerHTML = `
+            <div class="question-media-card mock-audio is-audio">
+              <div class="mock-audio-controls">
+                <div class="mock-play" aria-hidden="true"></div>
+                <div class="mock-audio-bar"></div>
+                <span class="mock-audio-time">${question.media.time || "0:00 / 0:30"}</span>
+              </div>
+            </div>
+          `;
+          questionMedia.classList.add("is-visible");
+          questionMedia.classList.add("is-tight");
+          questionMedia.classList.add("is-ultra-tight");
+        }
+      }
+
+      optionCards.forEach((card, index) => {
+        const title = card.querySelector(".option-title");
+        card.disabled = false;
+        card.classList.remove("is-correct", "is-wrong");
+        if (title) title.textContent = question.options[index] || "";
+      });
+
+      syncPauseUi();
+    };
+
+    const handleAnswer = (selectedIndex) => {
+      if (finished || locked) return;
+
+      const question = questions[currentQuestionIndex];
+      if (!question) return;
+
+      locked = true;
+      const isCorrect = selectedIndex === question.correctIndex;
+      if (isCorrect) correctAnswers += 1;
+
+      optionCards.forEach((card, index) => {
+        card.disabled = true;
+
+        if (index === question.correctIndex) {
+          card.classList.add("is-correct");
+        } else if (index === selectedIndex && !isCorrect) {
+          card.classList.add("is-wrong");
+        }
+      });
+
+      if (feedback) {
+        feedback.textContent = isCorrect
+          ? question.explanation
+          : `Close. ${question.explanation.replace(/^Correct\.\s*/, "")}`;
+        feedback.classList.toggle("is-good", isCorrect);
+      }
+
+      syncPauseUi();
+
+      window.setTimeout(() => {
+        currentQuestionIndex += 1;
+
+        if (currentQuestionIndex >= questions.length) {
+          if (feedback) {
+            feedback.textContent = `Fan check complete. Final score: ${correctAnswers}/${questions.length}.`;
+            feedback.classList.add("is-good");
+          }
+          finalizeRun();
+          return;
+        }
+
+        renderQuestion();
+      }, 900);
+    };
+
+    optionCards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const selectedIndex = Number(card.dataset.optionIndex);
+        handleAnswer(selectedIndex);
+      });
+    });
+
+    if (timerToggle) {
+      timerToggle.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        togglePause();
+      });
+
+      timerToggle.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        togglePause();
+      });
+    }
+
+    updateTimer();
+    renderQuestion();
+    timerId = window.setInterval(updateTimer, 1000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>славуј — account</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="photos/logo_sticker.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="photos/logo_sticker.png" />
+  <link rel="apple-touch-icon" href="photos/logo_sticker.png" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --muted: #666666;
+      --line: #dddddd;
+      --soft: #f5f5f5;
+      --dark: #171717;
+      --dark-line: rgba(255, 255, 255, 0.16);
+      --dark-muted: rgba(255, 255, 255, 0.68);
+      --container: min(1120px, calc(100% - 40px));
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    body.is-ready {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body.is-leaving {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .container {
+      width: var(--container);
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      width: var(--container);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      height: 52px;
+      width: auto;
+      object-fit: contain;
+      transform: translateY(3px);
+    }
+
+    .profile-menu {
+      position: relative;
+    }
+
+    .profile-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 40px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .profile-trigger::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      margin-left: 2px;
+      border-right: 1.5px solid var(--text);
+      border-bottom: 1.5px solid var(--text);
+      transform: rotate(45deg) translateY(-2px);
+      transition: transform 0.2s ease;
+    }
+
+    .profile-menu.is-open .profile-trigger::after {
+      transform: rotate(-135deg) translateY(-1px);
+    }
+
+    .user-avatar {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      flex: 0 0 auto;
+      overflow: hidden;
+      object-fit: cover;
+      object-position: 36% 18%;
+    }
+
+    .user-name {
+      white-space: nowrap;
+    }
+
+    .profile-dropdown {
+      position: absolute;
+      right: -10px;
+      top: calc(100% + 8px);
+      min-width: 190px;
+      padding: 8px 0;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      z-index: 30;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+      pointer-events: none;
+    }
+
+    .profile-menu.is-open .profile-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .profile-dropdown a,
+    .profile-dropdown button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 0 14px;
+      background: transparent;
+      border: 0;
+      color: var(--text);
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .profile-dropdown a:hover,
+    .profile-dropdown button:hover {
+      background: var(--soft);
+    }
+
+    main {
+      padding: 0;
+    }
+
+    .games-shell {
+      display: grid;
+      gap: 0;
+    }
+
+    .top-modes {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.9fr);
+      gap: 0;
+      align-items: stretch;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+    }
+
+    .game-section {
+      padding: 28px 0;
+    }
+
+    .section-head {
+      margin-bottom: 18px;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .creative-section {
+      background: var(--dark);
+      color: #ffffff;
+      padding: 28px 28px calc(28px + 1px) calc(50vw - min(560px, calc(100% - 20px)));
+    }
+
+    .creative-section .section-label {
+      color: #ffffff;
+    }
+
+    .creative-section .game-card {
+      background: transparent;
+      border-color: var(--dark-line);
+      color: #ffffff;
+    }
+
+    .creative-section .game-card:hover,
+    .creative-section .game-card:focus-visible {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .creative-section .game-number,
+    .creative-section .game-card p,
+    .creative-section .game-meta span {
+      color: var(--dark-muted);
+    }
+
+    .creative-section .game-meta {
+      border-top-color: var(--dark-line);
+    }
+
+    .group-section {
+      background: #4a4a4a;
+      color: #ffffff;
+      padding: 28px calc(50vw - min(560px, calc(100% - 20px))) calc(28px + 1px) 56px;
+    }
+
+    .group-section .section-label {
+      color: #ffffff;
+    }
+
+    .quiz-section {
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    .creative-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .game-card {
+      min-height: 220px;
+      padding: 18px;
+      border: 1px solid var(--text);
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .game-card:hover,
+    .game-card:focus-visible {
+      transform: translateY(-3px);
+      background: var(--soft);
+    }
+
+    .game-number {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .game-title {
+      font-size: clamp(1.5rem, 3vw, 2.3rem);
+      line-height: 0.92;
+      letter-spacing: -0.07em;
+      margin-bottom: 10px;
+    }
+
+    .game-card p,
+    .game-meta span,
+    .quiz-meta-line {
+      color: var(--muted);
+    }
+
+    .game-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      font-size: 0.88rem;
+    }
+
+    .group-panel {
+      min-height: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 28px;
+      text-align: left;
+    }
+
+    .group-panel strong {
+      display: block;
+      font-size: 2.5rem;
+      letter-spacing: -0.05em;
+      line-height: 0.95;
+    }
+
+    .group-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid #ffffff;
+      background: #ffffff;
+      color: #171717;
+      font-size: 0.88rem;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .group-cta::before {
+      content: "";
+      width: 0;
+      height: 0;
+      margin-right: 10px;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 10px solid #171717;
+    }
+
+    .group-cta:hover,
+    .group-cta:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.08);
+    }
+
+    .quiz-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .quiz-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 18px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid var(--text);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .quiz-row:hover,
+    .quiz-row:focus-visible {
+      transform: translateY(-3px);
+      background: var(--soft);
+    }
+
+    .quiz-cover {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .quiz-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .quiz-copy {
+      align-self: start;
+      padding-top: 6px;
+    }
+
+    .quiz-badge {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 24px;
+      padding: 0 8px;
+      border: 1px solid #4a4a4a;
+      background: #4a4a4a;
+      color: #ffffff;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .quiz-copy strong {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 8px;
+      font-size: 1.25rem;
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .quiz-meta-line {
+      display: block;
+      margin-top: 14px;
+      font-size: 0.82rem;
+    }
+
+    .quiz-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 28px;
+    }
+
+    .page-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 42px;
+      height: 42px;
+      padding: 0 12px;
+      border: 1px solid var(--text);
+      background: #ffffff;
+      color: var(--text);
+      font: inherit;
+      cursor: default;
+    }
+
+    .page-button.is-active {
+      background: var(--text);
+      color: #ffffff;
+    }
+
+    .page-button.is-muted {
+      border-color: var(--line);
+      color: var(--muted);
+    }
+
+    .footer {
+      background: #171717;
+      padding: 24px 0 36px;
+      margin-top: 0;
+    }
+
+    .footer-grid {
+      width: var(--container);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+    }
+
+    .footer-left {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .footer-grid h3 {
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    .footer-grid ul {
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+
+    .footer-grid p,
+    .footer-grid li,
+    .footer-credit {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .footer-logo {
+      width: 120px;
+      height: auto;
+      object-fit: contain;
+      margin-bottom: 14px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 8px;
+      text-align: right;
+    }
+
+    .footer-credit {
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 860px) {
+      .top-modes,
+      .creative-grid,
+      .quiz-list,
+      .quiz-row {
+        grid-template-columns: 1fr;
+      }
+
+      .creative-section,
+      .group-section {
+        padding: 28px calc(50vw - min(560px, calc(100% - 20px)));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .footer-grid,
+      .footer-left {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-brand {
+        align-items: flex-start;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="photos/logo.png" alt="славуј logo" />
+        <img class="brand-name" src="photos/name.png" alt="славуј" />
+      </a>
+      <div class="profile-menu" id="profile-menu">
+        <button class="profile-trigger" id="profile-trigger" type="button" aria-expanded="false" aria-haspopup="menu">
+          <img class="user-avatar" src="photos/account_profile.jpeg" alt="Account profile" />
+          <span class="user-name">mark0vka</span>
+        </button>
+        <div class="profile-dropdown" id="profile-dropdown" role="menu">
+          <a href="account.html" role="menuitem">My profile</a>
+          <a href="account.html" role="menuitem">History</a>
+          <a href="account.html" role="menuitem">Saved playlists</a>
+          <a href="login.html" role="menuitem">Log out</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <section class="games-shell">
+        <div class="top-modes">
+          <div class="game-section creative-section">
+            <div class="section-head">
+              <span class="section-label">Creative games</span>
+            </div>
+            <div class="creative-grid">
+              <a class="game-card" href="guest-paint.html">
+                <span class="game-number">01</span>
+                <div>
+                  <h2 class="game-title">Paint</h2>
+                  <p>Choose a rock mood. Build a set.</p>
+                </div>
+                <div class="game-meta">
+                  <span>Rock</span>
+                  <span>Play</span>
+                </div>
+              </a>
+
+              <a class="game-card" href="guest-paint.html">
+                <span class="game-number">02</span>
+                <div>
+                  <h2 class="game-title">Snake</h2>
+                  <p>Chain titles into one guitar-heavy line.</p>
+                </div>
+                <div class="game-meta">
+                  <span>Titles</span>
+                  <span>Play</span>
+                </div>
+              </a>
+
+              <a class="game-card" href="guest-paint.html">
+                <span class="game-number">03</span>
+                <div>
+                  <h2 class="game-title">Secret Message</h2>
+                  <p>Hide a note inside a rock playlist.</p>
+                </div>
+                <div class="game-meta">
+                  <span>Message</span>
+                  <span>Play</span>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="game-section group-section">
+            <div class="section-head">
+              <span class="section-label">Group play</span>
+            </div>
+            <a class="group-panel" href="guest-group.html">
+              <strong>Create or join a group game.</strong>
+              <span class="group-cta">Start</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="game-section quiz-section">
+          <div class="section-head">
+            <span class="section-label">Quizzes</span>
+          </div>
+          <div class="quiz-list">
+            <a class="quiz-row" href="top5.html">
+              <div class="quiz-cover"><img src="photos/account/nirvana.png" alt="Nirvana cover" /></div>
+              <div class="quiz-copy">
+                <span class="quiz-badge">Top 5</span>
+                <strong>Can you name Nirvana's top 5?</strong>
+                <span class="quiz-meta-line">Artist: Nirvana</span>
+              </div>
+            </a>
+
+            <a class="quiz-row" href="fancheck.html">
+              <div class="quiz-cover"><img src="photos/account/am.png" alt="Arctic Monkeys cover" /></div>
+              <div class="quiz-copy">
+                <span class="quiz-badge">Fan Check</span>
+                <strong>Are you really Arctic Monkeys' No.1 fan?</strong>
+                <span class="quiz-meta-line">Artist: Arctic Monkeys</span>
+              </div>
+            </a>
+
+            <a class="quiz-row" href="imposter.html">
+              <div class="quiz-cover"><img src="photos/account/beatles.png" alt="The Beatles cover" /></div>
+              <div class="quiz-copy">
+                <span class="quiz-badge">Imposter</span>
+                <strong>Which song is the imposter on Abbey Road?</strong>
+                <span class="quiz-meta-line">Album: Abbey Road</span>
+              </div>
+            </a>
+
+            <a class="quiz-row" href="fancheck.html">
+              <div class="quiz-cover"><img src="photos/account/radiohead.png" alt="Radiohead cover" /></div>
+              <div class="quiz-copy">
+                <span class="quiz-badge">Fan Check</span>
+                <strong>How well do you know Radiohead?</strong>
+                <span class="quiz-meta-line">Artist: Radiohead</span>
+              </div>
+            </a>
+
+            <a class="quiz-row" href="imposter.html">
+              <div class="quiz-cover"><img src="photos/account/led_zeppelin.jpg" alt="Led Zeppelin cover" /></div>
+              <div class="quiz-copy">
+                <span class="quiz-badge">Imposter</span>
+                <strong>Which track does not belong on Led Zeppelin IV?</strong>
+                <span class="quiz-meta-line">Album: Led Zeppelin IV</span>
+              </div>
+            </a>
+
+            <a class="quiz-row" href="top5.html">
+              <div class="quiz-cover"><img src="photos/account/rhcp.jpg" alt="Red Hot Chili Peppers cover" /></div>
+              <div class="quiz-copy">
+                <span class="quiz-badge">Top 5</span>
+                <strong>Can you name Red Hot Chili Peppers' top 5?</strong>
+                <span class="quiz-meta-line">Genre: alternative rock</span>
+              </div>
+            </a>
+          </div>
+          <div class="quiz-pagination" aria-label="Quiz pagination">
+            <button class="page-button is-muted" type="button" aria-label="Previous page">‹</button>
+            <button class="page-button is-active" type="button" aria-label="Page 1">1</button>
+            <button class="page-button" type="button" aria-label="Page 2">2</button>
+            <button class="page-button" type="button" aria-label="Page 3">3</button>
+            <button class="page-button" type="button" aria-label="Page 4">4</button>
+            <button class="page-button is-muted" type="button" aria-label="More pages">…</button>
+            <button class="page-button is-muted" type="button" aria-label="Next page">›</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-left">
+        <div><h3>Project</h3><p>Univerzitet u Beogradu</p><p>Elektrotehnicki fakultet</p><p>Principi softverskog inženjerstva</p></div>
+        <div><h3>Team Slavujci</h3><ul><li>Dusan Korizma</li><li>Lea Irt</li><li>Marko Misovski</li><li>Mark Možarovski</li></ul></div>
+      </div>
+      <div class="footer-brand"><img class="footer-logo" src="photos/logo_black.png" alt="slavuj black logo" /><p class="footer-credit">Illustrations by Lea Irt</p></div>
+    </div>
+  </footer>
+  <script>
+    requestAnimationFrame(() => {
+      document.body.classList.add("is-ready");
+    });
+
+    const currentFile = window.location.pathname.split("/").pop() || "index.html";
+
+    document.querySelectorAll('a[href]').forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      if (href.startsWith("#")) return;
+
+      link.addEventListener("click", (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+        if (link.classList.contains("brand") && currentFile === "index.html") {
+          event.preventDefault();
+          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+          return;
+        }
+
+        event.preventDefault();
+        document.body.classList.remove("is-ready");
+        document.body.classList.add("is-leaving");
+        window.setTimeout(() => {
+          window.location.href = link.href;
+        }, 180);
+      });
+    });
+
+    const profileMenu = document.querySelector("#profile-menu");
+    const profileTrigger = document.querySelector("#profile-trigger");
+
+    if (profileMenu && profileTrigger) {
+      profileTrigger.addEventListener("click", () => {
+        const isOpen = profileMenu.classList.toggle("is-open");
+        profileTrigger.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!profileMenu.contains(event.target)) {
+          profileMenu.classList.remove("is-open");
+          profileTrigger.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+  </script>
+</body>
+</html>

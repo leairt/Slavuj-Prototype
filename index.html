@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>славуј</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="photos/logo_sticker.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="photos/logo_sticker.png" />
+  <link rel="apple-touch-icon" href="photos/logo_sticker.png" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --muted: #666666;
+      --line: #dddddd;
+      --soft: #f5f5f5;
+      --container: min(1120px, calc(100% - 40px));
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.35;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    body.is-ready {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body.is-leaving {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .container {
+      width: var(--container);
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      height: 52px;
+      width: auto;
+      object-fit: contain;
+      transform: translateY(3px);
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: url("photos/background.png") center center / cover no-repeat;
+    }
+
+    .hero-inner {
+      width: min(100% - 40px, 900px);
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: clamp(3.1rem, 8vw, 6.3rem);
+      line-height: 0.92;
+      letter-spacing: -0.07em;
+      color: #ffffff;
+    }
+
+    .hero-title span {
+      display: block;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 56px;
+      margin-top: 40px;
+      padding: 0 28px;
+      border: 1px solid #ffffff;
+      background: #ffffff;
+      color: #000000;
+      font-size: 0.95rem;
+      font-weight: 700;
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+      animation: pulse 1.8s ease-out infinite;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .button::before {
+      content: "";
+      width: 0;
+      height: 0;
+      margin-right: 10px;
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+      border-left: 11px solid #000000;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.12);
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.65); }
+      70% { box-shadow: 0 0 0 18px rgba(255, 255, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+    }
+
+    .walkthrough {
+      padding: 0 0 56px;
+    }
+
+    .step {
+      padding: 42px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .step-grid {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 0.9fr) minmax(420px, 560px);
+      gap: 24px;
+      align-items: center;
+    }
+
+    .step.reverse .step-grid {
+      grid-template-columns: minmax(420px, 560px) minmax(0, 0.9fr) 120px;
+    }
+
+    .step-no {
+      font-size: clamp(4rem, 10vw, 8rem);
+      line-height: 0.85;
+      letter-spacing: -0.09em;
+    }
+
+    .step-copy h2 {
+      font-size: clamp(1.5rem, 3.2vw, 2.3rem);
+      line-height: 0.92;
+      letter-spacing: -0.06em;
+      margin-bottom: 8px;
+    }
+
+    .step-copy p,
+    .image-slot span,
+    .footer-grid p,
+    .footer-grid li {
+      color: var(--muted);
+    }
+
+    .step-copy p {
+      max-width: 22rem;
+      font-size: 0.9rem;
+    }
+
+    .image-slot {
+      min-height: 250px;
+      padding: 18px;
+      background: var(--soft);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      overflow: hidden;
+      position: relative;
+      border-radius: 18px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .image-slot strong {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .image-slot.has-image {
+      padding: 0;
+      background: #ffffff;
+    }
+
+    .image-slot.has-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .footer {
+      background: #171717;
+      border-top: 0;
+      padding: 24px 0 36px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+    }
+
+    .footer-left {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .footer-grid h3 {
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    .footer-grid ul {
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+
+    .footer-logo {
+      width: 120px;
+      height: auto;
+      object-fit: contain;
+      margin-bottom: 14px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 8px;
+      text-align: right;
+    }
+
+    .footer-credit {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .footer-grid p,
+    .footer-grid li {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    @media (max-width: 900px) {
+      .step-grid,
+      .step.reverse .step-grid,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-left {
+        grid-template-columns: 1fr;
+      }
+
+      .step-no {
+        order: 1;
+      }
+
+      .step-copy {
+        order: 2;
+      }
+
+      .image-slot {
+        order: 3;
+      }
+
+      .footer-brand {
+        align-items: flex-start;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="photos/logo.png" alt="славуј logo" />
+        <img class="brand-name" src="photos/name.png" alt="славуј" />
+      </a>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="hero-inner">
+        <h1 class="hero-title">
+          <span>Play Games.</span>
+          <span>Discover Music.</span>
+        </h1>
+        <a class="button" href="login.html">Start now</a>
+      </div>
+    </section>
+
+    <section class="walkthrough">
+      <div class="container">
+        <article class="step">
+          <div class="step-grid">
+            <div class="step-no">01</div>
+            <div class="step-copy">
+              <h2>Choose how to enter.</h2>
+              <p>Jump in fast or make it personal.</p>
+            </div>
+            <div class="image-slot has-image">
+              <img src="photos/steps/step1.png" alt="Login screen preview" />
+            </div>
+          </div>
+        </article>
+
+        <article class="step reverse">
+          <div class="step-grid">
+            <div class="image-slot tall">
+              <strong>Mode selection</strong>
+              <span>space for image</span>
+            </div>
+            <div class="step-copy">
+              <h2>Pick a game mode.</h2>
+              <p>Test your music knowledge, get creative, or have fun with friends.</p>
+            </div>
+            <div class="step-no">02</div>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-grid">
+            <div class="step-no">03</div>
+            <div class="step-copy">
+              <h2>Play a round.</h2>
+              <p>Guess, sort, connect, and discover.</p>
+            </div>
+            <div class="image-slot">
+              <strong>Game screen</strong>
+              <span>space for image</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="step reverse">
+          <div class="step-grid">
+            <div class="image-slot tall has-image">
+              <img src="photos/steps/step4.png" alt="Playlist result preview" />
+            </div>
+            <div class="step-copy">
+              <h2>Get the playlist.</h2>
+              <p>See what the session made for you.</p>
+            </div>
+            <div class="step-no">04</div>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-grid">
+            <div class="step-no">05</div>
+            <div class="step-copy">
+              <h2>Make it yours.</h2>
+              <p>Add custom cover art, press play, and share it with friends.</p>
+            </div>
+            <div class="image-slot has-image">
+              <img src="photos/steps/step5.png" alt="Playlist cover and sharing preview" />
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-left">
+        <div>
+          <h3>Project</h3>
+          <p>Univerzitet u Beogradu</p>
+          <p>Elektrotehnicki fakultet</p>
+          <p>Principi softverskog inženjerstva</p>
+        </div>
+        <div>
+          <h3>Team Slavujci</h3>
+          <ul>
+            <li>Dusan Korizma</li>
+            <li>Lea Irt</li>
+            <li>Marko Misovski</li>
+            <li>Mark Možarovski</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-brand">
+        <img class="footer-logo" src="photos/logo_black.png" alt="slavuj black logo" />
+        <p class="footer-credit">Illustrations by Lea Irt</p>
+      </div>
+    </div>
+  </footer>
+  <script>
+    requestAnimationFrame(() => {
+      document.body.classList.add("is-ready");
+    });
+
+    const currentFile = window.location.pathname.split("/").pop() || "index.html";
+
+    document.querySelectorAll('a[href]').forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      if (href.startsWith("#")) return;
+
+      link.addEventListener("click", (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+        if (link.classList.contains("brand") && currentFile === "index.html") {
+          event.preventDefault();
+          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+          return;
+        }
+
+        event.preventDefault();
+        document.body.classList.remove("is-ready");
+        document.body.classList.add("is-leaving");
+        window.setTimeout(() => {
+          window.location.href = link.href;
+        }, 180);
+      });
+    });
+
+  </script>
+</body>
+</html>

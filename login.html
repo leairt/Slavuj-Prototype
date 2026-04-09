@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>славуј — login</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="photos/logo_sticker.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="photos/logo_sticker.png" />
+  <link rel="apple-touch-icon" href="photos/logo_sticker.png" />
+  <style>
+    :root {
+      --white: #ffffff;
+      --black: #171717;
+      --muted-light: rgba(255, 255, 255, 0.72);
+      --muted-dark: #5f5f5f;
+      --line-light: rgba(255, 255, 255, 0.18);
+      --line-dark: rgba(0, 0, 0, 0.14);
+      --spotify: #1db954;
+      --container: min(1120px, calc(100% - 40px));
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--white);
+      color: var(--black);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    body.is-ready {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body.is-leaving {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--white);
+      border-bottom: 1px solid var(--line-dark);
+    }
+
+    .topbar-inner {
+      width: var(--container);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      flex: 0 0 auto;
+    }
+
+    .brand-name {
+      height: 52px;
+      width: auto;
+      object-fit: contain;
+      flex: 0 0 auto;
+      transform: translateY(3px);
+    }
+
+    .login-layout {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      min-height: calc(100vh - 63px);
+    }
+
+    .panel {
+      min-height: 100%;
+      padding: 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      gap: 28px;
+      text-align: center;
+    }
+
+    .panel + .panel {
+      border-left: 1px solid var(--line-dark);
+    }
+
+    .panel.guest {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    .panel.account {
+      background: var(--black);
+      color: var(--white);
+      border-left-color: var(--line-light);
+    }
+
+    .panel.spotify {
+      background: var(--spotify);
+      color: var(--white);
+      border-left-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .panel-top {
+      width: 100%;
+      display: grid;
+      gap: 0;
+      justify-items: center;
+      align-content: start;
+    }
+
+    .panel-mid {
+      display: grid;
+      gap: 18px;
+      justify-items: center;
+      align-content: center;
+      flex: 1 1 auto;
+    }
+
+    .spotify-head {
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .spotify-head h2 {
+      transform: translateX(-16px);
+    }
+
+    .tag {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .guest .tag {
+      color: var(--muted-dark);
+    }
+
+    .account .tag,
+    .spotify .tag {
+      color: var(--muted-light);
+    }
+
+    .panel h1,
+    .panel h2 {
+      font-size: clamp(2.4rem, 4vw, 4.4rem);
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+      font-weight: 700;
+    }
+
+    .panel p {
+      max-width: 18rem;
+      font-size: 0.98rem;
+      line-height: 1.35;
+    }
+
+    .guest p {
+      color: var(--muted-dark);
+    }
+
+    .account p,
+    .spotify p {
+      color: var(--muted-light);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border: 1px solid currentColor;
+      font-size: 0.92rem;
+      font-weight: 700;
+      width: fit-content;
+      transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+
+    .button.full {
+      width: 100%;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+    }
+
+    .guest .button {
+      background: var(--black);
+      color: var(--white);
+      border-color: var(--black);
+    }
+
+    .account .button {
+      background: var(--white);
+      color: var(--black);
+      border-color: var(--white);
+    }
+
+    .spotify .button {
+      background: var(--white);
+      color: #0e7a33;
+      border-color: var(--white);
+    }
+
+    .account-form {
+      display: grid;
+      gap: 12px;
+      margin-top: 8px;
+      width: min(100%, 320px);
+    }
+
+    .field input {
+      width: 100%;
+      min-height: 50px;
+      padding: 0 14px;
+      border: 1px solid var(--line-light);
+      background: transparent;
+      color: var(--white);
+      font: inherit;
+    }
+
+    .field input::placeholder {
+      color: rgba(255, 255, 255, 0.42);
+    }
+
+    .mini-actions {
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .ghost-link {
+      font-size: 0.88rem;
+      color: inherit;
+      opacity: 0.72;
+    }
+
+    .ghost-link strong {
+      opacity: 1;
+    }
+
+    .panel-bottom {
+      width: 100%;
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+    }
+
+    .panel-bottom small {
+      font-size: 0.8rem;
+      opacity: 0.72;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .spotify-mark {
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
+      flex: 0 0 auto;
+      transform: translateX(34px);
+    }
+
+    @media (max-width: 980px) {
+      .login-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .panel + .panel {
+        border-left: 0;
+      }
+
+      .panel.account,
+      .panel.spotify {
+        border-top: 1px solid rgba(255, 255, 255, 0.16);
+      }
+
+      .panel.guest,
+      .panel.account,
+      .panel.spotify {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar-inner {
+        width: min(100% - 28px, 1200px);
+      }
+
+      .panel {
+        padding: 24px;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+      }
+
+      .brand-name {
+        height: 46px;
+      }
+    }
+    .footer { background: #171717; padding: 24px 0 36px; }
+    .footer-grid { width: min(1200px, calc(100% - 40px)); margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; }
+    .footer-left { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .footer-grid h3 { font-size: 0.92rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; color: #ffffff; }
+    .footer-grid ul { list-style: none; display: grid; gap: 6px; }
+    .footer-grid p, .footer-grid li, .footer-credit { color: rgba(255, 255, 255, 0.72); }
+    .footer-logo { width: 120px; height: auto; object-fit: contain; margin-bottom: 14px; }
+    .footer-brand { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 8px; text-align: right; }
+    .footer-credit { font-size: 0.9rem; }
+    @media (max-width: 900px) { .footer-grid, .footer-left { grid-template-columns: 1fr; } .footer-brand { align-items: flex-start; text-align: left; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="photos/logo.png" alt="славуј logo" />
+        <img class="brand-name" src="photos/name.png" alt="славуј" />
+      </a>
+    </div>
+  </header>
+
+  <main class="login-layout">
+    <section class="panel guest">
+      <div class="panel-top">
+        <span class="tag">Guest</span>
+      </div>
+      <div class="panel-mid">
+        <h1>Jump in.</h1>
+        <p>Play with global hits.</p>
+        <a class="button" href="guest.html">Continue as guest</a>
+      </div>
+      <div class="panel-bottom">
+        <small>No account</small>
+      </div>
+    </section>
+
+    <section class="panel account">
+      <div class="panel-top">
+        <span class="tag">Account</span>
+      </div>
+      <div class="panel-mid">
+        <h2>Log in.</h2>
+        <p>Save progress. Set preferences.</p>
+        <div class="account-form">
+          <div class="field">
+            <input type="text" placeholder="Username" value="mark0vka" />
+          </div>
+          <div class="field">
+            <input type="password" placeholder="Password" />
+          </div>
+          <div class="mini-actions">
+            <a class="button full" href="account.html">Log in</a>
+            <a class="ghost-link" href="#">Forgot password?</a>
+            <a class="ghost-link" href="create-profile.html">Don't have an account? <strong>Create profile</strong></a>
+          </div>
+        </div>
+      </div>
+      <div class="panel-bottom">
+        <small>Custom profile</small>
+      </div>
+    </section>
+
+    <section class="panel spotify">
+      <div class="panel-top">
+        <span class="tag">Spotify</span>
+      </div>
+      <div class="panel-mid">
+        <div class="spotify-head">
+          <img class="spotify-mark" src="photos/spotify_logo.png" alt="Spotify logo" />
+          <h2>Connect Spotify.</h2>
+        </div>
+        <p>Get full personalization.</p>
+        <a class="button" href="spotify.html">Continue with Spotify</a>
+      </div>
+      <div class="panel-bottom">
+        <small>Best match</small>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-left">
+        <div><h3>Project</h3><p>Univerzitet u Beogradu</p><p>Elektrotehnicki fakultet</p><p>Principi softverskog inženjerstva</p></div>
+        <div><h3>Team Slavujci</h3><ul><li>Dusan Korizma</li><li>Lea Irt</li><li>Marko Misovski</li><li>Mark Možarovski</li></ul></div>
+      </div>
+      <div class="footer-brand"><img class="footer-logo" src="photos/logo_black.png" alt="slavuj black logo" /><p class="footer-credit">Illustrations by Lea Irt</p></div>
+    </div>
+  </footer>
+  <script>
+    requestAnimationFrame(() => {
+      document.body.classList.add("is-ready");
+    });
+
+    const currentFile = window.location.pathname.split("/").pop() || "index.html";
+
+    document.querySelectorAll('a[href]').forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      if (href.startsWith("#")) return;
+
+      link.addEventListener("click", (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+        if (link.classList.contains("brand") && currentFile === "index.html") {
+          event.preventDefault();
+          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+          return;
+        }
+
+        event.preventDefault();
+        document.body.classList.remove("is-ready");
+        document.body.classList.add("is-leaving");
+        window.setTimeout(() => {
+          window.location.href = link.href;
+        }, 180);
+      });
+    });
+
+  </script>
+</body>
+</html>
