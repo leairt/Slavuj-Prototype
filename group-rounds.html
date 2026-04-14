@@ -267,7 +267,19 @@
       padding-top: 4px;
     }
 
+    .results-actions,
+    .playlist-actions,
+    .saved-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
     .restart-preview-button,
+    .secondary-button,
+    .results-continue-button,
+    .playlist-save-button,
     .imposter-submit,
     .hitster-submit,
     .answer-submit,
@@ -285,8 +297,20 @@
       transition: transform 0.18s ease, box-shadow 0.18s ease;
     }
 
+    .secondary-button {
+      border-color: var(--line-strong);
+      background: transparent;
+      color: #ffffff;
+    }
+
     .restart-preview-button:hover,
     .restart-preview-button:focus-visible,
+    .secondary-button:hover,
+    .secondary-button:focus-visible,
+    .results-continue-button:hover,
+    .results-continue-button:focus-visible,
+    .playlist-save-button:hover,
+    .playlist-save-button:focus-visible,
     .imposter-submit:hover,
     .imposter-submit:focus-visible,
     .hitster-submit:hover,
@@ -301,6 +325,9 @@
     }
 
     .restart-preview-button:disabled,
+    .secondary-button:disabled,
+    .results-continue-button:disabled,
+    .playlist-save-button:disabled,
     .imposter-submit:disabled,
     .hitster-submit:disabled,
     .answer-submit:disabled,
@@ -381,6 +408,11 @@
       display: grid;
       gap: 22px;
       align-content: start;
+    }
+
+    .results-toggle-row {
+      display: flex;
+      justify-content: flex-end;
     }
 
     .results-lead {
@@ -498,6 +530,246 @@
       white-space: nowrap;
     }
 
+    .winner-stage,
+    .saved-stage {
+      display: grid;
+      gap: 22px;
+      align-content: start;
+    }
+
+    .winner-summary {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 18px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 214, 102, 0.12), rgba(255, 255, 255, 0.02)), var(--panel-2);
+      align-items: center;
+    }
+
+    .winner-avatar {
+      width: 78px;
+      height: 78px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 214, 102, 0.48);
+    }
+
+    .winner-copy {
+      display: grid;
+      gap: 6px;
+    }
+
+    .winner-kicker,
+    .saved-kicker {
+      color: var(--muted);
+      font-size: 0.76rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .winner-name,
+    .saved-title {
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      line-height: 0.94;
+      letter-spacing: -0.06em;
+    }
+
+    .winner-note,
+    .saved-note {
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .playlist-fieldset {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+    }
+
+    .winner-song-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .winner-song-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .winner-song-option {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+      color: #ffffff;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .winner-song-option {
+      display: grid;
+      grid-template-columns: 78px minmax(0, 1fr);
+      gap: 12px;
+      padding: 10px;
+      align-items: center;
+    }
+
+    .winner-song-option:hover,
+    .winner-song-option:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.34);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
+      outline: none;
+    }
+
+    .winner-song-option.is-selected {
+      border-color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
+    }
+
+    .winner-song-option:disabled {
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+      opacity: 0.68;
+    }
+
+    .saved-cover {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border: 1px solid var(--line);
+    }
+
+    .winner-song-image {
+      width: 78px;
+      height: 78px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+    }
+
+    .winner-song-copy {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .winner-song-title {
+      font-size: 0.98rem;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .winner-song-artist,
+    .winner-song-note {
+      color: var(--muted);
+      line-height: 1.25;
+    }
+
+    .winner-song-artist {
+      font-size: 0.82rem;
+    }
+
+    .winner-song-note {
+      font-size: 0.76rem;
+    }
+
+    .wait-round {
+      grid-template-rows: auto;
+      align-content: start;
+    }
+
+    .wait-round .round-body {
+      display: none;
+    }
+
+    .saved-playlist-panel {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      overflow: hidden;
+      display: grid;
+    }
+
+    .saved-playlist-round .game-panel {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      gap: 0;
+    }
+
+    .saved-hero {
+      display: grid;
+      grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)), var(--panel-2);
+    }
+
+    .saved-meta {
+      display: grid;
+      gap: 10px;
+      align-content: center;
+    }
+
+    .saved-track-list {
+      display: grid;
+      gap: 10px;
+      width: 100%;
+      background: transparent;
+      padding: 14px;
+    }
+
+    .saved-track {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .saved-track.is-highlight {
+      background: rgba(255, 214, 102, 0.08);
+    }
+
+    .saved-track-number {
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .saved-track-copy {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .saved-track-copy strong {
+      font-size: 0.98rem;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .saved-track-copy span,
+    .saved-track-badge {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.25;
+    }
+
+    .saved-track-badge {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      white-space: nowrap;
+    }
+
     .imposter-round .round-body {
       align-items: start;
       overflow: hidden;
@@ -526,12 +798,22 @@
     .imposter-card {
       padding: 8px;
       border: 1px solid var(--line);
-      background: var(--panel-2);
+      background: #000000;
       display: grid;
-      gap: 6px;
+      gap: 10px;
       align-content: start;
+      text-align: left;
       cursor: pointer;
       transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+    }
+
+    .imposter-cover {
+      width: 100%;
+      aspect-ratio: 2.5 / 1;
+      object-fit: contain;
+      object-position: center;
+      border: 1px solid var(--line);
+      background: #000000;
     }
 
     .imposter-card:hover,
@@ -542,31 +824,27 @@
     }
 
     .imposter-card.is-selected {
-      background: #ffffff;
-      color: var(--black);
-      border-color: #ffffff;
+      background: #000000;
+      border-color: var(--line-strong);
+    }
+
+    .imposter-card.is-correct {
+      background: rgba(34, 111, 60, 0.28);
+      border-color: rgba(66, 201, 115, 0.72);
+    }
+
+    .imposter-card.is-wrong {
+      background: rgba(109, 28, 28, 0.28);
+      border-color: rgba(229, 78, 78, 0.72);
+    }
+
+    .imposter-card.is-selected .imposter-song,
+    .imposter-card.is-selected .imposter-artist {
+      color: #ffffff;
     }
 
     .imposter-card:disabled {
       cursor: default;
-    }
-
-    .cover-placeholder {
-      aspect-ratio: 2.5 / 1;
-      border: 1px dashed rgba(255, 255, 255, 0.18);
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
-      display: grid;
-      place-items: center;
-      color: var(--muted);
-      font-size: 0.66rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .imposter-card.is-selected .cover-placeholder {
-      border-color: rgba(0, 0, 0, 0.18);
-      background: rgba(0, 0, 0, 0.04);
-      color: rgba(0, 0, 0, 0.56);
     }
 
     .imposter-copy {
@@ -668,8 +946,10 @@
     .hitster-cover {
       width: 100%;
       aspect-ratio: 1 / 1;
-      object-fit: cover;
+      object-fit: contain;
+      object-position: center;
       border: 1px solid var(--line);
+      background: #000000;
     }
 
     .hitster-song {
@@ -728,8 +1008,10 @@
     .roulette-cover {
       width: 100%;
       aspect-ratio: 1 / 1;
-      object-fit: cover;
+      object-fit: contain;
+      object-position: center;
       border: 1px solid var(--line);
+      background: #000000;
     }
 
     .roulette-song {
@@ -896,8 +1178,10 @@
     .blitz-cover {
       width: 100%;
       aspect-ratio: 1 / 1;
-      object-fit: cover;
+      object-fit: contain;
+      object-position: center;
       border: 1px solid var(--line);
+      background: #000000;
     }
 
     .blitz-question {
@@ -941,23 +1225,26 @@
     }
 
     .buzzer {
-      width: min(100%, 300px);
-      aspect-ratio: 1 / 1;
-      border-radius: 999px;
-      border: 2px solid #ffffff;
-      background: #6b1f1f;
+      width: min(100%, 420px);
+      min-height: 84px;
+      padding: 0 36px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(74, 16, 16, 0.62);
       color: #ffffff;
-      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-size: clamp(1.6rem, 3.4vw, 2.2rem);
       letter-spacing: -0.06em;
       cursor: pointer;
-      box-shadow: inset 0 -16px 0 rgba(0, 0, 0, 0.18), 0 24px 44px rgba(0, 0, 0, 0.22);
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: inset 0 -10px 0 rgba(0, 0, 0, 0.18), 0 16px 28px rgba(0, 0, 0, 0.16);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
     }
 
     .buzzer:hover,
     .buzzer:focus-visible {
       transform: translateY(-2px);
-      box-shadow: inset 0 -16px 0 rgba(0, 0, 0, 0.18), 0 28px 52px rgba(0, 0, 0, 0.28);
+      background: rgba(104, 24, 24, 0.74);
+      border-color: rgba(255, 255, 255, 0.28);
+      box-shadow: inset 0 -10px 0 rgba(0, 0, 0, 0.18), 0 20px 34px rgba(0, 0, 0, 0.22);
       outline: none;
     }
 
@@ -1011,13 +1298,10 @@
     }
 
     @media (max-width: 980px) {
-      .hitster-list {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
       .roulette-main,
       .blitz-prompt,
-      .podium-grid {
+      .podium-grid,
+      .saved-hero {
         grid-template-columns: 1fr;
       }
     }
@@ -1066,6 +1350,9 @@
       }
 
       .roulette-player,
+      .results-continue-button,
+      .secondary-button,
+      .playlist-save-button,
       .restart-preview-button,
       .imposter-submit,
       .hitster-submit,
@@ -1074,7 +1361,35 @@
         width: 100%;
       }
 
+      .results-actions,
+      .playlist-actions,
+      .saved-actions {
+        justify-content: stretch;
+      }
+
+      .results-toggle-row {
+        justify-content: stretch;
+      }
+
       .answer-row {
+        grid-template-columns: 1fr;
+      }
+
+      .answer-form {
+        grid-template-columns: 1fr;
+      }
+
+      .answer-submit {
+        width: 100%;
+      }
+
+      .winner-summary {
+        grid-template-columns: 1fr;
+        text-align: center;
+        justify-items: center;
+      }
+
+      .winner-song-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -1098,8 +1413,13 @@
         grid-template-columns: 1fr;
       }
 
-      .buzzer {
-        width: min(100%, 260px);
+      .winner-song-option,
+      .saved-track {
+        grid-template-columns: 1fr;
+      }
+
+      .saved-track-badge {
+        white-space: normal;
       }
     }
   </style>
@@ -1131,31 +1451,31 @@
 
       <div class="round-body">
         <div class="game-panel">
-          <p class="instruction">Three tracks belong together. Pick the one that breaks the pattern, then submit your choice. Cover blocks are placeholder visuals in this preview.</p>
+          <p class="instruction">Three tracks belong together. Click the one that breaks the pattern to check it immediately. Cover blocks are placeholder visuals in this preview.</p>
           <div class="imposter-grid" data-select-group="imposter">
             <button class="imposter-card" type="button">
-              <div class="cover-placeholder">Cover pending</div>
+              <img class="imposter-cover" src="photos/account/take_on_me.jpg" alt="Album art for Take on Me" />
               <div class="imposter-copy">
                 <strong class="imposter-song">Take on Me</strong>
                 <span class="imposter-artist">a-ha</span>
               </div>
             </button>
             <button class="imposter-card" type="button">
-              <div class="cover-placeholder">Cover pending</div>
+              <img class="imposter-cover" src="photos/account/blue_monday.jpg" alt="Album art for Blue Monday" />
               <div class="imposter-copy">
                 <strong class="imposter-song">Blue Monday</strong>
                 <span class="imposter-artist">New Order</span>
               </div>
             </button>
             <button class="imposter-card" type="button">
-              <div class="cover-placeholder">Cover pending</div>
+              <img class="imposter-cover" src="photos/account/blinding_lights.png" alt="Album art for Blinding Lights" />
               <div class="imposter-copy">
                 <strong class="imposter-song">Blinding Lights</strong>
                 <span class="imposter-artist">The Weeknd</span>
               </div>
             </button>
             <button class="imposter-card" type="button">
-              <div class="cover-placeholder">Cover pending</div>
+              <img class="imposter-cover" src="photos/account/sweet_dreams.jpg" alt="Album art for Sweet Dreams" />
               <div class="imposter-copy">
                 <strong class="imposter-song">Sweet Dreams</strong>
                 <span class="imposter-artist">Eurythmics</span>
@@ -1163,8 +1483,7 @@
             </button>
           </div>
           <div class="round-interaction">
-            <p class="round-status" id="imposter-status">Select one track to mark it as the imposter, then submit it.</p>
-            <button class="imposter-submit" type="button" id="imposter-submit" disabled>Submit choice</button>
+            <p class="round-status" id="imposter-status">Select one track to mark it as the imposter. The answer checks immediately on click.</p>
             <div class="round-result" id="imposter-result" hidden></div>
           </div>
         </div>
@@ -1227,7 +1546,7 @@
             </li>
             <li class="hitster-card" draggable="true">
               <div class="hitster-handle">::</div>
-              <img class="hitster-cover" src="photos/spotify/ekv2.png" alt="Adele cover" />
+              <img class="hitster-cover" src="photos/spotify/addele_rolling_in_the_deep.png" alt="Adele cover" />
               <div class="hitster-song">
                 <strong class="hitster-title">Rolling in the Deep</strong>
                 <span class="hitster-artist">Adele</span>
@@ -1281,20 +1600,20 @@
 
             <div class="roulette-players" data-select-group="roulette">
               <button class="roulette-player" type="button">
-                <img class="roulette-avatar" src="photos/account/nirvana.png" alt="Nikola avatar" />
-                <span class="roulette-name">Nikola M.</span>
+                <img class="roulette-avatar" src="photos/account/pfp1.jpg" alt="midnightmix avatar" />
+                <span class="roulette-name">midnightmix</span>
               </button>
               <button class="roulette-player" type="button">
-                <img class="roulette-avatar" src="photos/account/radiohead.png" alt="Jovana avatar" />
-                <span class="roulette-name">Jovana R.</span>
+                <img class="roulette-avatar" src="photos/account/pfp2.jpg" alt="vinylviper avatar" />
+                <span class="roulette-name">vinylviper</span>
               </button>
               <button class="roulette-player" type="button">
-                <img class="roulette-avatar" src="photos/account/rhcp.png" alt="Marko avatar" />
-                <span class="roulette-name">Marko P.</span>
+                <img class="roulette-avatar" src="photos/account/pfp3.jpg" alt="ech0pulse avatar" />
+                <span class="roulette-name">ech0pulse</span>
               </button>
               <button class="roulette-player" type="button">
-                <img class="roulette-avatar" src="photos/guest/weeknd.png" alt="Guest avatar" />
-                <span class="roulette-name">Guest 04</span>
+                <img class="roulette-avatar" src="photos/account/pfp4.jpg" alt="guest_04 avatar" />
+                <span class="roulette-name">guest_04</span>
               </button>
             </div>
 
@@ -1330,15 +1649,15 @@
               <div class="blitz-question">
                 <span class="blitz-kicker">Visual clue</span>
                 <div class="blitz-question-text">Which album does “Come As You Are” belong to?</div>
-                <p class="blitz-helper">Hit the buzzer to unlock one short answer. The artwork is part of the clue. Submit the album title before the timer runs out.</p>
+                <p class="blitz-helper">The cover is your clue. Hit the buzzer to answer.</p>
               </div>
             </div>
 
             <div class="blitz-action">
-              <p class="blitz-status" id="blitz-status">Buzz to open your answer field. Once you submit, your answer is saved for this preview.</p>
+              <p class="blitz-status" id="blitz-status">Buzz to open the answer field.</p>
               <button class="buzzer" type="button" id="buzzer">Buzz</button>
               <div class="answer-form" id="answer-form" hidden>
-                <p class="answer-lead">You buzzed in. Type the album title and submit it.</p>
+                <p class="answer-lead">Type the album title and submit it.</p>
                 <div class="answer-row">
                   <input class="answer-input" type="text" placeholder="Type album title" autocomplete="off" />
                   <button class="answer-submit" type="button">Submit answer</button>
@@ -1369,6 +1688,9 @@
           <div class="results-stage">
             <p class="results-lead" id="results-lead">You are still on the board.</p>
             <p class="instruction" id="results-summary">Finish the rounds to see where your final score lands on the podium.</p>
+            <div class="results-toggle-row">
+              <button class="secondary-button" type="button" id="winner-override-button">Switch winner to me</button>
+            </div>
             <div class="podium-grid" id="podium-grid"></div>
             <div class="leaderboard-list" id="leaderboard-list"></div>
           </div>
@@ -1376,7 +1698,105 @@
       </div>
 
       <div class="round-footer">
-        <button class="restart-preview-button" type="button" id="restart-preview-button">Restart preview</button>
+        <div class="results-actions">
+          <button class="secondary-button" type="button" id="results-restart-button">Go to main screen</button>
+          <button class="results-continue-button" type="button" id="results-continue-button">Continue to winner pick</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="round-screen playlist-round" data-round-screen hidden>
+      <div class="round-header">
+        <div class="round-meta">
+          <span class="round-counter">Winner step</span>
+          <span class="question-type">Winner playlist</span>
+          <h1 class="round-title">Choose the final song for the playlist.</h1>
+        </div>
+        <div class="round-side">
+          <div class="round-rank">4th place</div>
+          <div class="round-points">0 pts</div>
+        </div>
+      </div>
+
+      <div class="round-body">
+        <div class="game-panel">
+          <div class="winner-stage">
+            <div class="winner-summary">
+              <img class="winner-avatar" id="winner-avatar" src="photos/account/pfp4.jpg" alt="Winner avatar" />
+              <div class="winner-copy">
+                <span class="winner-kicker">Winner unlocked</span>
+                <h2 class="winner-name" id="winner-name">guest_04 gets the last pick.</h2>
+                <p class="winner-note" id="winner-note">Pick one of the four songs and submit it as the last track.</p>
+              </div>
+            </div>
+
+            <div class="playlist-fieldset">
+              <p class="field-label">Four final options</p>
+              <div class="winner-song-grid" id="winner-song-grid"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="round-footer">
+        <div class="playlist-actions">
+          <button class="secondary-button" type="button" id="playlist-back-button">Back to podium</button>
+          <button class="playlist-save-button" type="button" id="playlist-save-button">Submit song</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="round-screen wait-round" data-round-screen hidden>
+      <div class="round-header">
+        <div class="round-meta">
+          <span class="round-counter">Winner step</span>
+          <span class="question-type">Please wait</span>
+          <h1 class="round-title">Waiting for the winner to pick a song.</h1>
+        </div>
+        <div class="round-side">
+          <div class="round-rank">4th place</div>
+          <div class="round-points">0 pts</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="round-screen saved-playlist-round" data-round-screen hidden>
+      <div class="round-header">
+        <div class="round-meta">
+          <span class="round-counter">Saved playlist</span>
+          <span class="question-type">Group session</span>
+          <h1 class="round-title">Here is the finished playlist.</h1>
+        </div>
+        <div class="round-side">
+          <div class="round-rank">4th place</div>
+          <div class="round-points">0 pts</div>
+        </div>
+      </div>
+
+      <div class="round-body">
+        <div class="game-panel">
+          <div class="saved-stage">
+            <div class="saved-playlist-panel">
+              <div class="saved-hero">
+                <img class="saved-cover" id="saved-playlist-cover" src="photos/spotify/radiohead.png" alt="Saved playlist cover" />
+                <div class="saved-meta">
+                  <span class="saved-kicker">Saved to group history</span>
+                  <h2 class="saved-title" id="saved-playlist-title">Night Drive Winners</h2>
+                  <p class="saved-note" id="saved-playlist-note">Built by the winner and ready for the next replay.</p>
+                </div>
+              </div>
+
+              <div class="saved-track-list" id="saved-track-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="round-footer">
+        <div class="saved-actions">
+          <button class="playlist-save-button" type="button" id="add-to-library-button">Add to library</button>
+          <button class="restart-preview-button" type="button" id="saved-restart-button">Go to main screen</button>
+        </div>
       </div>
     </section>
   </main>
@@ -1388,9 +1808,9 @@
 
     const currentFile = window.location.pathname.split("/").pop() || "index.html";
     const roundScreens = Array.from(document.querySelectorAll("[data-round-screen]"));
-    const restartPreviewButton = document.getElementById("restart-preview-button");
+    const resultsRestartButton = document.getElementById("results-restart-button");
+    const resultsContinueButton = document.getElementById("results-continue-button");
     const imposterGroup = document.querySelector('[data-select-group="imposter"]');
-    const imposterSubmit = document.getElementById("imposter-submit");
     const imposterStatus = document.getElementById("imposter-status");
     const imposterResult = document.getElementById("imposter-result");
     const hitsterList = document.getElementById("hitster-list");
@@ -1409,12 +1829,31 @@
     const rouletteResult = document.getElementById("roulette-result");
     const resultsLead = document.getElementById("results-lead");
     const resultsSummary = document.getElementById("results-summary");
+    const winnerOverrideButton = document.getElementById("winner-override-button");
     const podiumGrid = document.getElementById("podium-grid");
     const leaderboardList = document.getElementById("leaderboard-list");
+    const winnerAvatar = document.getElementById("winner-avatar");
+    const winnerName = document.getElementById("winner-name");
+    const winnerNote = document.getElementById("winner-note");
+    const winnerSongGrid = document.getElementById("winner-song-grid");
+    const playlistBackButton = document.getElementById("playlist-back-button");
+    const playlistSaveButton = document.getElementById("playlist-save-button");
+    const savedPlaylistCover = document.getElementById("saved-playlist-cover");
+    const savedPlaylistTitle = document.getElementById("saved-playlist-title");
+    const savedPlaylistNote = document.getElementById("saved-playlist-note");
+    const savedTrackList = document.getElementById("saved-track-list");
+    const addToLibraryButton = document.getElementById("add-to-library-button");
+    const savedRestartButton = document.getElementById("saved-restart-button");
+    const waitTitle = document.querySelector(".wait-round .round-title");
     let activeRound = 0;
     let draggedCard = null;
     let activeTimerId = null;
     let autoAdvanceId = null;
+    let waitAdvanceId = null;
+    let waitDotsId = null;
+    let playlistDraft = null;
+    let forceUserWinner = false;
+    const waitBaseText = "Waiting for the winner to pick a song";
     const hitsterPlaceholder = document.createElement("li");
     hitsterPlaceholder.className = "hitster-placeholder";
     const roundRanks = Array.from(document.querySelectorAll(".round-rank"));
@@ -1422,7 +1861,7 @@
     const roundTimers = roundScreens.map((screen) => screen.querySelector(".round-timer"));
     const initialHitsterCards = hitsterList ? Array.from(hitsterList.querySelectorAll(".hitster-card")) : [];
     const scoreByRound = [0, 0, 0, 0];
-    const roundRemainingSeconds = [0, 0, 0, 0, 0];
+    const roundRemainingSeconds = Array.from({ length: roundScreens.length }, () => 0);
     const correctHitsterOrder = [
       "Šal od svile",
       "Par godina za nas",
@@ -1431,10 +1870,30 @@
       "Rolling in the Deep"
     ];
     const leaderboardPlayers = [
-      { id: "you", name: "Guest 04", avatar: "photos/guest/weeknd.png", isUser: true },
-      { id: "nikola", name: "Nikola M.", avatar: "photos/account/nirvana.png", score: 3350 },
-      { id: "jovana", name: "Jovana R.", avatar: "photos/account/radiohead.png", score: 2620 },
-      { id: "marko", name: "Marko P.", avatar: "photos/account/rhcp.png", score: 1710 }
+      { id: "you", name: "guest_04", avatar: "photos/account/pfp4.jpg", isUser: true },
+      { id: "midnightmix", name: "midnightmix", avatar: "photos/account/pfp1.jpg", score: 3350 },
+      { id: "vinylviper", name: "vinylviper", avatar: "photos/account/pfp2.jpg", score: 2620 },
+      { id: "ech0pulse", name: "ech0pulse", avatar: "photos/account/pfp3.jpg", score: 1710 }
+    ];
+    const winnerSongOptions = [
+      { id: "ekv", title: "Ti si sav moj bol", artist: "EKV", src: "photos/spotify/ekv.png", alt: "EKV cover", note: "Keeps the playlist in reflective mode." },
+      { id: "haustor", title: "Bi mogo da mogu", artist: "Haustor", src: "photos/spotify/haustor.png", alt: "Haustor cover", note: "Leans warmer and more playful." },
+      { id: "goblini", title: "Ima nas", artist: "Goblini", src: "photos/spotify/goblini.png", alt: "Goblini cover", note: "Adds a louder finish for the group." },
+      { id: "paket", title: "Niko kao ja", artist: "Šarlo Akrobata", src: "photos/spotify/paket.png", alt: "Paket aranžman cover", note: "Turns the ending into an ex-Yu classic cut." }
+    ];
+    const baseSavedTracks = [
+      { title: "Take on Me", artist: "a-ha", badge: "Round 1" },
+      { title: "Blue Monday", artist: "New Order", badge: "Round 1" },
+      { title: "Sweet Dreams", artist: "Eurythmics", badge: "Round 1" },
+      { title: "Šal od svile", artist: "Haustor", badge: "Round 2" },
+      { title: "Par godina za nas", artist: "EKV", badge: "Round 2" },
+      { title: "Rolling in the Deep", artist: "Adele", badge: "Round 2" },
+      { title: "Paranoid Android", artist: "Radiohead", badge: "Round 3" },
+      { title: "No Surprises", artist: "Radiohead", badge: "Round 3" },
+      { title: "Karma Police", artist: "Radiohead", badge: "Round 3" },
+      { title: "Smells Like Teen Spirit", artist: "Nirvana", badge: "Round 4" },
+      { title: "Lithium", artist: "Nirvana", badge: "Round 4" },
+      { title: "In Bloom", artist: "Nirvana", badge: "Round 4" }
     ];
 
     function parseTimerValue(value) {
@@ -1522,13 +1981,19 @@
       updatePointsDisplay();
     }
 
-    function resetAllScores() {
-      scoreByRound.fill(0);
-      updatePointsDisplay();
+    function resetPlaylistDraft() {
+      playlistDraft = null;
+      if (addToLibraryButton) {
+        addToLibraryButton.textContent = "Add to library";
+        addToLibraryButton.disabled = false;
+      }
     }
 
-    function normalizeAnswer(value) {
-      return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    function resetAllScores() {
+      scoreByRound.fill(0);
+      forceUserWinner = false;
+      resetPlaylistDraft();
+      updatePointsDisplay();
     }
 
     function getSpeedPoints(index) {
@@ -1541,6 +2006,10 @@
       if (!Number.isFinite(remainingSeconds) || remainingSeconds <= 0) return 0;
 
       return Math.max(50, Math.round((remainingSeconds / initialSeconds) * 1000));
+    }
+
+    function normalizeAnswer(value) {
+      return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
     }
 
     function revealFeedback(element) {
@@ -1572,16 +2041,201 @@
     }
 
     function getLeaderboardEntries() {
+      const maxOpponentScore = leaderboardPlayers.reduce((max, player) => {
+        if (player.isUser) return max;
+        return Math.max(max, player.score);
+      }, 0);
+
       return leaderboardPlayers
         .map((player, index) => ({
           ...player,
           index,
-          score: player.isUser ? getTotalScore() : player.score
+          score: player.isUser ? getTotalScore() : player.score,
+          sortScore: player.isUser
+            ? (forceUserWinner ? maxOpponentScore + 1 : getTotalScore())
+            : player.score
         }))
         .sort((a, b) => {
-          if (b.score !== a.score) return b.score - a.score;
+          if (b.sortScore !== a.sortScore) return b.sortScore - a.sortScore;
           return a.index - b.index;
         });
+    }
+
+    function getWinnerEntry() {
+      return getLeaderboardEntries()[0] || null;
+    }
+
+    function getDefaultPlaylistName(winner) {
+      if (!winner) return "Group Winners Mix";
+      return winner.isUser ? "Your Winner's Encore" : winner.name.split(" ")[0] + "'s Winner's Encore";
+    }
+
+    function createPlaylistDraft() {
+      const winner = getWinnerEntry();
+      const defaultSong = winnerSongOptions[0];
+
+      return {
+        winnerId: winner ? winner.id : "",
+        songId: defaultSong.id
+      };
+    }
+
+    function ensurePlaylistDraft() {
+      const winner = getWinnerEntry();
+      const winnerId = winner ? winner.id : "";
+      if (!playlistDraft || playlistDraft.winnerId !== winnerId) {
+        playlistDraft = createPlaylistDraft();
+      }
+      return playlistDraft;
+    }
+
+    function getSelectedWinnerSong() {
+      const draft = ensurePlaylistDraft();
+      return winnerSongOptions.find((song) => song.id === draft.songId) || winnerSongOptions[0];
+    }
+
+    function getSavedTracks() {
+      const selectedSong = getSelectedWinnerSong();
+      return [
+        ...baseSavedTracks,
+        {
+          title: selectedSong.title,
+          artist: selectedSong.artist,
+          badge: "Winner pick",
+          isHighlight: true
+        }
+      ];
+    }
+
+    function renderWinnerSongOptions(isEditable) {
+      if (!winnerSongGrid) return;
+
+      const draft = ensurePlaylistDraft();
+      winnerSongGrid.replaceChildren();
+
+      winnerSongOptions.forEach((song) => {
+        const button = document.createElement("button");
+        const image = document.createElement("img");
+        const copy = document.createElement("div");
+        const title = document.createElement("strong");
+        const artist = document.createElement("span");
+        const note = document.createElement("span");
+
+        button.type = "button";
+        button.className = "winner-song-option" + (draft.songId === song.id ? " is-selected" : "");
+        button.dataset.songId = song.id;
+        button.disabled = !isEditable;
+        button.setAttribute("aria-pressed", draft.songId === song.id ? "true" : "false");
+
+        image.className = "winner-song-image";
+        image.src = song.src;
+        image.alt = song.alt;
+
+        copy.className = "winner-song-copy";
+        title.className = "winner-song-title";
+        artist.className = "winner-song-artist";
+        note.className = "winner-song-note";
+
+        title.textContent = song.title;
+        artist.textContent = song.artist;
+        note.textContent = song.note;
+
+        copy.append(title, artist, note);
+        button.append(image, copy);
+        winnerSongGrid.append(button);
+      });
+    }
+
+    function renderWinnerPlaylistScreen() {
+      const winner = getWinnerEntry();
+      const isEditable = Boolean(winner && winner.isUser);
+
+      if (winnerAvatar) {
+        winnerAvatar.src = winner ? winner.avatar : leaderboardPlayers[0].avatar;
+        winnerAvatar.alt = (winner ? winner.name : "Winner") + " avatar";
+      }
+
+      if (winnerName) {
+        winnerName.textContent = winner && winner.isUser
+          ? "You won and unlocked the final song."
+          : (winner ? winner.name : "The winner") + " unlocked the final song.";
+      }
+
+      if (winnerNote) {
+        winnerNote.textContent = winner && winner.isUser
+          ? "You won. Choose one of the four options and submit it as the final song."
+          : (winner ? winner.name : "The winner") + " owns this step in the live game.";
+      }
+
+      renderWinnerSongOptions(isEditable);
+
+      if (playlistSaveButton) {
+        playlistSaveButton.textContent = "Submit song";
+        playlistSaveButton.disabled = !isEditable;
+      }
+    }
+
+    function renderWaitScreen() {
+      window.clearTimeout(waitAdvanceId);
+      waitAdvanceId = null;
+      window.clearInterval(waitDotsId);
+      waitDotsId = null;
+
+      if (waitTitle) {
+        let dotCount = 1;
+        waitTitle.textContent = waitBaseText + ".";
+
+        waitDotsId = window.setInterval(() => {
+          dotCount = (dotCount % 3) + 1;
+          waitTitle.textContent = waitBaseText + ".".repeat(dotCount);
+        }, 500);
+      }
+
+      waitAdvanceId = window.setTimeout(() => {
+        window.clearInterval(waitDotsId);
+        waitDotsId = null;
+        showRound(7);
+      }, 5000);
+    }
+
+    function renderSavedPlaylistScreen() {
+      if (!savedPlaylistCover || !savedPlaylistTitle || !savedPlaylistNote || !savedTrackList) return;
+
+      const winner = getWinnerEntry();
+      const playlistName = getDefaultPlaylistName(winner);
+      const selectedSong = getSelectedWinnerSong();
+      const tracks = getSavedTracks();
+
+      savedPlaylistCover.src = selectedSong.src;
+      savedPlaylistCover.alt = selectedSong.alt;
+      savedPlaylistTitle.textContent = playlistName;
+      savedPlaylistNote.textContent = winner && winner.isUser
+        ? "Your winning pick was added as song 13 in the playlist."
+        : (winner ? winner.name : "The winner") + " picked song 13 for this playlist.";
+
+      savedTrackList.replaceChildren();
+      tracks.forEach((track, index) => {
+        const row = document.createElement("div");
+        const number = document.createElement("span");
+        const copy = document.createElement("div");
+        const title = document.createElement("strong");
+        const artist = document.createElement("span");
+        const badge = document.createElement("span");
+
+        row.className = "saved-track" + (track.isHighlight ? " is-highlight" : "");
+        number.className = "saved-track-number";
+        copy.className = "saved-track-copy";
+        badge.className = "saved-track-badge";
+
+        number.textContent = String(index + 1).padStart(2, "0");
+        title.textContent = track.title;
+        artist.textContent = track.artist;
+        badge.textContent = track.badge;
+
+        copy.append(title, artist);
+        row.append(number, copy, badge);
+        savedTrackList.append(row);
+      });
     }
 
     function renderResultsScreen() {
@@ -1590,12 +2244,19 @@
       const entries = getLeaderboardEntries();
       const userRank = entries.findIndex((entry) => entry.isUser) + 1;
       const userEntry = entries[userRank - 1];
+      const winner = entries[0];
       const podiumOrder = [2, 1, 3];
 
       resultsLead.textContent = "You placed " + formatOrdinal(userRank) + " with " + formatPoints(userEntry ? userEntry.score : 0) + ".";
       resultsSummary.textContent = userRank === 1
-        ? "Top of the podium. The preview score carried you all the way to first place."
-        : "The podium is based on your round points against the rest of the lobby preview.";
+        ? "Top of the podium. You now choose the final song from four options."
+        : (winner ? winner.name : "The winner") + " now chooses the final song.";
+      if (resultsContinueButton) {
+        resultsContinueButton.textContent = userRank === 1 ? "Choose winner song" : "Wait for winner";
+      }
+      if (winnerOverrideButton) {
+        winnerOverrideButton.textContent = forceUserWinner ? "Use real winner" : "Switch winner to me";
+      }
 
       podiumGrid.replaceChildren();
       podiumOrder.forEach((place) => {
@@ -1670,9 +2331,9 @@
         submitButton.className = "answer-submit";
         submitButton.type = "button";
         submitButton.textContent = "Submit answer";
-        const answerRow = answerForm.querySelector(".answer-row");
-        if (answerRow) {
-          answerRow.append(submitButton);
+        const answerRowElement = answerForm.querySelector(".answer-row");
+        if (answerRowElement) {
+          answerRowElement.append(submitButton);
         } else {
           answerForm.append(submitButton);
         }
@@ -1681,12 +2342,47 @@
       return submitButton;
     }
 
+    function finalizeImposterPick(selectedCard) {
+      if (!selectedCard || !imposterGroup || !imposterResult) return;
+      if (imposterGroup.dataset.locked === "true") return;
+
+      const song = selectedCard.querySelector(".imposter-song");
+      const artist = selectedCard.querySelector(".imposter-artist");
+      const isCorrect = song && song.textContent.trim() === "Blinding Lights";
+      const awardedPoints = isCorrect ? getSpeedPoints(0) : 0;
+
+      imposterGroup.dataset.locked = "true";
+      imposterGroup.querySelectorAll(".imposter-card").forEach((card) => {
+        card.classList.remove("is-correct", "is-wrong");
+        card.disabled = true;
+      });
+      selectedCard.classList.add(isCorrect ? "is-correct" : "is-wrong");
+      imposterResult.hidden = false;
+      imposterResult.className = "round-result " + (isCorrect ? "is-correct" : "is-wrong");
+      setRoundScore(0, awardedPoints);
+      imposterResult.replaceChildren(buildRoundResult(
+        isCorrect ? "Correct answer" : "Answer checked",
+        (song ? song.textContent : "Track") +
+        (artist ? " by " + artist.textContent : "") +
+        (isCorrect ? " was the right imposter. +" + formatPoints(awardedPoints) + "." : " was checked as your pick. +0 pts.")
+      ));
+      if (imposterStatus) {
+        imposterStatus.textContent = isCorrect ? "Correct pick. Speed bonus awarded: " + formatPoints(awardedPoints) + "." : "Your pick was checked. +0 pts for this round.";
+      }
+      revealFeedback(imposterResult);
+      queueAutoAdvance();
+    }
+
     function showRound(index) {
       window.clearTimeout(autoAdvanceId);
       autoAdvanceId = null;
+      window.clearTimeout(waitAdvanceId);
+      waitAdvanceId = null;
+      window.clearInterval(waitDotsId);
+      waitDotsId = null;
 
       const previousRound = activeRound;
-      if (index === 0 && previousRound === roundScreens.length - 1) {
+      if (index === 0 && previousRound >= 4) {
         resetAllScores();
       }
 
@@ -1697,20 +2393,18 @@
 
       startRoundTimer(index);
 
-      if (index === 0 && imposterGroup && imposterSubmit && imposterResult) {
+      if (index === 0 && imposterGroup && imposterResult) {
         imposterGroup.dataset.locked = "false";
         imposterGroup.hidden = false;
         imposterGroup.querySelectorAll(".imposter-card").forEach((card) => {
-          card.classList.remove("is-selected");
+          card.classList.remove("is-selected", "is-correct", "is-wrong");
           card.disabled = false;
         });
-        imposterSubmit.hidden = false;
-        imposterSubmit.disabled = true;
         imposterResult.hidden = true;
         imposterResult.className = "round-result";
         imposterResult.replaceChildren();
         if (imposterStatus) {
-          imposterStatus.textContent = "Select one track to mark it as the imposter, then submit it.";
+          imposterStatus.textContent = "Select one track to mark it as the imposter. The answer checks immediately on click.";
         }
       }
 
@@ -1762,7 +2456,7 @@
         if (answerLead) answerLead.hidden = false;
         if (answerRow) answerRow.hidden = false;
         if (blitzStatus) {
-          blitzStatus.textContent = "Buzz to open your answer field. Once you submit, your answer is saved for this preview.";
+          blitzStatus.textContent = "Buzz to open the answer field.";
         }
         ensureAnswerSubmit();
         const confirmation = answerForm.querySelector(".answer-confirmation");
@@ -1771,6 +2465,21 @@
 
       if (index === 4) {
         renderResultsScreen();
+      }
+
+      if (index === 5) {
+        renderWinnerPlaylistScreen();
+      }
+
+      if (index === 6) {
+        renderWaitScreen();
+      }
+
+      if (index === 7) {
+        if (waitTitle) {
+          waitTitle.textContent = waitBaseText + ".";
+        }
+        renderSavedPlaylistScreen();
       }
     }
 
@@ -1783,7 +2492,7 @@
           items.forEach((button) => button.classList.remove("is-selected"));
           item.classList.add("is-selected");
 
-          if (rouletteSubmit && group.dataset.selectGroup === "roulette") {
+          if (group.dataset.selectGroup === "roulette" && rouletteSubmit) {
             rouletteSubmit.classList.add("is-visible");
             if (rouletteStatus) {
               const selectedName = item.querySelector(".roulette-name");
@@ -1791,12 +2500,12 @@
             }
           }
 
-          if (imposterSubmit && group.dataset.selectGroup === "imposter") {
-            imposterSubmit.disabled = false;
+          if (group.dataset.selectGroup === "imposter") {
             if (imposterStatus) {
               const selectedSong = item.querySelector(".imposter-song");
-              imposterStatus.textContent = "Selected: " + (selectedSong ? selectedSong.textContent : "track") + ". Submit your choice when you're ready.";
+              imposterStatus.textContent = "Selected: " + (selectedSong ? selectedSong.textContent : "track") + ". Checking now...";
             }
+            finalizeImposterPick(item);
           }
         });
       });
@@ -1889,38 +2598,6 @@
       });
     }
 
-    if (imposterSubmit && imposterGroup && imposterResult) {
-      imposterSubmit.addEventListener("click", () => {
-        const selectedCard = imposterGroup.querySelector(".imposter-card.is-selected");
-        if (!selectedCard) return;
-
-        const song = selectedCard.querySelector(".imposter-song");
-        const artist = selectedCard.querySelector(".imposter-artist");
-        const isCorrect = song && song.textContent.trim() === "Blinding Lights";
-        const awardedPoints = isCorrect ? getSpeedPoints(0) : 0;
-
-        imposterGroup.dataset.locked = "true";
-        imposterGroup.querySelectorAll(".imposter-card").forEach((card) => {
-          card.disabled = true;
-        });
-        imposterSubmit.hidden = true;
-        imposterResult.hidden = false;
-        imposterResult.className = "round-result " + (isCorrect ? "is-correct" : "is-wrong");
-        setRoundScore(0, awardedPoints);
-        imposterResult.replaceChildren(buildRoundResult(
-          isCorrect ? "Correct answer" : "Answer submitted",
-          (song ? song.textContent : "Track") +
-          (artist ? " by " + artist.textContent : "") +
-          (isCorrect ? " was the right imposter. +" + formatPoints(awardedPoints) + "." : " was submitted as your pick. +0 pts.")
-        ));
-        if (imposterStatus) {
-          imposterStatus.textContent = isCorrect ? "Correct pick. Speed bonus awarded: " + formatPoints(awardedPoints) + "." : "Your pick was submitted. +0 pts for this round.";
-        }
-        revealFeedback(imposterResult);
-        queueAutoAdvance();
-      });
-    }
-
     if (hitsterSubmit && hitsterList && hitsterResult) {
       hitsterSubmit.addEventListener("click", () => {
         const orderedCards = Array.from(hitsterList.querySelectorAll(".hitster-card"));
@@ -1963,7 +2640,7 @@
         if (!selectedPlayer) return;
 
         const playerName = selectedPlayer.querySelector(".roulette-name");
-        const isCorrect = playerName && playerName.textContent.trim() === "Jovana R.";
+        const isCorrect = playerName && playerName.textContent.trim() === "vinylviper";
         const awardedPoints = isCorrect ? getSpeedPoints(2) : 0;
 
         rouletteGroup.dataset.locked = "true";
@@ -1996,7 +2673,7 @@
           if (answerInput) answerInput.focus();
         }
         if (blitzStatus) {
-          blitzStatus.textContent = "Answer field unlocked. Type the album title and submit it before the timer ends.";
+          blitzStatus.textContent = "Answer field unlocked.";
         }
       });
     }
@@ -2041,9 +2718,65 @@
       });
     }
 
-    if (restartPreviewButton) {
-      restartPreviewButton.addEventListener("click", () => {
-        showRound(0);
+    if (resultsRestartButton) {
+      resultsRestartButton.addEventListener("click", () => {
+        window.location.href = "guest.html";
+      });
+    }
+
+    if (resultsContinueButton) {
+      resultsContinueButton.addEventListener("click", () => {
+        const winner = getWinnerEntry();
+        showRound(winner && winner.isUser ? 5 : 6);
+      });
+    }
+
+    if (winnerOverrideButton) {
+      winnerOverrideButton.addEventListener("click", () => {
+        forceUserWinner = !forceUserWinner;
+        resetPlaylistDraft();
+        updatePointsDisplay();
+        if (activeRound === 4) {
+          renderResultsScreen();
+        }
+      });
+    }
+
+    if (winnerSongGrid) {
+      winnerSongGrid.addEventListener("click", (event) => {
+        const option = event.target.closest("[data-song-id]");
+        const winner = getWinnerEntry();
+        if (!option || !winner || !winner.isUser) return;
+
+        ensurePlaylistDraft();
+        playlistDraft.songId = option.dataset.songId || playlistDraft.songId;
+        renderWinnerPlaylistScreen();
+      });
+    }
+
+    if (playlistBackButton) {
+      playlistBackButton.addEventListener("click", () => {
+        showRound(4);
+      });
+    }
+
+    if (playlistSaveButton) {
+      playlistSaveButton.addEventListener("click", () => {
+        ensurePlaylistDraft();
+        showRound(7);
+      });
+    }
+
+    if (addToLibraryButton) {
+      addToLibraryButton.addEventListener("click", () => {
+        addToLibraryButton.textContent = "Added to library";
+        addToLibraryButton.disabled = true;
+      });
+    }
+
+    if (savedRestartButton) {
+      savedRestartButton.addEventListener("click", () => {
+        window.location.href = "guest.html";
       });
     }
 
