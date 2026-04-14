@@ -191,6 +191,213 @@
       padding: 0;
     }
 
+    .friends-toggle {
+      position: fixed;
+      top: 50%;
+      right: 0;
+      z-index: 36;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 54px;
+      min-height: 164px;
+      padding: 16px 12px;
+      border: 1px solid #2f2f2f;
+      border-right: 0;
+      background: #1f1f1f;
+      color: #ffffff;
+      font: inherit;
+      cursor: pointer;
+      transform: translateY(-50%);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: right 0.24s ease, background 0.2s ease, color 0.2s ease;
+    }
+
+    .friends-toggle:hover,
+    .friends-toggle:focus-visible {
+      background: #3b3b3b;
+      color: #ffffff;
+    }
+
+    body.friends-open .friends-toggle {
+      right: min(360px, calc(100vw - 54px));
+    }
+
+    .friends-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 34;
+      background: rgba(0, 0, 0, 0.22);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.24s ease, visibility 0.24s ease;
+    }
+
+    body.friends-open .friends-overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .friends-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 35;
+      width: min(360px, calc(100vw - 54px));
+      height: 100vh;
+      height: 100dvh;
+      padding: 88px 20px 24px;
+      border-left: 1px solid #2f2f2f;
+      background: #171717;
+      color: #ffffff;
+      overflow-y: auto;
+      transform: translateX(calc(100% - 54px));
+      transition: transform 0.24s ease;
+      box-shadow: -16px 0 40px rgba(0, 0, 0, 0.08);
+    }
+
+    body.friends-open .friends-drawer {
+      transform: translateX(0);
+    }
+
+    .friends-head {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .friends-copy {
+      display: grid;
+      gap: 8px;
+    }
+
+    .friends-copy h1 {
+      font-size: clamp(2.1rem, 4vw, 3rem);
+      line-height: 0.92;
+      letter-spacing: -0.08em;
+    }
+
+    .friends-copy p,
+    .friend-note,
+    .friends-total {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .friends-total {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 36px;
+      padding: 0 12px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .friends-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .friend-card {
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: #222222;
+      display: grid;
+      gap: 14px;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .friend-card:hover,
+    .friend-card:focus-visible {
+      transform: translateY(-3px);
+      background: #2a2a2a;
+    }
+
+    .friend-photo {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #2a2a2a;
+    }
+
+    .friend-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .friend-meta {
+      display: grid;
+      gap: 8px;
+    }
+
+    .friend-name {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .friend-name strong {
+      font-size: 1.18rem;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: #ffffff;
+    }
+
+    .friend-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.76rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.68);
+      white-space: nowrap;
+    }
+
+    .friend-status::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #1db954;
+      flex: 0 0 auto;
+    }
+
+    .friend-status.is-away::before {
+      background: #c1c1c1;
+    }
+
+    .friend-note {
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 760px) {
+      .friends-toggle {
+        min-width: 48px;
+        min-height: 140px;
+      }
+
+      body.friends-open .friends-toggle {
+        right: calc(100vw - 48px);
+      }
+
+      .friends-drawer {
+        width: calc(100vw - 48px);
+        transform: translateX(calc(100% - 48px));
+      }
+    }
+
     .games-shell {
       display: grid;
       gap: 0;
@@ -897,6 +1104,127 @@
     </div>
   </header>
 
+  <button class="friends-toggle" id="friends-toggle" type="button" aria-expanded="false" aria-controls="friends-drawer">
+    Friends
+  </button>
+  <div class="friends-overlay" id="friends-overlay" hidden></div>
+  <aside class="friends-drawer" id="friends-drawer" aria-labelledby="friends-title">
+    <div class="friends-head">
+      <div class="friends-copy">
+        <span class="section-label">Friendship</span>
+        <h1 id="friends-title">Your friends.</h1>
+        <p>See who is around, what they played last, and who is ready for the next playlist battle.</p>
+      </div>
+      <span class="friends-total">8 friends</span>
+    </div>
+
+    <div class="friends-grid">
+      <article class="friend-card">
+        <div class="friend-photo">
+          <img src="photos/friends/maja.png" alt="Maja profile" />
+        </div>
+        <div class="friend-meta">
+          <div class="friend-name">
+            <strong>Maja</strong>
+            <span class="friend-status">Online</span>
+          </div>
+          <p class="friend-note">Last played: Top 5. Shared a new synth-pop playlist.</p>
+        </div>
+      </article>
+
+      <article class="friend-card">
+        <div class="friend-photo">
+          <img src="photos/friends/luka.png" alt="Luka profile" />
+        </div>
+        <div class="friend-meta">
+          <div class="friend-name">
+            <strong>Luka</strong>
+            <span class="friend-status">Online</span>
+          </div>
+          <p class="friend-note">Last played: Snake. Building a late-night rock chain.</p>
+        </div>
+      </article>
+
+      <article class="friend-card">
+        <div class="friend-photo">
+          <img src="photos/friends/sofija.png" alt="Sofija profile" />
+        </div>
+        <div class="friend-meta">
+          <div class="friend-name">
+            <strong>Sofija</strong>
+            <span class="friend-status is-away">Away</span>
+          </div>
+          <p class="friend-note">Last played: Hitster. Saved a 2000s throwback playlist.</p>
+        </div>
+      </article>
+
+      <article class="friend-card">
+        <div class="friend-photo">
+          <img src="photos/friends/andrej.png" alt="Andrej profile" />
+        </div>
+        <div class="friend-meta">
+          <div class="friend-name">
+            <strong>Andrej</strong>
+            <span class="friend-status">Online</span>
+          </div>
+          <p class="friend-note">Last played: Imposter. Waiting for a rematch.</p>
+        </div>
+      </article>
+
+      <article class="friend-card">
+        <div class="friend-photo">
+          <img src="photos/friends/teodora.png" alt="Teodora profile" />
+        </div>
+        <div class="friend-meta">
+          <div class="friend-name">
+            <strong>Teodora</strong>
+            <span class="friend-status is-away">Away</span>
+          </div>
+          <p class="friend-note">Last played: Fan Check. Added three songs to a shared mix.</p>
+        </div>
+      </article>
+
+      <article class="friend-card">
+        <div class="friend-photo">
+          <img src="photos/friends/nikola.png" alt="Nikola profile" />
+        </div>
+        <div class="friend-meta">
+          <div class="friend-name">
+            <strong>Nikola</strong>
+            <span class="friend-status">Online</span>
+          </div>
+          <p class="friend-note">Last played: Secret Message. Sent a coded playlist invite.</p>
+        </div>
+      </article>
+
+      <article class="friend-card">
+        <div class="friend-photo">
+          <img src="photos/friends/sara.png" alt="Sara profile" />
+        </div>
+        <div class="friend-meta">
+          <div class="friend-name">
+            <strong>Sara</strong>
+            <span class="friend-status is-away">Away</span>
+          </div>
+          <p class="friend-note">Last played: Paint. Curating a moodboard playlist.</p>
+        </div>
+      </article>
+
+      <article class="friend-card">
+        <div class="friend-photo">
+          <img src="photos/friends/vanja.png" alt="Vanja profile" />
+        </div>
+        <div class="friend-meta">
+          <div class="friend-name">
+            <strong>Vanja</strong>
+            <span class="friend-status">Online</span>
+          </div>
+          <p class="friend-note">Last played: Group play. Ready to join a new party room.</p>
+        </div>
+      </article>
+    </div>
+  </aside>
+
   <main>
     <div class="container">
       <section class="games-shell">
@@ -1093,6 +1421,32 @@
         if (!profileMenu.contains(event.target)) {
           profileMenu.classList.remove("is-open");
           profileTrigger.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    const friendsToggle = document.querySelector("#friends-toggle");
+    const friendsDrawer = document.querySelector("#friends-drawer");
+    const friendsOverlay = document.querySelector("#friends-overlay");
+
+    if (friendsToggle && friendsDrawer && friendsOverlay) {
+      const setFriendsOpen = (isOpen) => {
+        document.body.classList.toggle("friends-open", isOpen);
+        friendsToggle.setAttribute("aria-expanded", String(isOpen));
+        friendsOverlay.hidden = !isOpen;
+      };
+
+      friendsToggle.addEventListener("click", () => {
+        setFriendsOpen(!document.body.classList.contains("friends-open"));
+      });
+
+      friendsOverlay.addEventListener("click", () => {
+        setFriendsOpen(false);
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          setFriendsOpen(false);
         }
       });
     }

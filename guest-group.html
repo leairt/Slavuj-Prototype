@@ -8,40 +8,26 @@
   <link rel="icon" type="image/png" sizes="192x192" href="photos/logo/logo_sticker.png" />
   <link rel="apple-touch-icon" href="photos/logo/logo_sticker.png" />
   <style>
-    :root { --container: min(1120px, calc(100% - 40px)); }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #fff; color: #000; font-family: Arial, Helvetica, sans-serif; opacity: 0; transform: translateY(12px); transition: opacity 0.22s ease, transform 0.22s ease; }
-    body.is-ready { opacity: 1; transform: translateY(0); }
-    body.is-leaving { opacity: 0; transform: translateY(12px); }
-    a { color: inherit; text-decoration: none; }
-    img { display: block; max-width: 100%; }
-    .topbar { position: sticky; top: 0; z-index: 20; background: #ffffff; border-bottom: 1px solid #ddd; }
-    .topbar-inner, .shell { width: var(--container); margin: 0 auto; }
-    .topbar-inner { display: flex; align-items: center; padding: 12px 0; }
-    .brand { display: flex; align-items: center; gap: 6px; line-height: 1; }
-    .brand-mark { width: 38px; height: 38px; object-fit: contain; }
-    .brand-name { height: 52px; transform: translateY(3px); }
-    .shell { padding: 36px 0 48px; }
-    .eyebrow { color: #666; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px; display: inline-block; }
-    h1 { font-size: clamp(3rem, 8vw, 6rem); line-height: 0.9; letter-spacing: -0.08em; margin-bottom: 12px; }
-    p, li { color: #666; }
-    .board { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 28px; }
-    .card { padding: 22px; border: 1px solid #000; min-height: 180px; }
-    .list { list-style: none; display: grid; gap: 12px; margin-top: 12px; }
-    .list li { padding-top: 12px; border-top: 1px solid #ddd; }
-    .button { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 16px; border: 1px solid #000; margin-top: 22px; }
-    @media (max-width: 860px) { .board { grid-template-columns: 1fr; } }
-    .footer { background: #171717; padding: 24px 0 36px; margin-top: 48px; }
-    .footer-grid { width: min(1120px, calc(100% - 40px)); margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; }
-    .footer-left { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .footer-grid h3 { font-size: 0.92rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; color: #ffffff; }
-    .footer-grid ul { list-style: none; display: grid; gap: 6px; }
-    .footer-grid p, .footer-grid li, .footer-credit { color: rgba(255,255,255,0.72); }
-    .footer-logo { width: 120px; height: auto; object-fit: contain; margin-bottom: 14px; }
-    .footer-brand { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 8px; text-align: right; }
-    .footer-credit { font-size: 0.9rem; }
-    @media (max-width: 860px) { .board, .footer-grid, .footer-left { grid-template-columns: 1fr; } .footer-brand { align-items: flex-start; text-align: left; } }
-    /* Cross-browser responsive safety layer */
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --muted: #666666;
+      --line: #dddddd;
+      --soft: #f5f5f5;
+      --soft-2: #f0f0f0;
+      --dark: #171717;
+      --group-bg: #3a3a3a;
+      --dark-line: rgba(255, 255, 255, 0.16);
+      --dark-muted: rgba(255, 255, 255, 0.68);
+      --container: min(1120px, calc(100% - 40px));
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     html {
       -webkit-text-size-adjust: 100%;
       text-size-adjust: 100%;
@@ -50,12 +36,27 @@
     body {
       min-width: 320px;
       overflow-x: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
     }
 
-    *,
-    *::before,
-    *::after {
-      min-width: 0;
+    body.is-ready {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body.is-leaving {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
     button,
@@ -65,26 +66,70 @@
       font: inherit;
     }
 
-    img,
-    svg,
-    video,
-    canvas {
+    img {
+      display: block;
       max-width: 100%;
     }
 
-    canvas {
-      height: auto;
+    *,
+    *::before,
+    *::after {
+      min-width: 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
     }
 
     .topbar-inner,
-    .container,
-    .shell,
-    .footer-grid {
+    .shell {
+      width: var(--container);
+      margin: 0 auto;
       max-width: calc(100% - 40px);
     }
 
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
     .brand-name {
+      height: 52px;
+      width: auto;
       max-width: min(46vw, 220px);
+      object-fit: contain;
+      transform: translateY(3px);
+    }
+
+    .shell {
+      padding: 36px 0 0;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
     h1,
@@ -93,25 +138,503 @@
     p,
     li,
     strong,
-    span,
-    .game-title,
-    .quiz-copy strong,
-    .group-panel strong,
-    .hero-copy h1 {
+    span {
       overflow-wrap: break-word;
     }
-    @media (max-width: 760px) {
-      .topbar-inner {
-        gap: 12px;
-        flex-wrap: wrap;
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 6rem);
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+      margin-bottom: 12px;
+    }
+
+    p,
+    li {
+      color: var(--muted);
+    }
+
+    .intro {
+      max-width: 40rem;
+    }
+
+    .flow-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.9fr);
+      gap: 0;
+      margin-top: 28px;
+      align-items: stretch;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      background: var(--dark);
+    }
+
+    .panel {
+      border: 0;
+      position: relative;
+    }
+
+    .main-panel {
+      background: var(--dark);
+      color: #ffffff;
+      padding: 28px 28px 72px calc(50vw - min(560px, calc(100% - 20px)));
+    }
+
+    .side-panel {
+      background: var(--group-bg);
+      color: #ffffff;
+      padding: 28px calc(50vw - min(560px, calc(100% - 20px))) 72px 56px;
+    }
+
+    .main-panel p,
+    .main-panel li,
+    .main-panel .field-label,
+    .main-panel .aside-label,
+    .main-panel .mini-label,
+    .main-panel .copy-status,
+    .side-panel p,
+    .side-panel li,
+    .side-panel .aside-label {
+      color: var(--dark-muted);
+    }
+
+    .flow-steps {
+      display: inline-grid;
+      grid-auto-flow: column;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .step-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--dark-line);
+      color: var(--dark-muted);
+      background: transparent;
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .step-chip.is-active {
+      border-color: #ffffff;
+      color: var(--dark);
+      background: #ffffff;
+    }
+
+    .flow-step[hidden] {
+      display: none;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 3vw, 2.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      margin-bottom: 8px;
+    }
+
+    .section-copy {
+      max-width: 34rem;
+      margin-bottom: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .field-label,
+    .aside-label,
+    .mini-label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .text-input,
+    .round-input,
+    .link-input {
+      width: 100%;
+      border: 1px solid var(--dark-line);
+      background: transparent;
+      color: #ffffff;
+      min-height: 46px;
+      padding: 0 14px;
+    }
+
+    .text-input::placeholder,
+    .round-input::placeholder,
+    .link-input::placeholder {
+      color: var(--dark-muted);
+    }
+
+    .games-list,
+    .friend-list,
+    .summary-list,
+    .list {
+      list-style: none;
+    }
+
+    .games-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .game-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 18px;
+      align-items: center;
+      padding: 16px;
+      border: 1px solid var(--dark-line);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .game-row.is-disabled {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .game-row.is-disabled .game-copy,
+    .game-row.is-disabled .mini-label {
+      opacity: 0.6;
+    }
+
+    .game-copy strong,
+    .summary-card strong,
+    .friend-copy strong,
+    .invite-panel strong {
+      display: block;
+      font-size: 1rem;
+      line-height: 1.05;
+      margin-bottom: 4px;
+    }
+
+    .game-copy p,
+    .friend-copy p,
+    .summary-card p,
+    .invite-panel p {
+      font-size: 0.92rem;
+    }
+
+    .game-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .round-box {
+      display: grid;
+      gap: 6px;
+      min-width: 86px;
+    }
+
+    .round-input {
+      width: 86px;
+      padding-right: 8px;
+    }
+
+    .round-input:disabled {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--dark-muted);
+      cursor: not-allowed;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      width: 56px;
+      height: 32px;
+      cursor: pointer;
+    }
+
+    .switch input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .switch-track {
+      position: relative;
+      width: 56px;
+      height: 32px;
+      border: 1px solid #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      transition: background 0.18s ease;
+    }
+
+    .switch-track::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 24px;
+      height: 24px;
+      background: #ffffff;
+      transition: transform 0.18s ease;
+    }
+
+    .switch input:checked + .switch-track {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .switch input:checked + .switch-track::after {
+      transform: translateX(24px);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .button,
+    .ghost-button,
+    .tab-button,
+    .friend-button,
+    .copy-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 16px;
+      border: 1px solid #ffffff;
+      background: transparent;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    .button {
+      background: #ffffff;
+      color: var(--dark);
+    }
+
+    .button[disabled],
+    .friend-button[disabled],
+    .copy-button[disabled],
+    .ghost-button[disabled],
+    .tab-button[disabled] {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .summary-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .summary-card {
+      padding: 16px;
+      border: 1px solid var(--dark-line);
+      background: transparent;
+    }
+
+    .summary-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .summary-list li {
+      padding-top: 10px;
+      border-top: 1px solid var(--dark-line);
+      color: #ffffff;
+    }
+
+    .summary-list li:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .mini-note {
+      font-size: 0.9rem;
+    }
+
+    .invite-summary {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .summary-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .summary-pill,
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--dark-line);
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      font-size: 0.9rem;
+    }
+
+    .tabs {
+      display: inline-grid;
+      grid-auto-flow: column;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .tab-button {
+      border-color: var(--dark-line);
+      color: var(--dark-muted);
+    }
+
+    .tab-button.is-active {
+      border-color: #ffffff;
+      color: var(--dark);
+      background: #ffffff;
+    }
+
+    .tab-panel[hidden] {
+      display: none;
+    }
+
+    .friend-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .friend-row {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--dark-line);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .friend-avatar {
+      width: 52px;
+      height: 52px;
+      object-fit: cover;
+      border: 1px solid var(--dark-line);
+      border-radius: 999px;
+    }
+
+    .friend-button.is-sent {
+      background: #ffffff;
+      color: var(--dark);
+    }
+
+    .invite-panel {
+      display: grid;
+      gap: 14px;
+      padding: 16px;
+      border: 1px solid var(--dark-line);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .link-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .copy-status {
+      font-size: 0.9rem;
+      color: var(--dark-muted);
+    }
+
+    .footer {
+      background: #171717;
+      padding: 24px 0 36px;
+      margin-top: 0;
+    }
+
+    .footer-grid {
+      width: min(1120px, calc(100% - 40px));
+      max-width: calc(100% - 40px);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+    }
+
+    .footer-left {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .footer-grid h3 {
+      margin-bottom: 10px;
+      color: #ffffff;
+      font-size: 0.92rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .footer-grid ul {
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+
+    .footer-grid p,
+    .footer-grid li,
+    .footer-credit {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .footer-logo {
+      width: 120px;
+      height: auto;
+      object-fit: contain;
+      margin-bottom: 14px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 8px;
+      text-align: right;
+    }
+
+    .footer-credit {
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 900px) {
+      .footer-grid,
+      .footer-left {
+        grid-template-columns: 1fr;
       }
 
+      .footer-brand {
+        align-items: flex-start;
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 760px) {
       .topbar-inner,
-      .container,
       .shell,
       .footer-grid {
         width: calc(100% - 24px);
         max-width: calc(100% - 24px);
+      }
+
+      .topbar-inner {
+        gap: 12px;
+        flex-wrap: wrap;
       }
 
       .brand-mark {
@@ -125,193 +648,77 @@
         max-width: min(54vw, 170px);
       }
 
-      .profile-trigger,
-      .topbar-user {
-        max-width: 100%;
+      h1 {
+        font-size: 2.15rem;
+        line-height: 1;
+        letter-spacing: 0;
       }
 
-      .user-name,
-      .user-label {
-        overflow: hidden;
-        text-overflow: ellipsis;
+      .flow-shell {
+        grid-template-columns: 1fr;
       }
 
-      .top-modes,
-      .creative-grid,
-      .quiz-list,
-      .footer-grid,
-      .footer-left,
-      .stats-row {
-        grid-template-columns: 1fr !important;
+      .main-panel {
+        padding: 28px calc(50vw - min(560px, calc(100% - 20px)));
       }
 
-      .creative-section,
-      .group-section {
-        padding-left: max(12px, calc(50vw - min(560px, calc(100% - 24px)))) !important;
-        padding-right: max(12px, calc(50vw - min(560px, calc(100% - 24px)))) !important;
+      .side-panel {
+        padding: 28px calc(50vw - min(560px, calc(100% - 20px)));
       }
 
-      .game-card {
-        min-height: auto;
-        gap: 16px;
+      .game-row,
+      .friend-row,
+      .link-row {
+        grid-template-columns: 1fr;
       }
 
-      .game-illustration {
-        min-height: auto;
-        grid-template-columns: 38px minmax(0, 1fr);
+      .game-actions {
+        justify-content: space-between;
       }
 
-      .game-illustration img {
-        width: 38px;
-        height: 38px;
+      .round-box,
+      .round-input {
+        width: 100%;
       }
 
-      .quiz-row {
-        grid-template-columns: 96px minmax(0, 1fr) !important;
-        gap: 12px;
-      }
-
-      .footer-brand {
-        align-items: flex-start;
-        text-align: left;
-      }
-
-      h1,
-      .hero-copy h1 {
-        font-size: 2.15rem !important;
-        line-height: 1 !important;
-        letter-spacing: 0 !important;
-        white-space: normal !important;
-      }
-
-      .game-title,
-      .section-head h2,
-      .group-panel strong,
-      .quiz-copy strong {
-        letter-spacing: 0 !important;
+      .tabs,
+      .flow-steps {
+        grid-auto-flow: row;
       }
     }
 
     @media (max-width: 430px) {
       .topbar-inner,
-      .container,
       .shell,
       .footer-grid {
         width: calc(100% - 20px);
         max-width: calc(100% - 20px);
       }
 
-      .quiz-row {
-        grid-template-columns: 72px minmax(0, 1fr) !important;
-        padding: 10px;
+      h1 {
+        font-size: 1.85rem;
       }
 
-      h1,
-      .hero-copy h1 {
-        font-size: 1.85rem !important;
+      .main-panel,
+      .side-panel {
+        padding-top: 18px;
+        padding-bottom: 48px;
+      }
+
+      .actions {
+        display: grid;
+      }
+
+      .button,
+      .ghost-button,
+      .tab-button,
+      .friend-button,
+      .copy-button {
+        width: 100%;
       }
 
       .footer-logo {
         width: 112px;
-      }
-    }
-
-    @media (max-width: 760px) {
-      .step-grid,
-      .step.reverse .step-grid,
-      .login-layout,
-      .step-split,
-      .avatar-upload,
-      .review-layout,
-      .selected-genres,
-      .genre-results,
-      .board,
-      .palette {
-        grid-template-columns: 1fr !important;
-      }
-
-      .step-no {
-        font-size: 3rem !important;
-        letter-spacing: 0 !important;
-      }
-
-      .image-slot {
-        min-height: 180px;
-        border-radius: 8px;
-      }
-
-      .panel {
-        min-height: auto;
-        padding: 28px 18px;
-      }
-
-      .step-title {
-        white-space: normal !important;
-      }
-
-      .avatar-upload,
-      .review-layout {
-        justify-items: center;
-        text-align: center;
-      }
-
-      .review-row {
-        grid-template-columns: 1fr !important;
-        gap: 4px;
-      }
-
-      .answer-slot {
-        height: auto;
-        min-height: 58px;
-      }
-
-      .footer-grid {
-        grid-template-columns: minmax(0, 1fr) minmax(128px, auto) !important;
-        align-items: stretch;
-        gap: 18px;
-      }
-
-      .footer-left {
-        grid-template-columns: 1fr !important;
-        gap: 18px;
-      }
-
-      .footer-brand {
-        align-items: flex-end;
-        justify-content: flex-end;
-        align-self: stretch;
-        text-align: right;
-      }
-
-      .footer-logo {
-        width: 128px;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .quiz-row {
-        grid-template-columns: 1fr !important;
-      }
-
-      .quiz-cover {
-        width: 96px;
-      }
-
-      .answer-slot {
-        grid-template-columns: 18px 32px minmax(0, 1fr) !important;
-        gap: 8px;
-        padding: 8px 10px;
-      }
-
-      .slot-cover {
-        width: 32px;
-        height: 32px;
-      }
-    }
-
-    @supports (height: 100dvh) {
-      .login-layout {
-        min-height: calc(100dvh - 63px);
       }
     }
 
@@ -344,37 +751,361 @@
       </a>
     </div>
   </header>
+
   <main class="shell">
     <span class="eyebrow">Guest / Group play</span>
-    <h1>Join the room.</h1>
-    <p>Shared play with global songs.</p>
-    <section class="board">
-      <article class="card">
-        <strong>Mini-games</strong>
-        <ul class="list">
-          <li>Blitz</li>
-          <li>Hitster</li>
-          <li>Music Roulette</li>
-        </ul>
-      </article>
-      <article class="card">
-        <strong>Result</strong>
-        <ul class="list">
-          <li>One shared playlist</li>
-          <li>One winner</li>
-          <li>Global hit pool</li>
-        </ul>
-      </article>
+    <h1>Create the room.</h1>
+    <p class="intro">Pick the mini-games, set the round count, then move to invites. The flow stays lightweight and keeps the same prototype style.</p>
+
+    <section class="flow-shell">
+      <div class="panel main-panel">
+        <div class="flow-steps" aria-label="Group flow steps">
+          <span class="step-chip is-active" data-chip="setup">01 Setup</span>
+          <span class="step-chip" data-chip="invite">02 Invite</span>
+        </div>
+
+        <section class="flow-step" data-step="setup">
+          <h2 class="section-title">Build your group game.</h2>
+          <p class="section-copy">Every game can be turned on or off. Round counts stay editable so the host can shape the session before sending invites.</p>
+
+          <label class="field" for="group-name">
+            <span class="field-label">Room name</span>
+            <input class="text-input" id="group-name" type="text" value="Friday listening room" />
+          </label>
+
+          <ul class="games-list">
+            <li class="game-row">
+              <div class="game-copy">
+                <strong>Imposter</strong>
+                <p>Spot the one song that does not belong.</p>
+              </div>
+              <div class="game-actions">
+                <label class="switch" aria-label="Include Imposter">
+                  <input class="game-toggle" type="checkbox" data-game="Imposter" checked />
+                  <span class="switch-track" aria-hidden="true"></span>
+                </label>
+              </div>
+              <label class="round-box">
+                <span class="mini-label">Rounds</span>
+                <input class="round-input" type="number" min="1" max="10" value="3" data-rounds="Imposter" />
+              </label>
+            </li>
+
+            <li class="game-row">
+              <div class="game-copy">
+                <strong>Hitster</strong>
+                <p>Place tracks in the right year order.</p>
+              </div>
+              <div class="game-actions">
+                <label class="switch" aria-label="Include Hitster">
+                  <input class="game-toggle" type="checkbox" data-game="Hitster" checked />
+                  <span class="switch-track" aria-hidden="true"></span>
+                </label>
+              </div>
+              <label class="round-box">
+                <span class="mini-label">Rounds</span>
+                <input class="round-input" type="number" min="1" max="10" value="4" data-rounds="Hitster" />
+              </label>
+            </li>
+
+            <li class="game-row">
+              <div class="game-copy">
+                <strong>Music Roulette</strong>
+                <p>Guess whose favorite song is playing.</p>
+              </div>
+              <div class="game-actions">
+                <label class="switch" aria-label="Include Music Roulette">
+                  <input class="game-toggle" type="checkbox" data-game="Music Roulette" checked />
+                  <span class="switch-track" aria-hidden="true"></span>
+                </label>
+              </div>
+              <label class="round-box">
+                <span class="mini-label">Rounds</span>
+                <input class="round-input" type="number" min="1" max="10" value="3" data-rounds="Music Roulette" />
+              </label>
+            </li>
+
+            <li class="game-row">
+              <div class="game-copy">
+                <strong>Quiz Blitz</strong>
+                <p>Fast buzzer questions across global hits.</p>
+              </div>
+              <div class="game-actions">
+                <label class="switch" aria-label="Include Quiz Blitz">
+                  <input class="game-toggle" type="checkbox" data-game="Quiz Blitz" />
+                  <span class="switch-track" aria-hidden="true"></span>
+                </label>
+              </div>
+              <label class="round-box">
+                <span class="mini-label">Rounds</span>
+                <input class="round-input" type="number" min="1" max="10" value="2" data-rounds="Quiz Blitz" />
+              </label>
+            </li>
+          </ul>
+
+          <div class="actions">
+            <a class="ghost-button" href="guest.html">Back to games</a>
+            <button class="button" type="button" id="next-step">Next</button>
+          </div>
+        </section>
+
+        <section class="flow-step" data-step="invite" hidden>
+          <h2 class="section-title">Send the room out.</h2>
+          <p class="section-copy">Invite registered friends directly or share a guest link. This is still a prototype, so both actions stay simple and immediate.</p>
+
+          <div class="invite-summary">
+            <span class="aside-label">Selected game mix</span>
+            <div class="summary-strip" id="selected-games"></div>
+          </div>
+
+          <div class="tabs" aria-label="Invite options">
+            <button class="tab-button is-active" type="button" data-tab="friends">Invite friends</button>
+            <button class="tab-button" type="button" data-tab="guests">Guest link</button>
+          </div>
+
+          <section class="tab-panel" data-panel="friends">
+            <ul class="friend-list">
+              <li class="friend-row">
+                <img class="friend-avatar" src="photos/account/nirvana.png" alt="Nikola profile" />
+                <div class="friend-copy">
+                  <strong>Nikola M.</strong>
+                  <p>Recently played Hitster and Snake.</p>
+                </div>
+                <button class="friend-button" type="button">Send invite</button>
+              </li>
+              <li class="friend-row">
+                <img class="friend-avatar" src="photos/account/radiohead.png" alt="Jovana profile" />
+                <div class="friend-copy">
+                  <strong>Jovana R.</strong>
+                  <p>Listens to indie and alternate playlists.</p>
+                </div>
+                <button class="friend-button" type="button">Send invite</button>
+              </li>
+              <li class="friend-row">
+                <img class="friend-avatar" src="photos/account/rhcp.png" alt="Marko profile" />
+                <div class="friend-copy">
+                  <strong>Marko P.</strong>
+                  <p>Often joins fast quiz rounds.</p>
+                </div>
+                <button class="friend-button" type="button">Send invite</button>
+              </li>
+            </ul>
+          </section>
+
+          <section class="tab-panel" data-panel="guests" hidden>
+            <div class="invite-panel">
+              <div>
+                <strong>Guest room link</strong>
+                <p>Share this link with anyone who should join without an account.</p>
+              </div>
+              <div class="link-row">
+                <input class="link-input" id="guest-link" type="text" readonly value="https://slavuj.app/guest/group/friday-room-284" />
+                <button class="copy-button" type="button" id="copy-link">Copy link</button>
+              </div>
+              <p class="copy-status" id="copy-status">Link is ready to share.</p>
+            </div>
+          </section>
+
+          <div class="actions">
+            <button class="ghost-button" type="button" id="back-step">Back</button>
+            <a class="button" href="group-rounds.html">Preview rounds</a>
+          </div>
+        </section>
+      </div>
+
+      <aside class="panel side-panel">
+        <div class="summary-stack">
+          <div class="summary-card">
+            <span class="aside-label">Room summary</span>
+            <ul class="summary-list">
+              <li><strong id="summary-room-name">Friday listening room</strong><p>Room name</p></li>
+              <li><strong id="summary-game-count">3 games selected</strong><p>Included in this session</p></li>
+              <li><strong id="summary-round-count">10 total rounds</strong><p>Across all enabled games</p></li>
+            </ul>
+          </div>
+
+          <div class="summary-card">
+            <span class="aside-label">Host notes</span>
+            <p class="mini-note">Keep it short, invite a few people first, then share the guest link if you want the room to stay open.</p>
+          </div>
+        </div>
+      </aside>
     </section>
-    <a class="button" href="guest.html">Back to games</a>
   </main>
-  <footer class="footer"><div class="footer-grid"><div class="footer-left"><div><h3>Project</h3><p>Univerzitet u Beogradu</p><p>Elektrotehnicki fakultet</p><p>Principi softverskog inženjerstva</p></div><div><h3>Team Slavujci</h3><ul><li>Dusan Korizma</li><li>Lea Irt</li><li>Marko Misovski</li><li>Mark Možarovski</li></ul></div></div><div class="footer-brand"><img class="footer-logo" src="photos/logo/logo_black.png" alt="slavuj black logo" /><p class="footer-credit">Illustrations by Lea Irt</p></div></div></footer>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-left">
+        <div>
+          <h3>Project</h3>
+          <p>Univerzitet u Beogradu</p>
+          <p>Elektrotehnicki fakultet</p>
+          <p>Principi softverskog inzenjerstva</p>
+        </div>
+        <div>
+          <h3>Team Slavujci</h3>
+          <ul>
+            <li>Dusan Korizma</li>
+            <li>Lea Irt</li>
+            <li>Marko Misovski</li>
+            <li>Mark Mozarovski</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-brand">
+        <img class="footer-logo" src="photos/logo/logo_black.png" alt="slavuj black logo" />
+        <p class="footer-credit">Illustrations by Lea Irt</p>
+      </div>
+    </div>
+  </footer>
+
   <script>
     requestAnimationFrame(() => {
       document.body.classList.add("is-ready");
     });
 
     const currentFile = window.location.pathname.split("/").pop() || "index.html";
+    const steps = document.querySelectorAll("[data-step]");
+    const chips = document.querySelectorAll("[data-chip]");
+    const tabs = document.querySelectorAll("[data-tab]");
+    const panels = document.querySelectorAll("[data-panel]");
+    const toggles = document.querySelectorAll(".game-toggle");
+    const roundInputs = document.querySelectorAll(".round-input");
+    const roomNameInput = document.getElementById("group-name");
+    const selectedGames = document.getElementById("selected-games");
+    const summaryRoomName = document.getElementById("summary-room-name");
+    const summaryGameCount = document.getElementById("summary-game-count");
+    const summaryRoundCount = document.getElementById("summary-round-count");
+    const nextButton = document.getElementById("next-step");
+    const backButton = document.getElementById("back-step");
+    const copyButton = document.getElementById("copy-link");
+    const guestLinkInput = document.getElementById("guest-link");
+    const copyStatus = document.getElementById("copy-status");
+
+    function showStep(stepName) {
+      steps.forEach((step) => {
+        step.hidden = step.dataset.step !== stepName;
+      });
+
+      chips.forEach((chip) => {
+        chip.classList.toggle("is-active", chip.dataset.chip === stepName);
+      });
+    }
+
+    function showTab(tabName) {
+      tabs.forEach((tab) => {
+        tab.classList.toggle("is-active", tab.dataset.tab === tabName);
+      });
+
+      panels.forEach((panel) => {
+        panel.hidden = panel.dataset.panel !== tabName;
+      });
+    }
+
+    function getSelectedGames() {
+      return Array.from(toggles)
+        .filter((toggle) => toggle.checked)
+        .map((toggle) => {
+          const roundsInput = document.querySelector('[data-rounds="' + toggle.dataset.game + '"]');
+          return {
+            name: toggle.dataset.game,
+            rounds: Number(roundsInput.value) || 0
+          };
+        });
+    }
+
+    function renderSummary() {
+      const roomName = roomNameInput.value.trim() || "Untitled room";
+      const games = getSelectedGames();
+      const totalRounds = games.reduce((sum, game) => sum + game.rounds, 0);
+
+      toggles.forEach((toggle) => {
+        const roundsInput = document.querySelector('[data-rounds="' + toggle.dataset.game + '"]');
+        const row = toggle.closest(".game-row");
+
+        roundsInput.disabled = !toggle.checked;
+        row.classList.toggle("is-disabled", !toggle.checked);
+      });
+
+      summaryRoomName.textContent = roomName;
+      summaryGameCount.textContent = games.length + (games.length === 1 ? " game selected" : " games selected");
+      summaryRoundCount.textContent = totalRounds + (totalRounds === 1 ? " total round" : " total rounds");
+      nextButton.disabled = games.length === 0;
+
+      selectedGames.innerHTML = "";
+
+      if (!games.length) {
+        const emptyPill = document.createElement("span");
+        emptyPill.className = "status-pill";
+        emptyPill.textContent = "Select at least one game";
+        selectedGames.appendChild(emptyPill);
+        return;
+      }
+
+      games.forEach((game) => {
+        const pill = document.createElement("span");
+        pill.className = "summary-pill";
+        pill.textContent = game.name + " - " + game.rounds + (game.rounds === 1 ? " round" : " rounds");
+        selectedGames.appendChild(pill);
+      });
+    }
+
+    async function copyGuestLink() {
+      const value = guestLinkInput.value;
+
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(value);
+        } else {
+          guestLinkInput.removeAttribute("readonly");
+          guestLinkInput.select();
+          document.execCommand("copy");
+          guestLinkInput.setAttribute("readonly", "readonly");
+        }
+
+        copyStatus.textContent = "Guest link copied.";
+      } catch (error) {
+        copyStatus.textContent = "Copy failed. You can still copy the link manually.";
+      }
+    }
+
+    roomNameInput.addEventListener("input", renderSummary);
+    toggles.forEach((toggle) => toggle.addEventListener("change", renderSummary));
+    roundInputs.forEach((input) => {
+      input.addEventListener("input", () => {
+        const value = Math.max(1, Math.min(10, Number(input.value) || 1));
+        input.value = String(value);
+        renderSummary();
+      });
+    });
+
+    nextButton.addEventListener("click", () => {
+      showStep("invite");
+      renderSummary();
+    });
+
+    backButton.addEventListener("click", () => {
+      showStep("setup");
+    });
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        showTab(tab.dataset.tab);
+      });
+    });
+
+    document.querySelectorAll(".friend-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        button.textContent = "Invite sent";
+        button.classList.add("is-sent");
+        button.disabled = true;
+      });
+    });
+
+    copyButton.addEventListener("click", copyGuestLink);
+    renderSummary();
+    showStep("setup");
+    showTab("friends");
 
     document.querySelectorAll('a[href]').forEach((link) => {
       const href = link.getAttribute("href") || "";
@@ -399,7 +1130,6 @@
         }, 180);
       });
     });
-
   </script>
 </body>
 </html>

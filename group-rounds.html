@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>славуј — group rounds</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="photos/logo/logo_sticker.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="photos/logo/logo_sticker.png" />
+  <link rel="apple-touch-icon" href="photos/logo/logo_sticker.png" />
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --panel: #171717;
+      --panel-2: #1f1f1f;
+      --line: rgba(255, 255, 255, 0.12);
+      --line-strong: rgba(255, 255, 255, 0.26);
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, 0.66);
+      --black: #111111;
+      --container: min(1240px, calc(100% - 48px));
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      min-width: 320px;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    body.is-ready {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body.is-leaving {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #ffffff;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .topbar-inner,
+    .round-shell {
+      width: var(--container);
+      margin: 0 auto;
+      max-width: calc(100% - 48px);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      height: 52px;
+      width: auto;
+      max-width: min(46vw, 220px);
+      object-fit: contain;
+      transform: translateY(3px);
+    }
+
+    .round-shell {
+      height: calc(100vh - 79px);
+      min-height: calc(100vh - 79px);
+      padding: 18px 0 18px;
+      display: grid;
+    }
+
+    .round-screen[hidden] {
+      display: none;
+    }
+
+    .round-screen {
+      height: 100%;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 14px;
+    }
+
+    .round-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .round-meta {
+      display: grid;
+      gap: 8px;
+      max-width: 58rem;
+    }
+
+    .round-counter,
+    .question-type {
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .round-counter {
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+    }
+
+    .question-type {
+      font-size: 0.74rem;
+      letter-spacing: 0.16em;
+    }
+
+    .round-title {
+      font-size: clamp(1.9rem, 4.2vw, 3.8rem);
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+      max-width: 16ch;
+    }
+
+    .round-timer {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 112px;
+      min-height: 56px;
+      padding: 0 18px;
+      border: 1px solid var(--line-strong);
+      background: var(--panel);
+      font-size: 1.2rem;
+      letter-spacing: -0.04em;
+      flex-shrink: 0;
+    }
+
+    .round-timer.is-urgent {
+      border-color: rgba(255, 96, 96, 0.9);
+      background: #651818;
+      color: #ffffff;
+      animation: timer-flash 0.75s ease-in-out infinite;
+    }
+
+    @keyframes timer-flash {
+      0%,
+      100% {
+        background: #651818;
+        box-shadow: 0 0 0 rgba(255, 96, 96, 0);
+      }
+
+      50% {
+        background: #b52323;
+        box-shadow: 0 0 22px rgba(255, 96, 96, 0.35);
+      }
+    }
+
+    .round-body {
+      display: grid;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .game-panel {
+      min-height: 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)), var(--panel);
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .round-footer {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding-top: 4px;
+    }
+
+    .next-round-button,
+    .answer-submit,
+    .roulette-submit {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 22px;
+      border: 1px solid #ffffff;
+      background: #ffffff;
+      color: var(--black);
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .next-round-button:hover,
+    .next-round-button:focus-visible,
+    .answer-submit:hover,
+    .answer-submit:focus-visible,
+    .roulette-submit:hover,
+    .roulette-submit:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+      outline: none;
+    }
+
+    .instruction {
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.28;
+      max-width: 62rem;
+    }
+
+    .imposter-round .round-body {
+      align-items: start;
+    }
+
+    .imposter-round .game-panel {
+      height: auto;
+      align-self: start;
+    }
+
+    .imposter-round .round-title {
+      font-size: clamp(1.65rem, 3.3vw, 3rem);
+      max-width: 18ch;
+    }
+
+    .imposter-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .imposter-card {
+      padding: 8px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      display: grid;
+      gap: 6px;
+      align-content: start;
+      cursor: pointer;
+      transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+    }
+
+    .imposter-card:hover,
+    .imposter-card:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.34);
+      outline: none;
+    }
+
+    .imposter-card.is-selected {
+      background: #ffffff;
+      color: var(--black);
+      border-color: #ffffff;
+    }
+
+    .cover-placeholder {
+      aspect-ratio: 2.5 / 1;
+      border: 1px dashed rgba(255, 255, 255, 0.18);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 0.66rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .imposter-card.is-selected .cover-placeholder {
+      border-color: rgba(0, 0, 0, 0.18);
+      background: rgba(0, 0, 0, 0.04);
+      color: rgba(0, 0, 0, 0.56);
+    }
+
+    .imposter-copy {
+      display: grid;
+      gap: 2px;
+    }
+
+    .imposter-song {
+      color: #ffffff;
+      font-size: 0.92rem;
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+
+    .imposter-artist {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.7rem;
+      line-height: 1.2;
+    }
+
+    .hitster-round .round-body {
+      align-items: start;
+    }
+
+    .hitster-round .game-panel {
+      height: auto;
+      align-self: start;
+    }
+
+    .hitster-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .hitster-card {
+      padding: 10px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      display: grid;
+      gap: 10px;
+      align-content: start;
+      cursor: grab;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease, opacity 0.18s ease;
+      transform-origin: center center;
+    }
+
+    .hitster-card.is-dragging {
+      opacity: 0.92;
+      transform: scale(1.04) rotate(-1.2deg);
+      border-color: rgba(255, 255, 255, 0.38);
+      background: #2b2b2b;
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.28);
+      cursor: grabbing;
+      z-index: 2;
+    }
+
+    .hitster-card.is-drop-target {
+      border-color: rgba(255, 255, 255, 0.5);
+      background: #2d2d2d;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+    }
+
+    .hitster-placeholder {
+      min-height: 100%;
+      border: 1px dashed rgba(255, 255, 255, 0.42);
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      position: relative;
+    }
+
+    .hitster-placeholder::before {
+      content: "Drop here";
+      position: absolute;
+      inset: 10px 10px auto 10px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .hitster-handle {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 0.84rem;
+      letter-spacing: 0.14em;
+    }
+
+    .hitster-cover {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border: 1px solid var(--line);
+    }
+
+    .hitster-song {
+      display: grid;
+      gap: 3px;
+    }
+
+    .hitster-title {
+      font-size: 1rem;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .hitster-artist {
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.2;
+    }
+
+    .hitster-note {
+      width: 100%;
+      min-height: 38px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+      color: #ffffff;
+      font-size: 0.82rem;
+    }
+
+    .hitster-note::placeholder,
+    .answer-input::placeholder {
+      color: var(--muted);
+    }
+
+    .roulette-round .round-body {
+      align-items: start;
+    }
+
+    .roulette-round .game-panel {
+      height: auto;
+      align-self: start;
+    }
+
+    .roulette-stage {
+      display: grid;
+      gap: 18px;
+    }
+
+    .roulette-main {
+      display: grid;
+      grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .roulette-cover {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border: 1px solid var(--line);
+    }
+
+    .roulette-song {
+      padding: 20px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .roulette-kicker {
+      color: var(--muted);
+      font-size: 0.76rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .roulette-title {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 0.92;
+      letter-spacing: -0.08em;
+    }
+
+    .roulette-details {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.3;
+    }
+
+    .player-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 58px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .play-button {
+      width: 34px;
+      height: 34px;
+      border: 1px solid #ffffff;
+      background: transparent;
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .player-progress {
+      flex: 1;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.14);
+      position: relative;
+    }
+
+    .player-progress::after {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 34%;
+      background: #ffffff;
+    }
+
+    .player-time {
+      color: var(--muted);
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .roulette-players {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .roulette-player {
+      padding: 8px 12px;
+      border: 0;
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.18s ease, transform 0.18s ease;
+      border-radius: 999px;
+    }
+
+    .roulette-player:hover,
+    .roulette-player:focus-visible {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.06);
+      outline: none;
+    }
+
+    .roulette-player.is-selected {
+      background: #ffffff;
+      color: var(--black);
+    }
+
+    .roulette-player.is-selected .roulette-name {
+      color: var(--black);
+    }
+
+    .roulette-avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 1px solid var(--line-strong);
+      flex-shrink: 0;
+    }
+
+    .roulette-name {
+      color: #ffffff;
+      font-size: 1.08rem;
+      line-height: 1.1;
+      font-weight: 700;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .roulette-submit {
+      display: none;
+      margin: 4px auto 0;
+    }
+
+    .roulette-submit.is-visible {
+      display: inline-flex;
+    }
+
+    .blitz-round .round-body {
+      align-items: start;
+    }
+
+    .blitz-round .game-panel {
+      height: auto;
+      align-self: start;
+    }
+
+    .blitz-stage {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+      padding-top: 4px;
+    }
+
+    .blitz-prompt {
+      display: grid;
+      grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    .blitz-cover {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border: 1px solid var(--line);
+    }
+
+    .blitz-question {
+      display: grid;
+      gap: 10px;
+      align-content: center;
+    }
+
+    .blitz-helper {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      max-width: 48rem;
+    }
+
+    .blitz-kicker {
+      color: var(--muted);
+      font-size: 0.76rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .blitz-question-text {
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+    }
+
+    .blitz-action {
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+    }
+
+    .blitz-status {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+      text-align: center;
+      max-width: 34rem;
+    }
+
+    .buzzer {
+      width: min(100%, 300px);
+      aspect-ratio: 1 / 1;
+      border-radius: 999px;
+      border: 2px solid #ffffff;
+      background: #6b1f1f;
+      color: #ffffff;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      letter-spacing: -0.06em;
+      cursor: pointer;
+      box-shadow: inset 0 -16px 0 rgba(0, 0, 0, 0.18), 0 24px 44px rgba(0, 0, 0, 0.22);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .buzzer:hover,
+    .buzzer:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: inset 0 -16px 0 rgba(0, 0, 0, 0.18), 0 28px 52px rgba(0, 0, 0, 0.28);
+      outline: none;
+    }
+
+    .answer-form {
+      width: min(100%, 640px);
+      display: grid;
+      gap: 12px;
+    }
+
+    .answer-form[hidden] {
+      display: none;
+    }
+
+    .answer-lead {
+      color: #ffffff;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .answer-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .answer-input {
+      width: 100%;
+      min-height: 52px;
+      padding: 0 18px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: #ffffff;
+      font-size: 1rem;
+    }
+
+    .answer-confirmation {
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      line-height: 1.4;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .answer-confirmation strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #ffffff;
+    }
+
+    @media (max-width: 980px) {
+      .hitster-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .roulette-main,
+      .blitz-prompt {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .topbar-inner,
+      .round-shell {
+        width: calc(100% - 24px);
+        max-width: calc(100% - 24px);
+      }
+
+      .topbar-inner {
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .brand-mark {
+        width: 32px;
+        height: 32px;
+      }
+
+      .brand-name {
+        height: auto;
+        max-height: 44px;
+        max-width: min(54vw, 170px);
+      }
+
+      .round-header {
+        display: grid;
+      }
+
+      .round-timer {
+        justify-self: start;
+      }
+
+      .imposter-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hitster-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .roulette-player,
+      .next-round-button,
+      .answer-submit,
+      .roulette-submit {
+        width: 100%;
+      }
+
+      .answer-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .topbar-inner,
+      .round-shell {
+        width: calc(100% - 20px);
+        max-width: calc(100% - 20px);
+      }
+
+      .round-title {
+        font-size: 2rem;
+      }
+
+      .game-panel {
+        padding: 16px;
+      }
+
+      .hitster-list {
+        grid-template-columns: 1fr;
+      }
+
+      .buzzer {
+        width: min(100%, 260px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="photos/logo/logo.png" alt="славуј logo" />
+        <img class="brand-name" src="photos/logo/name.png" alt="славуј" />
+      </a>
+    </div>
+  </header>
+
+  <main class="round-shell">
+    <section class="round-screen imposter-round" data-round-screen>
+      <div class="round-header">
+        <div class="round-meta">
+          <span class="round-counter">Round 1 / 4</span>
+          <span class="question-type">Imposter</span>
+          <h1 class="round-title">Which track is the imposter?</h1>
+        </div>
+        <div class="round-timer">00:25</div>
+      </div>
+
+      <div class="round-body">
+        <div class="game-panel">
+          <p class="instruction">Three tracks belong in the same lane. One breaks the rule. Album images are placeholders for now so you can replace them later.</p>
+          <div class="imposter-grid" data-select-group="imposter">
+            <button class="imposter-card" type="button">
+              <div class="cover-placeholder">Cover pending</div>
+              <div class="imposter-copy">
+                <strong class="imposter-song">Take on Me</strong>
+                <span class="imposter-artist">a-ha</span>
+              </div>
+            </button>
+            <button class="imposter-card" type="button">
+              <div class="cover-placeholder">Cover pending</div>
+              <div class="imposter-copy">
+                <strong class="imposter-song">Blue Monday</strong>
+                <span class="imposter-artist">New Order</span>
+              </div>
+            </button>
+            <button class="imposter-card" type="button">
+              <div class="cover-placeholder">Cover pending</div>
+              <div class="imposter-copy">
+                <strong class="imposter-song">Blinding Lights</strong>
+                <span class="imposter-artist">The Weeknd</span>
+              </div>
+            </button>
+            <button class="imposter-card" type="button">
+              <div class="cover-placeholder">Cover pending</div>
+              <div class="imposter-copy">
+                <strong class="imposter-song">Sweet Dreams</strong>
+                <span class="imposter-artist">Eurythmics</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="round-footer">
+        <button class="next-round-button" type="button">Next round</button>
+      </div>
+    </section>
+
+    <section class="round-screen hitster-round" data-round-screen hidden>
+      <div class="round-header">
+        <div class="round-meta">
+          <span class="round-counter">Round 2 / 4</span>
+          <span class="question-type">Hitster</span>
+          <h1 class="round-title">Arrange these songs from oldest to newest.</h1>
+        </div>
+        <div class="round-timer">00:40</div>
+      </div>
+
+      <div class="round-body">
+        <div class="game-panel">
+          <p class="instruction">Drag the songs left or right to reorder them. Each card includes a compact note field for a quick year guess.</p>
+          <ul class="hitster-list" id="hitster-list">
+            <li class="hitster-card" draggable="true">
+              <div class="hitster-handle">::</div>
+              <img class="hitster-cover" src="photos/spotify/radiohead.png" alt="OK Computer cover" />
+              <div class="hitster-song">
+                <strong class="hitster-title">Paranoid Android</strong>
+                <span class="hitster-artist">Radiohead</span>
+              </div>
+              <input class="hitster-note" type="text" placeholder="maybe 1997" />
+            </li>
+            <li class="hitster-card" draggable="true">
+              <div class="hitster-handle">::</div>
+              <img class="hitster-cover" src="photos/spotify/nirvana.png" alt="Nevermind cover" />
+              <div class="hitster-song">
+                <strong class="hitster-title">Come As You Are</strong>
+                <span class="hitster-artist">Nirvana</span>
+              </div>
+              <input class="hitster-note" type="text" placeholder="maybe 1991" />
+            </li>
+            <li class="hitster-card" draggable="true">
+              <div class="hitster-handle">::</div>
+              <img class="hitster-cover" src="photos/spotify/ekv.png" alt="EKV cover" />
+              <div class="hitster-song">
+                <strong class="hitster-title">Par godina za nas</strong>
+                <span class="hitster-artist">EKV</span>
+              </div>
+              <input class="hitster-note" type="text" placeholder="maybe 1989" />
+            </li>
+            <li class="hitster-card" draggable="true">
+              <div class="hitster-handle">::</div>
+              <img class="hitster-cover" src="photos/spotify/haustor.png" alt="Haustor cover" />
+              <div class="hitster-song">
+                <strong class="hitster-title">Šal od svile</strong>
+                <span class="hitster-artist">Haustor</span>
+              </div>
+              <input class="hitster-note" type="text" placeholder="maybe 1987" />
+            </li>
+            <li class="hitster-card" draggable="true">
+              <div class="hitster-handle">::</div>
+              <img class="hitster-cover" src="photos/spotify/ekv2.png" alt="Adele cover" />
+              <div class="hitster-song">
+                <strong class="hitster-title">Rolling in the Deep</strong>
+                <span class="hitster-artist">Adele</span>
+              </div>
+              <input class="hitster-note" type="text" placeholder="maybe 2010" />
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="round-footer">
+        <button class="next-round-button" type="button">Next round</button>
+      </div>
+    </section>
+
+    <section class="round-screen roulette-round" data-round-screen hidden>
+      <div class="round-header">
+        <div class="round-meta">
+          <span class="round-counter">Round 3 / 4</span>
+          <span class="question-type">Music Roulette</span>
+          <h1 class="round-title">Whose taste does this song match best?</h1>
+        </div>
+        <div class="round-timer">00:20</div>
+      </div>
+
+      <div class="round-body">
+        <div class="game-panel">
+          <div class="roulette-stage">
+            <div class="roulette-main">
+              <img class="roulette-cover" src="photos/spotify/radiohead.png" alt="Paranoid Android album art" />
+              <div class="roulette-song">
+                <span class="roulette-kicker">Main song</span>
+                <h2 class="roulette-title">Paranoid Android</h2>
+                <div class="roulette-details">
+                  <span>Album: <strong>OK Computer</strong></span>
+                  <span>Artist: <strong>Radiohead</strong></span>
+                </div>
+                <div class="player-bar" aria-hidden="true">
+                  <button class="play-button" type="button">▶</button>
+                  <div class="player-progress"></div>
+                  <span class="player-time">0:43 / 6:23</span>
+                </div>
+                <p class="instruction">The play button and player are visual only in this prototype.</p>
+              </div>
+            </div>
+
+            <div class="roulette-players" data-select-group="roulette">
+              <button class="roulette-player" type="button">
+                <img class="roulette-avatar" src="photos/account/nirvana.png" alt="Nikola avatar" />
+                <span class="roulette-name">Nikola M.</span>
+              </button>
+              <button class="roulette-player" type="button">
+                <img class="roulette-avatar" src="photos/account/radiohead.png" alt="Jovana avatar" />
+                <span class="roulette-name">Jovana R.</span>
+              </button>
+              <button class="roulette-player" type="button">
+                <img class="roulette-avatar" src="photos/account/rhcp.png" alt="Marko avatar" />
+                <span class="roulette-name">Marko P.</span>
+              </button>
+              <button class="roulette-player" type="button">
+                <img class="roulette-avatar" src="photos/guest/weeknd.png" alt="Guest avatar" />
+                <span class="roulette-name">Guest 04</span>
+              </button>
+            </div>
+
+            <button class="roulette-submit" type="button" id="roulette-submit">Submit answer</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="round-footer">
+        <button class="next-round-button" type="button">Next round</button>
+      </div>
+    </section>
+
+    <section class="round-screen blitz-round" data-round-screen hidden>
+      <div class="round-header">
+        <div class="round-meta">
+          <span class="round-counter">Round 4 / 4</span>
+          <span class="question-type">Blitz</span>
+          <h1 class="round-title">Buzz first. Name the album.</h1>
+        </div>
+        <div class="round-timer">00:15</div>
+      </div>
+
+      <div class="round-body">
+        <div class="game-panel">
+          <div class="blitz-stage">
+            <div class="blitz-prompt">
+              <img class="blitz-cover" src="photos/guest/nirvana.png" alt="Visual clue for the question" />
+              <div class="blitz-question">
+                <span class="blitz-kicker">Visual clue</span>
+                <div class="blitz-question-text">Which album does “Come As You Are” belong to?</div>
+                <p class="blitz-helper">Hit the buzzer to unlock one short answer. The artwork is part of the clue. Lock in the album title before the timer runs out.</p>
+              </div>
+            </div>
+
+            <div class="blitz-action">
+              <p class="blitz-status" id="blitz-status">Buzz to open your answer field. Once you submit, your answer is locked in for this preview.</p>
+              <button class="buzzer" type="button" id="buzzer">Buzz</button>
+              <div class="answer-form" id="answer-form" hidden>
+                <p class="answer-lead">You buzzed in. Type the album title and lock it in.</p>
+                <div class="answer-row">
+                  <input class="answer-input" type="text" placeholder="Type album title" autocomplete="off" />
+                  <button class="answer-submit" type="button">Lock answer</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="round-footer">
+        <button class="next-round-button" type="button">Restart preview</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    requestAnimationFrame(() => {
+      document.body.classList.add("is-ready");
+    });
+
+    const currentFile = window.location.pathname.split("/").pop() || "index.html";
+    const roundScreens = Array.from(document.querySelectorAll("[data-round-screen]"));
+    const nextButtons = Array.from(document.querySelectorAll(".next-round-button"));
+    const hitsterList = document.getElementById("hitster-list");
+    const buzzer = document.getElementById("buzzer");
+    const answerForm = document.getElementById("answer-form");
+    const answerLead = answerForm ? answerForm.querySelector(".answer-lead") : null;
+    const answerRow = answerForm ? answerForm.querySelector(".answer-row") : null;
+    const answerInput = answerForm ? answerForm.querySelector(".answer-input") : null;
+    const blitzStatus = document.getElementById("blitz-status");
+    const rouletteSubmit = document.getElementById("roulette-submit");
+    let activeRound = 0;
+    let draggedCard = null;
+    let activeTimerId = null;
+    const hitsterPlaceholder = document.createElement("li");
+    hitsterPlaceholder.className = "hitster-placeholder";
+    const roundTimers = roundScreens.map((screen) => screen.querySelector(".round-timer"));
+
+    function parseTimerValue(value) {
+      const [minutes = "0", seconds = "0"] = value.split(":");
+      return (Number(minutes) * 60) + Number(seconds);
+    }
+
+    function formatTimerValue(totalSeconds) {
+      const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+      const seconds = String(totalSeconds % 60).padStart(2, "0");
+      return minutes + ":" + seconds;
+    }
+
+    function renderTimer(timer, totalSeconds) {
+      timer.textContent = formatTimerValue(totalSeconds);
+      timer.classList.toggle("is-urgent", totalSeconds <= 5);
+    }
+
+    function startRoundTimer(index) {
+      const timer = roundTimers[index];
+      if (!timer) return;
+
+      window.clearInterval(activeTimerId);
+      activeTimerId = null;
+
+      const initialSeconds = Number(timer.dataset.initialSeconds);
+      let remainingSeconds = Number.isFinite(initialSeconds) ? initialSeconds : 0;
+
+      renderTimer(timer, remainingSeconds);
+
+      if (remainingSeconds === 0) return;
+
+      activeTimerId = window.setInterval(() => {
+        if (remainingSeconds === 0) {
+          window.clearInterval(activeTimerId);
+          activeTimerId = null;
+          return;
+        }
+
+        remainingSeconds -= 1;
+        renderTimer(timer, remainingSeconds);
+
+        if (remainingSeconds === 0) {
+          window.clearInterval(activeTimerId);
+          activeTimerId = null;
+        }
+      }, 1000);
+    }
+
+    roundTimers.forEach((timer) => {
+      if (!timer) return;
+      timer.dataset.initialSeconds = String(parseTimerValue(timer.textContent.trim()));
+      renderTimer(timer, Number(timer.dataset.initialSeconds));
+    });
+
+    function clearHitsterTargets() {
+      if (!hitsterList) return;
+      hitsterList.querySelectorAll(".is-drop-target").forEach((item) => item.classList.remove("is-drop-target"));
+    }
+
+    function ensureAnswerSubmit() {
+      if (!answerForm) return null;
+
+      let submitButton = answerForm.querySelector(".answer-submit");
+      if (!submitButton) {
+        submitButton = document.createElement("button");
+        submitButton.className = "answer-submit";
+        submitButton.type = "button";
+        submitButton.textContent = "Lock answer";
+        const answerRow = answerForm.querySelector(".answer-row");
+        if (answerRow) {
+          answerRow.append(submitButton);
+        } else {
+          answerForm.append(submitButton);
+        }
+      }
+
+      return submitButton;
+    }
+
+    function showRound(index) {
+      activeRound = index;
+      roundScreens.forEach((screen, screenIndex) => {
+        screen.hidden = screenIndex !== index;
+      });
+
+      startRoundTimer(index);
+
+      if (buzzer && answerForm && index === 3) {
+        buzzer.hidden = false;
+        answerForm.hidden = true;
+        if (answerInput) {
+          answerInput.value = "";
+          answerInput.hidden = false;
+        }
+        if (answerLead) answerLead.hidden = false;
+        if (answerRow) answerRow.hidden = false;
+        if (blitzStatus) {
+          blitzStatus.textContent = "Buzz to open your answer field. Once you submit, your answer is locked in for this preview.";
+        }
+        ensureAnswerSubmit();
+        const confirmation = answerForm.querySelector(".answer-confirmation");
+        if (confirmation) confirmation.remove();
+      }
+    }
+
+    document.querySelectorAll("[data-select-group]").forEach((group) => {
+      const items = group.querySelectorAll("button");
+      items.forEach((item) => {
+        item.addEventListener("click", () => {
+          items.forEach((button) => button.classList.remove("is-selected"));
+          item.classList.add("is-selected");
+
+          if (rouletteSubmit && group.dataset.selectGroup === "roulette") {
+            rouletteSubmit.classList.add("is-visible");
+          }
+        });
+      });
+    });
+
+    if (hitsterList) {
+      const hitsterCards = Array.from(hitsterList.querySelectorAll(".hitster-card"));
+
+      hitsterCards.forEach((card) => {
+        card.addEventListener("dragstart", () => {
+          draggedCard = card;
+          card.classList.add("is-dragging");
+          requestAnimationFrame(() => {
+            if (draggedCard === card && card.parentNode === hitsterList) {
+              card.replaceWith(hitsterPlaceholder);
+            }
+          });
+        });
+
+        card.addEventListener("dragend", () => {
+          card.classList.remove("is-dragging");
+
+          if (draggedCard === card && hitsterPlaceholder.parentNode === hitsterList) {
+            hitsterPlaceholder.replaceWith(card);
+          }
+
+          clearHitsterTargets();
+          hitsterPlaceholder.remove();
+          draggedCard = null;
+        });
+
+        card.addEventListener("dragover", (event) => {
+          event.preventDefault();
+
+          if (draggedCard && draggedCard !== card) {
+            const bounds = card.getBoundingClientRect();
+            const shouldInsertAfter = event.clientX > bounds.left + (bounds.width / 2);
+
+            clearHitsterTargets();
+            card.classList.add("is-drop-target");
+
+            if (shouldInsertAfter) {
+              card.after(hitsterPlaceholder);
+            } else {
+              card.before(hitsterPlaceholder);
+            }
+          }
+        });
+
+        card.addEventListener("dragleave", () => {
+          card.classList.remove("is-drop-target");
+        });
+
+        card.addEventListener("drop", (event) => {
+          event.preventDefault();
+
+          if (!draggedCard || draggedCard === card) return;
+
+          if (hitsterPlaceholder.parentNode === hitsterList) {
+            hitsterPlaceholder.replaceWith(draggedCard);
+          }
+
+          clearHitsterTargets();
+        });
+      });
+
+      hitsterList.addEventListener("dragover", (event) => {
+        event.preventDefault();
+
+        const hoveredCard = event.target.closest(".hitster-card");
+        if (!draggedCard || hoveredCard) return;
+
+        const listBounds = hitsterList.getBoundingClientRect();
+        if (event.clientX > listBounds.right - 80) {
+          clearHitsterTargets();
+          hitsterList.append(hitsterPlaceholder);
+        }
+      });
+
+      hitsterList.addEventListener("drop", (event) => {
+        event.preventDefault();
+
+        if (!draggedCard) return;
+
+        if (hitsterPlaceholder.parentNode === hitsterList) {
+          hitsterPlaceholder.replaceWith(draggedCard);
+        }
+
+        clearHitsterTargets();
+      });
+    }
+
+    if (buzzer) {
+      buzzer.addEventListener("click", () => {
+        buzzer.hidden = true;
+        if (answerForm) {
+          answerForm.hidden = false;
+          if (answerInput) answerInput.focus();
+        }
+        if (blitzStatus) {
+          blitzStatus.textContent = "Answer field unlocked. Type the album title and lock it in before the timer ends.";
+        }
+      });
+    }
+
+    if (answerForm && answerInput) {
+      answerForm.addEventListener("click", (event) => {
+        const submitButton = event.target.closest(".answer-submit");
+        if (!submitButton) return;
+
+        const submittedAnswer = answerInput.value.trim();
+        const confirmation = answerForm.querySelector(".answer-confirmation") || document.createElement("div");
+        const confirmationTitle = document.createElement("strong");
+        const confirmationText = document.createElement("span");
+
+        confirmation.className = "answer-confirmation";
+        confirmationTitle.textContent = "Answer locked in";
+        confirmationText.textContent = (submittedAnswer || "No answer entered.") + " Waiting for reveal.";
+        confirmation.replaceChildren(confirmationTitle, confirmationText);
+
+        if (answerLead) answerLead.hidden = true;
+        if (answerRow) answerRow.hidden = true;
+        answerInput.hidden = true;
+        submitButton.remove();
+        answerForm.append(confirmation);
+        if (blitzStatus) {
+          blitzStatus.textContent = "Your answer is locked. The timer will keep running, but this round now stays in a submitted state.";
+        }
+      });
+    }
+
+    if (answerInput) {
+      answerInput.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter") return;
+        event.preventDefault();
+        const submitButton = answerForm ? answerForm.querySelector(".answer-submit") : null;
+        if (submitButton) submitButton.click();
+      });
+    }
+
+    nextButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const nextIndex = (activeRound + 1) % roundScreens.length;
+        showRound(nextIndex);
+      });
+    });
+
+    document.querySelectorAll("a[href]").forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      if (href.startsWith("#")) return;
+
+      link.addEventListener("click", (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+        if (link.classList.contains("brand") && currentFile === "index.html") {
+          event.preventDefault();
+          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+          return;
+        }
+
+        event.preventDefault();
+        document.body.classList.remove("is-ready");
+        document.body.classList.add("is-leaving");
+        window.setTimeout(() => {
+          window.location.href = link.href;
+        }, 180);
+      });
+    });
+
+    showRound(0);
+  </script>
+</body>
+</html>
