@@ -68,6 +68,10 @@
       max-width: 100%;
     }
 
+    [hidden] {
+      display: none !important;
+    }
+
     .topbar {
       position: sticky;
       top: 0;
@@ -165,6 +169,15 @@
       max-width: 16ch;
     }
 
+    .round-side {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      flex-shrink: 0;
+    }
+
     .round-timer {
       display: inline-flex;
       align-items: center;
@@ -177,6 +190,38 @@
       font-size: 1.2rem;
       letter-spacing: -0.04em;
       flex-shrink: 0;
+    }
+
+    .round-points {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 164px;
+      min-height: 64px;
+      padding: 0 20px;
+      border: 1px solid var(--line-strong);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03));
+      color: #ffffff;
+      font-size: 1.32rem;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      white-space: nowrap;
+    }
+
+    .round-rank {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 112px;
+      min-height: 64px;
+      padding: 0 18px;
+      border: 1px solid var(--line-strong);
+      background: rgba(255, 255, 255, 0.04);
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      white-space: nowrap;
     }
 
     .round-timer.is-urgent {
@@ -202,7 +247,7 @@
     .round-body {
       display: grid;
       min-height: 0;
-      overflow: hidden;
+      overflow: auto;
     }
 
     .game-panel {
@@ -222,7 +267,9 @@
       padding-top: 4px;
     }
 
-    .next-round-button,
+    .restart-preview-button,
+    .imposter-submit,
+    .hitster-submit,
     .answer-submit,
     .roulette-submit {
       display: inline-flex;
@@ -238,8 +285,12 @@
       transition: transform 0.18s ease, box-shadow 0.18s ease;
     }
 
-    .next-round-button:hover,
-    .next-round-button:focus-visible,
+    .restart-preview-button:hover,
+    .restart-preview-button:focus-visible,
+    .imposter-submit:hover,
+    .imposter-submit:focus-visible,
+    .hitster-submit:hover,
+    .hitster-submit:focus-visible,
     .answer-submit:hover,
     .answer-submit:focus-visible,
     .roulette-submit:hover,
@@ -249,6 +300,17 @@
       outline: none;
     }
 
+    .restart-preview-button:disabled,
+    .imposter-submit:disabled,
+    .hitster-submit:disabled,
+    .answer-submit:disabled,
+    .roulette-submit:disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
     .instruction {
       color: var(--muted);
       font-size: 0.84rem;
@@ -256,13 +318,196 @@
       max-width: 62rem;
     }
 
-    .imposter-round .round-body {
+    .round-interaction {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .round-status {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+      max-width: 48rem;
+    }
+
+    .round-result {
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      line-height: 1.45;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .round-result strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #ffffff;
+    }
+
+    .round-result.is-correct,
+    .answer-confirmation.is-correct {
+      border-color: rgba(66, 201, 115, 0.72);
+      background: rgba(34, 111, 60, 0.28);
+      color: rgba(219, 255, 226, 0.96);
+    }
+
+    .round-result.is-wrong,
+    .answer-confirmation.is-wrong {
+      border-color: rgba(229, 78, 78, 0.72);
+      background: rgba(109, 28, 28, 0.28);
+      color: rgba(255, 222, 222, 0.96);
+    }
+
+    .round-result.is-correct strong,
+    .answer-confirmation.is-correct strong,
+    .round-result.is-wrong strong,
+    .answer-confirmation.is-wrong strong {
+      color: #ffffff;
+    }
+
+    .results-round .round-body {
       align-items: start;
     }
 
-    .imposter-round .game-panel {
+    .results-round .game-panel {
       height: auto;
       align-self: start;
+    }
+
+    .results-stage {
+      display: grid;
+      gap: 22px;
+      align-content: start;
+    }
+
+    .results-lead {
+      font-size: clamp(1.4rem, 3vw, 2.4rem);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+      color: #ffffff;
+    }
+
+    .podium-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+
+    .podium-slot {
+      min-height: 180px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)), var(--panel-2);
+      padding: 18px 16px;
+      display: grid;
+      gap: 12px;
+      align-content: end;
+      text-align: center;
+    }
+
+    .podium-slot.is-first {
+      min-height: 280px;
+      background: linear-gradient(180deg, rgba(255, 214, 102, 0.2), rgba(255, 214, 102, 0.04)), var(--panel-2);
+    }
+
+    .podium-slot.is-second {
+      min-height: 230px;
+    }
+
+    .podium-slot.is-third {
+      min-height: 200px;
+    }
+
+    .podium-rank {
+      color: var(--muted);
+      font-size: 0.76rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .podium-avatar {
+      width: 76px;
+      height: 76px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 1px solid var(--line-strong);
+      margin: 0 auto;
+    }
+
+    .podium-name {
+      font-size: 1.08rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .podium-score {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .leaderboard-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .leaderboard-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .leaderboard-row.is-user {
+      border-color: rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .leaderboard-place {
+      color: var(--muted);
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .leaderboard-player {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .leaderboard-player img {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 1px solid var(--line-strong);
+      flex-shrink: 0;
+    }
+
+    .leaderboard-player span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .imposter-round .round-body {
+      align-items: start;
+      overflow: hidden;
+    }
+
+    .imposter-round .game-panel {
+      height: 100%;
+      align-self: stretch;
+      grid-template-rows: auto 1fr auto;
+      align-content: stretch;
     }
 
     .imposter-round .round-title {
@@ -274,6 +519,8 @@
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
+      align-content: start;
+      min-height: 0;
     }
 
     .imposter-card {
@@ -298,6 +545,10 @@
       background: #ffffff;
       color: var(--black);
       border-color: #ffffff;
+    }
+
+    .imposter-card:disabled {
+      cursor: default;
     }
 
     .cover-placeholder {
@@ -362,6 +613,10 @@
       cursor: grab;
       transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease, opacity 0.18s ease;
       transform-origin: center center;
+    }
+
+    .hitster-card.is-locked {
+      cursor: default;
     }
 
     .hitster-card.is-dragging {
@@ -526,7 +781,6 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
       flex-shrink: 0;
     }
 
@@ -762,7 +1016,8 @@
       }
 
       .roulette-main,
-      .blitz-prompt {
+      .blitz-prompt,
+      .podium-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -794,6 +1049,10 @@
         display: grid;
       }
 
+      .round-side {
+        justify-self: start;
+      }
+
       .round-timer {
         justify-self: start;
       }
@@ -807,7 +1066,9 @@
       }
 
       .roulette-player,
-      .next-round-button,
+      .restart-preview-button,
+      .imposter-submit,
+      .hitster-submit,
       .answer-submit,
       .roulette-submit {
         width: 100%;
@@ -861,12 +1122,16 @@
           <span class="question-type">Imposter</span>
           <h1 class="round-title">Which track is the imposter?</h1>
         </div>
-        <div class="round-timer">00:25</div>
+        <div class="round-side">
+          <div class="round-rank">4th place</div>
+          <div class="round-points">0 pts</div>
+          <div class="round-timer">00:25</div>
+        </div>
       </div>
 
       <div class="round-body">
         <div class="game-panel">
-          <p class="instruction">Three tracks belong in the same lane. One breaks the rule. Album images are placeholders for now so you can replace them later.</p>
+          <p class="instruction">Three tracks belong together. Pick the one that breaks the pattern, then submit your choice. Cover blocks are placeholder visuals in this preview.</p>
           <div class="imposter-grid" data-select-group="imposter">
             <button class="imposter-card" type="button">
               <div class="cover-placeholder">Cover pending</div>
@@ -897,11 +1162,12 @@
               </div>
             </button>
           </div>
+          <div class="round-interaction">
+            <p class="round-status" id="imposter-status">Select one track to mark it as the imposter, then submit it.</p>
+            <button class="imposter-submit" type="button" id="imposter-submit" disabled>Submit choice</button>
+            <div class="round-result" id="imposter-result" hidden></div>
+          </div>
         </div>
-      </div>
-
-      <div class="round-footer">
-        <button class="next-round-button" type="button">Next round</button>
       </div>
     </section>
 
@@ -912,12 +1178,16 @@
           <span class="question-type">Hitster</span>
           <h1 class="round-title">Arrange these songs from oldest to newest.</h1>
         </div>
-        <div class="round-timer">00:40</div>
+        <div class="round-side">
+          <div class="round-rank">4th place</div>
+          <div class="round-points">0 pts</div>
+          <div class="round-timer">00:40</div>
+        </div>
       </div>
 
       <div class="round-body">
         <div class="game-panel">
-          <p class="instruction">Drag the songs left or right to reorder them. Each card includes a compact note field for a quick year guess.</p>
+          <p class="instruction">Drag the songs left or right to reorder them from oldest to newest. Year notes are optional and only help you think through the order.</p>
           <ul class="hitster-list" id="hitster-list">
             <li class="hitster-card" draggable="true">
               <div class="hitster-handle">::</div>
@@ -965,11 +1235,12 @@
               <input class="hitster-note" type="text" placeholder="maybe 2010" />
             </li>
           </ul>
+          <div class="round-interaction">
+            <p class="round-status" id="hitster-status">Reorder the cards until the timeline feels right, then submit the sequence.</p>
+            <button class="hitster-submit" type="button" id="hitster-submit">Submit order</button>
+            <div class="round-result" id="hitster-result" hidden></div>
+          </div>
         </div>
-      </div>
-
-      <div class="round-footer">
-        <button class="next-round-button" type="button">Next round</button>
       </div>
     </section>
 
@@ -980,7 +1251,11 @@
           <span class="question-type">Music Roulette</span>
           <h1 class="round-title">Whose taste does this song match best?</h1>
         </div>
-        <div class="round-timer">00:20</div>
+        <div class="round-side">
+          <div class="round-rank">4th place</div>
+          <div class="round-points">0 pts</div>
+          <div class="round-timer">00:20</div>
+        </div>
       </div>
 
       <div class="round-body">
@@ -996,11 +1271,11 @@
                   <span>Artist: <strong>Radiohead</strong></span>
                 </div>
                 <div class="player-bar" aria-hidden="true">
-                  <button class="play-button" type="button">▶</button>
+                  <div class="play-button">▶</div>
                   <div class="player-progress"></div>
                   <span class="player-time">0:43 / 6:23</span>
                 </div>
-                <p class="instruction">The play button and player are visual only in this prototype.</p>
+                <p class="instruction">The player bar is decorative in this prototype. Use the visible song details as your clue.</p>
               </div>
             </div>
 
@@ -1023,13 +1298,13 @@
               </button>
             </div>
 
-            <button class="roulette-submit" type="button" id="roulette-submit">Submit answer</button>
+            <div class="round-interaction">
+              <p class="round-status" id="roulette-status">Pick the player whose taste fits the song best, then submit your guess.</p>
+              <button class="roulette-submit" type="button" id="roulette-submit">Submit guess</button>
+              <div class="round-result" id="roulette-result" hidden></div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="round-footer">
-        <button class="next-round-button" type="button">Next round</button>
       </div>
     </section>
 
@@ -1040,7 +1315,11 @@
           <span class="question-type">Blitz</span>
           <h1 class="round-title">Buzz first. Name the album.</h1>
         </div>
-        <div class="round-timer">00:15</div>
+        <div class="round-side">
+          <div class="round-rank">4th place</div>
+          <div class="round-points">0 pts</div>
+          <div class="round-timer">00:15</div>
+        </div>
       </div>
 
       <div class="round-body">
@@ -1051,18 +1330,18 @@
               <div class="blitz-question">
                 <span class="blitz-kicker">Visual clue</span>
                 <div class="blitz-question-text">Which album does “Come As You Are” belong to?</div>
-                <p class="blitz-helper">Hit the buzzer to unlock one short answer. The artwork is part of the clue. Lock in the album title before the timer runs out.</p>
+                <p class="blitz-helper">Hit the buzzer to unlock one short answer. The artwork is part of the clue. Submit the album title before the timer runs out.</p>
               </div>
             </div>
 
             <div class="blitz-action">
-              <p class="blitz-status" id="blitz-status">Buzz to open your answer field. Once you submit, your answer is locked in for this preview.</p>
+              <p class="blitz-status" id="blitz-status">Buzz to open your answer field. Once you submit, your answer is saved for this preview.</p>
               <button class="buzzer" type="button" id="buzzer">Buzz</button>
               <div class="answer-form" id="answer-form" hidden>
-                <p class="answer-lead">You buzzed in. Type the album title and lock it in.</p>
+                <p class="answer-lead">You buzzed in. Type the album title and submit it.</p>
                 <div class="answer-row">
                   <input class="answer-input" type="text" placeholder="Type album title" autocomplete="off" />
-                  <button class="answer-submit" type="button">Lock answer</button>
+                  <button class="answer-submit" type="button">Submit answer</button>
                 </div>
               </div>
             </div>
@@ -1070,8 +1349,34 @@
         </div>
       </div>
 
+    </section>
+
+    <section class="round-screen results-round" data-round-screen hidden>
+      <div class="round-header">
+        <div class="round-meta">
+          <span class="round-counter">Session results</span>
+          <span class="question-type">Podium</span>
+          <h1 class="round-title">Final standings</h1>
+        </div>
+        <div class="round-side">
+          <div class="round-rank">4th place</div>
+          <div class="round-points">0 pts</div>
+        </div>
+      </div>
+
+      <div class="round-body">
+        <div class="game-panel">
+          <div class="results-stage">
+            <p class="results-lead" id="results-lead">You are still on the board.</p>
+            <p class="instruction" id="results-summary">Finish the rounds to see where your final score lands on the podium.</p>
+            <div class="podium-grid" id="podium-grid"></div>
+            <div class="leaderboard-list" id="leaderboard-list"></div>
+          </div>
+        </div>
+      </div>
+
       <div class="round-footer">
-        <button class="next-round-button" type="button">Restart preview</button>
+        <button class="restart-preview-button" type="button" id="restart-preview-button">Restart preview</button>
       </div>
     </section>
   </main>
@@ -1083,21 +1388,54 @@
 
     const currentFile = window.location.pathname.split("/").pop() || "index.html";
     const roundScreens = Array.from(document.querySelectorAll("[data-round-screen]"));
-    const nextButtons = Array.from(document.querySelectorAll(".next-round-button"));
+    const restartPreviewButton = document.getElementById("restart-preview-button");
+    const imposterGroup = document.querySelector('[data-select-group="imposter"]');
+    const imposterSubmit = document.getElementById("imposter-submit");
+    const imposterStatus = document.getElementById("imposter-status");
+    const imposterResult = document.getElementById("imposter-result");
     const hitsterList = document.getElementById("hitster-list");
+    const hitsterSubmit = document.getElementById("hitster-submit");
+    const hitsterStatus = document.getElementById("hitster-status");
+    const hitsterResult = document.getElementById("hitster-result");
     const buzzer = document.getElementById("buzzer");
     const answerForm = document.getElementById("answer-form");
     const answerLead = answerForm ? answerForm.querySelector(".answer-lead") : null;
     const answerRow = answerForm ? answerForm.querySelector(".answer-row") : null;
     const answerInput = answerForm ? answerForm.querySelector(".answer-input") : null;
     const blitzStatus = document.getElementById("blitz-status");
+    const rouletteGroup = document.querySelector('[data-select-group="roulette"]');
     const rouletteSubmit = document.getElementById("roulette-submit");
+    const rouletteStatus = document.getElementById("roulette-status");
+    const rouletteResult = document.getElementById("roulette-result");
+    const resultsLead = document.getElementById("results-lead");
+    const resultsSummary = document.getElementById("results-summary");
+    const podiumGrid = document.getElementById("podium-grid");
+    const leaderboardList = document.getElementById("leaderboard-list");
     let activeRound = 0;
     let draggedCard = null;
     let activeTimerId = null;
+    let autoAdvanceId = null;
     const hitsterPlaceholder = document.createElement("li");
     hitsterPlaceholder.className = "hitster-placeholder";
+    const roundRanks = Array.from(document.querySelectorAll(".round-rank"));
+    const roundPoints = Array.from(document.querySelectorAll(".round-points"));
     const roundTimers = roundScreens.map((screen) => screen.querySelector(".round-timer"));
+    const initialHitsterCards = hitsterList ? Array.from(hitsterList.querySelectorAll(".hitster-card")) : [];
+    const scoreByRound = [0, 0, 0, 0];
+    const roundRemainingSeconds = [0, 0, 0, 0, 0];
+    const correctHitsterOrder = [
+      "Šal od svile",
+      "Par godina za nas",
+      "Come As You Are",
+      "Paranoid Android",
+      "Rolling in the Deep"
+    ];
+    const leaderboardPlayers = [
+      { id: "you", name: "Guest 04", avatar: "photos/guest/weeknd.png", isUser: true },
+      { id: "nikola", name: "Nikola M.", avatar: "photos/account/nirvana.png", score: 3350 },
+      { id: "jovana", name: "Jovana R.", avatar: "photos/account/radiohead.png", score: 2620 },
+      { id: "marko", name: "Marko P.", avatar: "photos/account/rhcp.png", score: 1710 }
+    ];
 
     function parseTimerValue(value) {
       const [minutes = "0", seconds = "0"] = value.split(":");
@@ -1116,14 +1454,15 @@
     }
 
     function startRoundTimer(index) {
-      const timer = roundTimers[index];
-      if (!timer) return;
-
       window.clearInterval(activeTimerId);
       activeTimerId = null;
 
+      const timer = roundTimers[index];
+      if (!timer) return;
+
       const initialSeconds = Number(timer.dataset.initialSeconds);
       let remainingSeconds = Number.isFinite(initialSeconds) ? initialSeconds : 0;
+      roundRemainingSeconds[index] = remainingSeconds;
 
       renderTimer(timer, remainingSeconds);
 
@@ -1137,6 +1476,7 @@
         }
 
         remainingSeconds -= 1;
+        roundRemainingSeconds[index] = remainingSeconds;
         renderTimer(timer, remainingSeconds);
 
         if (remainingSeconds === 0) {
@@ -1157,6 +1497,170 @@
       hitsterList.querySelectorAll(".is-drop-target").forEach((item) => item.classList.remove("is-drop-target"));
     }
 
+    function formatPoints(value) {
+      return value.toLocaleString("en-US") + " pts";
+    }
+
+    function formatPointsBadge(value) {
+      return formatPoints(value);
+    }
+
+    function updatePointsDisplay() {
+      const totalPoints = scoreByRound.reduce((sum, value) => sum + value, 0);
+      roundPoints.forEach((badge) => {
+        badge.textContent = formatPointsBadge(totalPoints);
+      });
+      const entries = getLeaderboardEntries();
+      const userRank = entries.findIndex((entry) => entry.isUser) + 1;
+      roundRanks.forEach((badge) => {
+        badge.textContent = formatOrdinal(userRank) + " place";
+      });
+    }
+
+    function setRoundScore(index, value) {
+      scoreByRound[index] = value;
+      updatePointsDisplay();
+    }
+
+    function resetAllScores() {
+      scoreByRound.fill(0);
+      updatePointsDisplay();
+    }
+
+    function normalizeAnswer(value) {
+      return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    }
+
+    function getSpeedPoints(index) {
+      const timer = roundTimers[index];
+      if (!timer) return 0;
+
+      const initialSeconds = Number(timer.dataset.initialSeconds);
+      const remainingSeconds = roundRemainingSeconds[index];
+      if (!Number.isFinite(initialSeconds) || initialSeconds <= 0) return 0;
+      if (!Number.isFinite(remainingSeconds) || remainingSeconds <= 0) return 0;
+
+      return Math.max(50, Math.round((remainingSeconds / initialSeconds) * 1000));
+    }
+
+    function revealFeedback(element) {
+      if (!element) return;
+      requestAnimationFrame(() => {
+        element.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      });
+    }
+
+    function queueAutoAdvance(delayMs = 2200) {
+      window.clearTimeout(autoAdvanceId);
+      autoAdvanceId = window.setTimeout(() => {
+        const nextIndex = Math.min(activeRound + 1, roundScreens.length - 1);
+        showRound(nextIndex);
+      }, delayMs);
+    }
+
+    function getTotalScore() {
+      return scoreByRound.reduce((sum, value) => sum + value, 0);
+    }
+
+    function formatOrdinal(value) {
+      const remainder = value % 10;
+      const teenCheck = value % 100;
+      if (remainder === 1 && teenCheck !== 11) return value + "st";
+      if (remainder === 2 && teenCheck !== 12) return value + "nd";
+      if (remainder === 3 && teenCheck !== 13) return value + "rd";
+      return value + "th";
+    }
+
+    function getLeaderboardEntries() {
+      return leaderboardPlayers
+        .map((player, index) => ({
+          ...player,
+          index,
+          score: player.isUser ? getTotalScore() : player.score
+        }))
+        .sort((a, b) => {
+          if (b.score !== a.score) return b.score - a.score;
+          return a.index - b.index;
+        });
+    }
+
+    function renderResultsScreen() {
+      if (!podiumGrid || !leaderboardList || !resultsLead || !resultsSummary) return;
+
+      const entries = getLeaderboardEntries();
+      const userRank = entries.findIndex((entry) => entry.isUser) + 1;
+      const userEntry = entries[userRank - 1];
+      const podiumOrder = [2, 1, 3];
+
+      resultsLead.textContent = "You placed " + formatOrdinal(userRank) + " with " + formatPoints(userEntry ? userEntry.score : 0) + ".";
+      resultsSummary.textContent = userRank === 1
+        ? "Top of the podium. The preview score carried you all the way to first place."
+        : "The podium is based on your round points against the rest of the lobby preview.";
+
+      podiumGrid.replaceChildren();
+      podiumOrder.forEach((place) => {
+        const entry = entries[place - 1];
+        if (!entry) return;
+
+        const slot = document.createElement("div");
+        const rank = document.createElement("span");
+        const avatar = document.createElement("img");
+        const name = document.createElement("strong");
+        const score = document.createElement("span");
+
+        slot.className = "podium-slot is-" + (place === 1 ? "first" : place === 2 ? "second" : "third");
+        rank.className = "podium-rank";
+        avatar.className = "podium-avatar";
+        name.className = "podium-name";
+        score.className = "podium-score";
+
+        rank.textContent = formatOrdinal(place);
+        avatar.src = entry.avatar;
+        avatar.alt = entry.name + " avatar";
+        name.textContent = entry.name;
+        score.textContent = formatPoints(entry.score);
+
+        slot.append(rank, avatar, name, score);
+        podiumGrid.append(slot);
+      });
+
+      leaderboardList.replaceChildren();
+      entries.forEach((entry, index) => {
+        const row = document.createElement("div");
+        const place = document.createElement("span");
+        const player = document.createElement("div");
+        const avatar = document.createElement("img");
+        const name = document.createElement("span");
+        const score = document.createElement("strong");
+
+        row.className = "leaderboard-row" + (entry.isUser ? " is-user" : "");
+        place.className = "leaderboard-place";
+        player.className = "leaderboard-player";
+
+        place.textContent = formatOrdinal(index + 1);
+        avatar.src = entry.avatar;
+        avatar.alt = entry.name + " avatar";
+        name.textContent = entry.name + (entry.isUser ? " (You)" : "");
+        score.textContent = formatPoints(entry.score);
+
+        player.append(avatar, name);
+        row.append(place, player, score);
+        leaderboardList.append(row);
+      });
+    }
+
+    function buildRoundResult(title, message) {
+      const result = document.createElement("div");
+      const resultTitle = document.createElement("strong");
+      const resultBody = document.createElement("span");
+
+      resultTitle.textContent = title;
+      resultBody.textContent = message;
+      result.replaceChildren(resultTitle, resultBody);
+
+      return result;
+    }
+
     function ensureAnswerSubmit() {
       if (!answerForm) return null;
 
@@ -1165,7 +1669,7 @@
         submitButton = document.createElement("button");
         submitButton.className = "answer-submit";
         submitButton.type = "button";
-        submitButton.textContent = "Lock answer";
+        submitButton.textContent = "Submit answer";
         const answerRow = answerForm.querySelector(".answer-row");
         if (answerRow) {
           answerRow.append(submitButton);
@@ -1178,12 +1682,75 @@
     }
 
     function showRound(index) {
+      window.clearTimeout(autoAdvanceId);
+      autoAdvanceId = null;
+
+      const previousRound = activeRound;
+      if (index === 0 && previousRound === roundScreens.length - 1) {
+        resetAllScores();
+      }
+
       activeRound = index;
       roundScreens.forEach((screen, screenIndex) => {
         screen.hidden = screenIndex !== index;
       });
 
       startRoundTimer(index);
+
+      if (index === 0 && imposterGroup && imposterSubmit && imposterResult) {
+        imposterGroup.dataset.locked = "false";
+        imposterGroup.hidden = false;
+        imposterGroup.querySelectorAll(".imposter-card").forEach((card) => {
+          card.classList.remove("is-selected");
+          card.disabled = false;
+        });
+        imposterSubmit.hidden = false;
+        imposterSubmit.disabled = true;
+        imposterResult.hidden = true;
+        imposterResult.className = "round-result";
+        imposterResult.replaceChildren();
+        if (imposterStatus) {
+          imposterStatus.textContent = "Select one track to mark it as the imposter, then submit it.";
+        }
+      }
+
+      if (index === 1 && hitsterList && hitsterSubmit && hitsterResult) {
+        hitsterList.hidden = false;
+        initialHitsterCards.forEach((card) => {
+          hitsterList.append(card);
+        });
+        hitsterList.querySelectorAll(".hitster-card").forEach((card) => {
+          card.draggable = true;
+          card.classList.remove("is-locked");
+        });
+        hitsterList.querySelectorAll(".hitster-note").forEach((input) => {
+          input.disabled = false;
+          input.value = "";
+        });
+        hitsterSubmit.hidden = false;
+        hitsterResult.hidden = true;
+        hitsterResult.className = "round-result";
+        hitsterResult.replaceChildren();
+        if (hitsterStatus) {
+          hitsterStatus.textContent = "Reorder the cards until the timeline feels right, then submit the sequence.";
+        }
+      }
+
+      if (index === 2 && rouletteGroup && rouletteSubmit && rouletteResult) {
+        rouletteGroup.dataset.locked = "false";
+        rouletteGroup.hidden = false;
+        rouletteGroup.querySelectorAll(".roulette-player").forEach((player) => {
+          player.classList.remove("is-selected");
+          player.disabled = false;
+        });
+        rouletteSubmit.classList.remove("is-visible");
+        rouletteResult.hidden = true;
+        rouletteResult.className = "round-result";
+        rouletteResult.replaceChildren();
+        if (rouletteStatus) {
+          rouletteStatus.textContent = "Pick the player whose taste fits the song best, then submit your guess.";
+        }
+      }
 
       if (buzzer && answerForm && index === 3) {
         buzzer.hidden = false;
@@ -1195,11 +1762,15 @@
         if (answerLead) answerLead.hidden = false;
         if (answerRow) answerRow.hidden = false;
         if (blitzStatus) {
-          blitzStatus.textContent = "Buzz to open your answer field. Once you submit, your answer is locked in for this preview.";
+          blitzStatus.textContent = "Buzz to open your answer field. Once you submit, your answer is saved for this preview.";
         }
         ensureAnswerSubmit();
         const confirmation = answerForm.querySelector(".answer-confirmation");
         if (confirmation) confirmation.remove();
+      }
+
+      if (index === 4) {
+        renderResultsScreen();
       }
     }
 
@@ -1207,11 +1778,25 @@
       const items = group.querySelectorAll("button");
       items.forEach((item) => {
         item.addEventListener("click", () => {
+          if (group.dataset.locked === "true") return;
+
           items.forEach((button) => button.classList.remove("is-selected"));
           item.classList.add("is-selected");
 
           if (rouletteSubmit && group.dataset.selectGroup === "roulette") {
             rouletteSubmit.classList.add("is-visible");
+            if (rouletteStatus) {
+              const selectedName = item.querySelector(".roulette-name");
+              rouletteStatus.textContent = "Selected: " + (selectedName ? selectedName.textContent : "player") + ". Submit your guess when you're ready.";
+            }
+          }
+
+          if (imposterSubmit && group.dataset.selectGroup === "imposter") {
+            imposterSubmit.disabled = false;
+            if (imposterStatus) {
+              const selectedSong = item.querySelector(".imposter-song");
+              imposterStatus.textContent = "Selected: " + (selectedSong ? selectedSong.textContent : "track") + ". Submit your choice when you're ready.";
+            }
           }
         });
       });
@@ -1304,6 +1889,105 @@
       });
     }
 
+    if (imposterSubmit && imposterGroup && imposterResult) {
+      imposterSubmit.addEventListener("click", () => {
+        const selectedCard = imposterGroup.querySelector(".imposter-card.is-selected");
+        if (!selectedCard) return;
+
+        const song = selectedCard.querySelector(".imposter-song");
+        const artist = selectedCard.querySelector(".imposter-artist");
+        const isCorrect = song && song.textContent.trim() === "Blinding Lights";
+        const awardedPoints = isCorrect ? getSpeedPoints(0) : 0;
+
+        imposterGroup.dataset.locked = "true";
+        imposterGroup.querySelectorAll(".imposter-card").forEach((card) => {
+          card.disabled = true;
+        });
+        imposterSubmit.hidden = true;
+        imposterResult.hidden = false;
+        imposterResult.className = "round-result " + (isCorrect ? "is-correct" : "is-wrong");
+        setRoundScore(0, awardedPoints);
+        imposterResult.replaceChildren(buildRoundResult(
+          isCorrect ? "Correct answer" : "Answer submitted",
+          (song ? song.textContent : "Track") +
+          (artist ? " by " + artist.textContent : "") +
+          (isCorrect ? " was the right imposter. +" + formatPoints(awardedPoints) + "." : " was submitted as your pick. +0 pts.")
+        ));
+        if (imposterStatus) {
+          imposterStatus.textContent = isCorrect ? "Correct pick. Speed bonus awarded: " + formatPoints(awardedPoints) + "." : "Your pick was submitted. +0 pts for this round.";
+        }
+        revealFeedback(imposterResult);
+        queueAutoAdvance();
+      });
+    }
+
+    if (hitsterSubmit && hitsterList && hitsterResult) {
+      hitsterSubmit.addEventListener("click", () => {
+        const orderedCards = Array.from(hitsterList.querySelectorAll(".hitster-card"));
+        const orderedTitles = orderedCards.map((card, index) => {
+          const title = card.querySelector(".hitster-title");
+          return String(index + 1) + ". " + (title ? title.textContent : "Track");
+        }).join(" -> ");
+        const isCorrect = orderedCards.every((card, index) => {
+          const title = card.querySelector(".hitster-title");
+          return title && title.textContent.trim() === correctHitsterOrder[index];
+        });
+        const awardedPoints = isCorrect ? getSpeedPoints(1) : 0;
+
+        hitsterList.querySelectorAll(".hitster-card").forEach((card) => {
+          card.draggable = false;
+          card.classList.add("is-locked");
+        });
+        hitsterList.querySelectorAll(".hitster-note").forEach((input) => {
+          input.disabled = true;
+        });
+        hitsterSubmit.hidden = true;
+        hitsterResult.hidden = false;
+        hitsterResult.className = "round-result " + (isCorrect ? "is-correct" : "is-wrong");
+        setRoundScore(1, awardedPoints);
+        hitsterResult.replaceChildren(buildRoundResult(
+          isCorrect ? "Correct order" : "Order submitted",
+          orderedTitles + (isCorrect ? " +" + formatPoints(awardedPoints) + "." : " +0 pts.")
+        ));
+        if (hitsterStatus) {
+          hitsterStatus.textContent = isCorrect ? "Correct timeline. Speed bonus awarded: " + formatPoints(awardedPoints) + "." : "Your sequence was submitted. +0 pts for this round.";
+        }
+        revealFeedback(hitsterResult);
+        queueAutoAdvance();
+      });
+    }
+
+    if (rouletteSubmit && rouletteGroup && rouletteResult) {
+      rouletteSubmit.addEventListener("click", () => {
+        const selectedPlayer = rouletteGroup.querySelector(".roulette-player.is-selected");
+        if (!selectedPlayer) return;
+
+        const playerName = selectedPlayer.querySelector(".roulette-name");
+        const isCorrect = playerName && playerName.textContent.trim() === "Jovana R.";
+        const awardedPoints = isCorrect ? getSpeedPoints(2) : 0;
+
+        rouletteGroup.dataset.locked = "true";
+        rouletteGroup.hidden = true;
+        rouletteGroup.querySelectorAll(".roulette-player").forEach((player) => {
+          player.disabled = true;
+        });
+        rouletteSubmit.classList.remove("is-visible");
+        rouletteResult.hidden = false;
+        rouletteResult.className = "round-result " + (isCorrect ? "is-correct" : "is-wrong");
+        setRoundScore(2, awardedPoints);
+        rouletteResult.replaceChildren(buildRoundResult(
+          isCorrect ? "Correct guess" : "Guess submitted",
+          (playerName ? playerName.textContent : "Selected player") +
+          (isCorrect ? " matches this song best. +" + formatPoints(awardedPoints) + "." : " was submitted as your pick. +0 pts.")
+        ));
+        if (rouletteStatus) {
+          rouletteStatus.textContent = isCorrect ? "Correct guess. Speed bonus awarded: " + formatPoints(awardedPoints) + "." : "Your guess was submitted. +0 pts for this round.";
+        }
+        revealFeedback(rouletteResult);
+        queueAutoAdvance();
+      });
+    }
+
     if (buzzer) {
       buzzer.addEventListener("click", () => {
         buzzer.hidden = true;
@@ -1312,7 +1996,7 @@
           if (answerInput) answerInput.focus();
         }
         if (blitzStatus) {
-          blitzStatus.textContent = "Answer field unlocked. Type the album title and lock it in before the timer ends.";
+          blitzStatus.textContent = "Answer field unlocked. Type the album title and submit it before the timer ends.";
         }
       });
     }
@@ -1326,10 +2010,12 @@
         const confirmation = answerForm.querySelector(".answer-confirmation") || document.createElement("div");
         const confirmationTitle = document.createElement("strong");
         const confirmationText = document.createElement("span");
+        const isCorrect = normalizeAnswer(submittedAnswer).includes("nevermind");
+        const awardedPoints = isCorrect ? getSpeedPoints(3) : 0;
 
-        confirmation.className = "answer-confirmation";
-        confirmationTitle.textContent = "Answer locked in";
-        confirmationText.textContent = (submittedAnswer || "No answer entered.") + " Waiting for reveal.";
+        confirmation.className = "answer-confirmation " + (isCorrect ? "is-correct" : "is-wrong");
+        confirmationTitle.textContent = isCorrect ? "Correct answer" : "Answer submitted";
+        confirmationText.textContent = (submittedAnswer || "No answer entered.") + (isCorrect ? " +" + formatPoints(awardedPoints) + "." : " +0 pts.");
         confirmation.replaceChildren(confirmationTitle, confirmationText);
 
         if (answerLead) answerLead.hidden = true;
@@ -1337,9 +2023,12 @@
         answerInput.hidden = true;
         submitButton.remove();
         answerForm.append(confirmation);
+        setRoundScore(3, awardedPoints);
         if (blitzStatus) {
-          blitzStatus.textContent = "Your answer is locked. The timer will keep running, but this round now stays in a submitted state.";
+          blitzStatus.textContent = isCorrect ? "Correct answer. Speed bonus awarded: " + formatPoints(awardedPoints) + "." : "Your answer is saved. +0 pts for this round.";
         }
+        revealFeedback(confirmation);
+        queueAutoAdvance();
       });
     }
 
@@ -1352,12 +2041,11 @@
       });
     }
 
-    nextButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const nextIndex = (activeRound + 1) % roundScreens.length;
-        showRound(nextIndex);
+    if (restartPreviewButton) {
+      restartPreviewButton.addEventListener("click", () => {
+        showRound(0);
       });
-    });
+    }
 
     document.querySelectorAll("a[href]").forEach((link) => {
       const href = link.getAttribute("href") || "";
@@ -1383,6 +2071,7 @@
       });
     });
 
+    updatePointsDisplay();
     showRound(0);
   </script>
 </body>
