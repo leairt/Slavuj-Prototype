@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>славуј — create profile</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="photos/logo_sticker.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="photos/logo_sticker.png" />
-  <link rel="apple-touch-icon" href="photos/logo_sticker.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="photos/logo/logo_sticker.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="photos/logo/logo_sticker.png" />
+  <link rel="apple-touch-icon" href="photos/logo/logo_sticker.png" />
   <style>
     :root {
       --bg: #ffffff;
@@ -719,14 +719,306 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
+    /* Cross-browser responsive safety layer */
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      min-width: 320px;
+      overflow-x: hidden;
+    }
+
+    *,
+    *::before,
+    *::after {
+      min-width: 0;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    img,
+    svg,
+    video,
+    canvas {
+      max-width: 100%;
+    }
+
+    canvas {
+      height: auto;
+    }
+
+    .topbar-inner,
+    .container,
+    .shell,
+    .footer-grid {
+      max-width: calc(100% - 40px);
+    }
+
+    .brand-name {
+      max-width: min(46vw, 220px);
+    }
+
+    h1,
+    h2,
+    h3,
+    p,
+    li,
+    strong,
+    span,
+    .game-title,
+    .quiz-copy strong,
+    .group-panel strong,
+    .hero-copy h1 {
+      overflow-wrap: break-word;
+    }
+    @media (max-width: 760px) {
+      .topbar-inner {
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .topbar-inner,
+      .container,
+      .shell,
+      .footer-grid {
+        width: calc(100% - 24px);
+        max-width: calc(100% - 24px);
+      }
+
+      .brand-mark {
+        width: 32px;
+        height: 32px;
+      }
+
+      .brand-name {
+        height: auto;
+        max-height: 44px;
+        max-width: min(54vw, 170px);
+      }
+
+      .profile-trigger,
+      .topbar-user {
+        max-width: 100%;
+      }
+
+      .user-name,
+      .user-label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .top-modes,
+      .creative-grid,
+      .quiz-list,
+      .footer-grid,
+      .footer-left,
+      .stats-row {
+        grid-template-columns: 1fr !important;
+      }
+
+      .creative-section,
+      .group-section {
+        padding-left: max(12px, calc(50vw - min(560px, calc(100% - 24px)))) !important;
+        padding-right: max(12px, calc(50vw - min(560px, calc(100% - 24px)))) !important;
+      }
+
+      .game-card {
+        min-height: auto;
+        gap: 16px;
+      }
+
+      .game-illustration {
+        min-height: auto;
+        grid-template-columns: 38px minmax(0, 1fr);
+      }
+
+      .game-illustration img {
+        width: 38px;
+        height: 38px;
+      }
+
+      .quiz-row {
+        grid-template-columns: 96px minmax(0, 1fr) !important;
+        gap: 12px;
+      }
+
+      .footer-brand {
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      h1,
+      .hero-copy h1 {
+        font-size: 2.15rem !important;
+        line-height: 1 !important;
+        letter-spacing: 0 !important;
+        white-space: normal !important;
+      }
+
+      .game-title,
+      .section-head h2,
+      .group-panel strong,
+      .quiz-copy strong {
+        letter-spacing: 0 !important;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .topbar-inner,
+      .container,
+      .shell,
+      .footer-grid {
+        width: calc(100% - 20px);
+        max-width: calc(100% - 20px);
+      }
+
+      .quiz-row {
+        grid-template-columns: 72px minmax(0, 1fr) !important;
+        padding: 10px;
+      }
+
+      h1,
+      .hero-copy h1 {
+        font-size: 1.85rem !important;
+      }
+
+      .footer-logo {
+        width: 112px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .step-grid,
+      .step.reverse .step-grid,
+      .login-layout,
+      .step-split,
+      .avatar-upload,
+      .review-layout,
+      .selected-genres,
+      .genre-results,
+      .board,
+      .palette {
+        grid-template-columns: 1fr !important;
+      }
+
+      .step-no {
+        font-size: 3rem !important;
+        letter-spacing: 0 !important;
+      }
+
+      .image-slot {
+        min-height: 180px;
+        border-radius: 8px;
+      }
+
+      .panel {
+        min-height: auto;
+        padding: 28px 18px;
+      }
+
+      .step-title {
+        white-space: normal !important;
+      }
+
+      .avatar-upload,
+      .review-layout {
+        justify-items: center;
+        text-align: center;
+      }
+
+      .review-row {
+        grid-template-columns: 1fr !important;
+        gap: 4px;
+      }
+
+      .answer-slot {
+        height: auto;
+        min-height: 58px;
+      }
+
+      .footer-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(128px, auto) !important;
+        align-items: stretch;
+        gap: 18px;
+      }
+
+      .footer-left {
+        grid-template-columns: 1fr !important;
+        gap: 18px;
+      }
+
+      .footer-brand {
+        align-items: flex-end;
+        justify-content: flex-end;
+        align-self: stretch;
+        text-align: right;
+      }
+
+      .footer-logo {
+        width: 128px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .quiz-row {
+        grid-template-columns: 1fr !important;
+      }
+
+      .quiz-cover {
+        width: 96px;
+      }
+
+      .answer-slot {
+        grid-template-columns: 18px 32px minmax(0, 1fr) !important;
+        gap: 8px;
+        padding: 8px 10px;
+      }
+
+      .slot-cover {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    @supports (height: 100dvh) {
+      .login-layout {
+        min-height: calc(100dvh - 63px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @supports (-webkit-touch-callout: none) {
+      input,
+      textarea,
+      select {
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
   <header class="topbar">
     <div class="topbar-inner">
       <a class="brand" href="index.html">
-        <img class="brand-mark" src="photos/logo.png" alt="славуј logo" />
-        <img class="brand-name" src="photos/name.png" alt="славуј" />
+        <img class="brand-mark" src="photos/logo/logo.png" alt="славуј logo" />
+        <img class="brand-name" src="photos/logo/name.png" alt="славуј" />
       </a>
     </div>
   </header>
@@ -774,7 +1066,7 @@
               </div>
               <div class="avatar-upload">
                 <div class="avatar-picker">
-                  <img class="avatar-preview" id="avatar-preview" src="photos/account_profile.jpeg" alt="Profile preview" />
+                  <img class="avatar-preview" id="avatar-preview" src="photos/account/account_profile.png" alt="Profile preview" />
                   <label class="upload-label" for="avatar-input" aria-hidden="true">+</label>
                   <input class="upload-input" id="avatar-input" type="file" accept="image/*" />
                 </div>
@@ -830,7 +1122,7 @@
                 <h2 class="step-title">Review.</h2>
               </div>
               <div class="review-layout">
-                <img class="review-avatar review-reveal" data-review-row id="review-avatar" src="photos/account_profile.jpeg" alt="Review avatar" />
+                <img class="review-avatar review-reveal" data-review-row id="review-avatar" src="photos/account/account_profile.png" alt="Review avatar" />
                 <ul class="review-list">
                   <li class="review-row" data-review-row>
                     <span class="review-key">Email</span>
@@ -873,7 +1165,7 @@
         <div><h3>Project</h3><p>Univerzitet u Beogradu</p><p>Elektrotehnicki fakultet</p><p>Principi softverskog inženjerstva</p></div>
         <div><h3>Team Slavujci</h3><ul><li>Dusan Korizma</li><li>Lea Irt</li><li>Marko Misovski</li><li>Mark Možarovski</li></ul></div>
       </div>
-      <div class="footer-brand"><img class="footer-logo" src="photos/logo_black.png" alt="slavuj black logo" /><p class="footer-credit">Illustrations by Lea Irt</p></div>
+      <div class="footer-brand"><img class="footer-logo" src="photos/logo/logo_black.png" alt="slavuj black logo" /><p class="footer-credit">Illustrations by Lea Irt</p></div>
     </div>
   </footer>
 

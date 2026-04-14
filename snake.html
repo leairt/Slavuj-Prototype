@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>славуј — snake</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="photos/logo/logo_sticker.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="photos/logo/logo_sticker.png" />
+  <link rel="apple-touch-icon" href="photos/logo/logo_sticker.png" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --muted: #666666;
+      --line: #dddddd;
+      --soft: #f5f5f5;
+      --dark: #171717;
+      --container: min(1120px, calc(100% - 40px));
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    body.is-ready {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body.is-leaving {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner,
+    .shell,
+    .footer-grid {
+      width: var(--container);
+      margin: 0 auto;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      height: 52px;
+      width: auto;
+      object-fit: contain;
+      transform: translateY(3px);
+    }
+
+    .shell {
+      padding: 0 0 40px;
+    }
+
+    .snake-page {
+      display: grid;
+      gap: 22px;
+    }
+
+    .game-strip {
+      background: var(--dark);
+      color: #ffffff;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      padding: 32px 20px;
+    }
+
+    .game-card {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(280px, 430px) minmax(300px, 1fr);
+      gap: 24px;
+      align-items: start;
+      min-height: 0;
+    }
+
+    .hero-copy {
+      display: grid;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .title-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(120px, auto);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .title-illustration {
+      display: grid;
+      justify-items: end;
+      align-self: start;
+      margin-left: auto;
+      gap: 6px;
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 0.72rem;
+      line-height: 1.1;
+      text-align: right;
+    }
+
+    .title-illustration img {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      width: fit-content;
+      padding: 0 10px;
+      border: 1px solid #ffffff;
+      background: #ffffff;
+      color: var(--dark);
+      font-size: 0.76rem;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin-top: 14px;
+      font-size: 2.45rem;
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .hero-meta {
+      margin-top: 10px;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.92rem;
+      line-height: 1.35;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .seed-form {
+      display: grid;
+      gap: 10px;
+      width: min(100%, 430px);
+    }
+
+    .seed-label {
+      color: #ffffff;
+      font-size: 0.76rem;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .seed-search {
+      position: relative;
+    }
+
+    .seed-search::before {
+      content: "";
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      width: 13px;
+      height: 13px;
+      border: 1.5px solid rgba(255, 255, 255, 0.72);
+      border-radius: 999px;
+      transform: translateY(-58%);
+      pointer-events: none;
+    }
+
+    .seed-search::after {
+      content: "";
+      position: absolute;
+      left: 27px;
+      top: 29px;
+      width: 7px;
+      height: 1.5px;
+      background: rgba(255, 255, 255, 0.72);
+      transform: rotate(45deg);
+      transform-origin: left center;
+      pointer-events: none;
+    }
+
+    .seed-input {
+      width: 100%;
+      min-height: 48px;
+      padding: 0 14px 0 44px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      font: inherit;
+    }
+
+    .seed-input::placeholder {
+      color: rgba(255, 255, 255, 0.48);
+    }
+
+    .seed-input:focus {
+      outline: none;
+      border-color: #ffffff;
+    }
+
+    .seed-button {
+      display: none;
+      min-height: 48px;
+      padding: 0 14px;
+      border: 1px solid #ffffff;
+      background: #ffffff;
+      color: var(--dark);
+      cursor: pointer;
+    }
+
+    .selected-song {
+      min-height: 66px;
+      padding: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.05);
+      display: grid;
+      grid-template-columns: 50px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+
+    .selected-cover {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .selected-copy {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .selected-title {
+      color: #ffffff;
+      font-size: 0.98rem;
+      line-height: 1.08;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .selected-artist {
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 0.78rem;
+      line-height: 1.1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .playlist-panel {
+      display: grid;
+      gap: 8px;
+    }
+
+    .playlist-title {
+      color: #ffffff;
+      font-size: 0.82rem;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .playlist-list {
+      display: grid;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .playlist-list li {
+      min-height: 54px;
+      padding: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.05);
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .playlist-cover {
+      width: 38px;
+      height: 38px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .playlist-copy {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .playlist-song {
+      color: #ffffff;
+      font-size: 0.9rem;
+      line-height: 1.05;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .playlist-artist {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.72rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .game-stage {
+      display: grid;
+      gap: 12px;
+      justify-items: center;
+      min-width: 0;
+    }
+
+    .board-wrap {
+      width: min(560px, 100%);
+      aspect-ratio: 1 / 1;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #snake-board {
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: none;
+    }
+
+    .current-word {
+      width: min(560px, 100%);
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.86rem;
+    }
+
+    .current-word span {
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    .current-word strong {
+      font-size: 1rem;
+      color: #ffffff;
+    }
+
+    .result-message {
+      width: min(560px, 100%);
+      min-height: 0;
+      padding: 12px 14px;
+      border: 1px solid #ffffff;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #111111;
+      font-size: 0.86rem;
+      line-height: 1.25;
+      display: none;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+    }
+
+    .result-message.is-visible {
+      display: block;
+    }
+
+    .controls-row {
+      width: min(560px, 100%);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      justify-items: center;
+    }
+
+    .control-button {
+      width: 42px;
+      height: 42px;
+      min-height: 42px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #ffffff;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      text-indent: -999px;
+      transition: transform 0.18s ease, opacity 0.18s ease;
+    }
+
+    .control-button:hover,
+    .control-button:focus-visible {
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .control-button:disabled {
+      cursor: default;
+      opacity: 0.38;
+    }
+
+    .control-button:disabled:hover {
+      transform: none;
+    }
+
+    .control-button.is-dark {
+      background: transparent;
+      color: #ffffff;
+    }
+
+    .control-button::before,
+    .control-button::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #play-pause-button::before {
+      width: 0;
+      height: 0;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      border-left: 18px solid #ffffff;
+      transform: translate(-38%, -50%);
+    }
+
+    #play-pause-button.is-playing::before,
+    #play-pause-button.is-playing::after {
+      width: 6px;
+      height: 24px;
+      background: #ffffff;
+      border: 0;
+    }
+
+    #play-pause-button.is-playing::before {
+      transform: translate(calc(-50% - 7px), -50%);
+    }
+
+    #play-pause-button.is-playing::after {
+      transform: translate(calc(-50% + 7px), -50%);
+    }
+
+    #restart-button {
+      background-image: url("photos/snake/icon.png");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 24px 24px;
+    }
+
+    .pad {
+      width: min(240px, 100%);
+      display: none;
+      grid-template-columns: repeat(3, 56px);
+      grid-template-rows: repeat(3, 44px);
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .pad-button {
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      min-height: 44px;
+      cursor: pointer;
+    }
+
+    .pad-button[data-dir="up"] {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .pad-button[data-dir="left"] {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .pad-button[data-dir="right"] {
+      grid-column: 3;
+      grid-row: 2;
+    }
+
+    .pad-button[data-dir="down"] {
+      grid-column: 2;
+      grid-row: 3;
+    }
+
+    .related {
+      display: grid;
+      gap: 12px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .section-head h2 {
+      font-size: 2.2rem;
+      line-height: 0.96;
+      letter-spacing: 0;
+    }
+
+    .quiz-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .quiz-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--text);
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .quiz-row:hover,
+    .quiz-row:focus-visible {
+      transform: translateY(-3px);
+      background: var(--soft);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+    }
+
+    .quiz-cover {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .quiz-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .quiz-badge {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 24px;
+      padding: 0 8px;
+      border: 1px solid #4a4a4a;
+      background: #4a4a4a;
+      color: #ffffff;
+      font-size: 0.68rem;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .quiz-copy {
+      align-self: start;
+      padding-top: 6px;
+    }
+
+    .quiz-copy strong {
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      font-size: 1.05rem;
+      letter-spacing: 0;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .quiz-meta-line {
+      margin-top: 10px;
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    .footer {
+      background: var(--dark);
+      padding: 24px 0 36px;
+      margin-top: 0;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+    }
+
+    .footer-left {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .footer-grid h3 {
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    .footer-grid ul {
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+
+    .footer-grid p,
+    .footer-grid li,
+    .footer-credit {
+      color: rgba(255,255,255,0.72);
+    }
+
+    .footer-logo {
+      width: 120px;
+      height: auto;
+      object-fit: contain;
+      margin-bottom: 14px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 8px;
+      text-align: right;
+    }
+
+    .footer-credit {
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 980px) {
+      .game-card {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy {
+        width: min(560px, 100%);
+        justify-self: center;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .footer-grid,
+      .footer-left {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-brand {
+        align-items: flex-start;
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        padding: 24px 0 40px;
+      }
+
+      .game-strip {
+        padding: 28px 20px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .stats-row,
+      .controls-row,
+      .quiz-list,
+      .quiz-row {
+        grid-template-columns: 1fr;
+      }
+
+      .pad {
+        display: grid;
+      }
+
+    }
+    /* Cross-browser responsive safety layer */
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      min-width: 320px;
+      overflow-x: hidden;
+    }
+
+    *,
+    *::before,
+    *::after {
+      min-width: 0;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    img,
+    svg,
+    video,
+    canvas {
+      max-width: 100%;
+    }
+
+    canvas {
+      height: auto;
+    }
+
+    .topbar-inner,
+    .container,
+    .shell,
+    .footer-grid {
+      max-width: calc(100% - 40px);
+    }
+
+    .brand-name {
+      max-width: min(46vw, 220px);
+    }
+
+    h1,
+    h2,
+    h3,
+    p,
+    li,
+    strong,
+    span,
+    .game-title,
+    .quiz-copy strong,
+    .group-panel strong,
+    .hero-copy h1 {
+      overflow-wrap: break-word;
+    }
+    @media (max-width: 760px) {
+      .topbar-inner {
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .topbar-inner,
+      .container,
+      .shell,
+      .footer-grid {
+        width: calc(100% - 24px);
+        max-width: calc(100% - 24px);
+      }
+
+      .brand-mark {
+        width: 32px;
+        height: 32px;
+      }
+
+      .brand-name {
+        height: auto;
+        max-height: 44px;
+        max-width: min(54vw, 170px);
+      }
+
+      .profile-trigger,
+      .topbar-user {
+        max-width: 100%;
+      }
+
+      .user-name,
+      .user-label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .top-modes,
+      .creative-grid,
+      .quiz-list,
+      .footer-grid,
+      .footer-left,
+      .stats-row {
+        grid-template-columns: 1fr !important;
+      }
+
+      .creative-section,
+      .group-section {
+        padding-left: max(12px, calc(50vw - min(560px, calc(100% - 24px)))) !important;
+        padding-right: max(12px, calc(50vw - min(560px, calc(100% - 24px)))) !important;
+      }
+
+      .game-card {
+        min-height: auto;
+        gap: 16px;
+      }
+
+      .game-illustration {
+        min-height: auto;
+        grid-template-columns: 38px minmax(0, 1fr);
+      }
+
+      .seed-form {
+        grid-template-columns: 1fr;
+      }
+
+      .title-row {
+        grid-template-columns: minmax(0, 1fr) minmax(82px, auto);
+        align-items: start;
+      }
+
+      .title-illustration {
+        justify-items: end;
+        text-align: right;
+      }
+
+      .game-illustration img {
+        width: 38px;
+        height: 38px;
+      }
+
+      .quiz-row {
+        grid-template-columns: 96px minmax(0, 1fr) !important;
+        gap: 12px;
+      }
+
+      .footer-brand {
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      h1,
+      .hero-copy h1 {
+        font-size: 2.15rem !important;
+        line-height: 1 !important;
+        letter-spacing: 0 !important;
+        white-space: normal !important;
+      }
+
+      .game-title,
+      .section-head h2,
+      .group-panel strong,
+      .quiz-copy strong {
+        letter-spacing: 0 !important;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .topbar-inner,
+      .container,
+      .shell,
+      .footer-grid {
+        width: calc(100% - 20px);
+        max-width: calc(100% - 20px);
+      }
+
+      .quiz-row {
+        grid-template-columns: 72px minmax(0, 1fr) !important;
+        padding: 10px;
+      }
+
+      h1,
+      .hero-copy h1 {
+        font-size: 1.85rem !important;
+      }
+
+      .footer-logo {
+        width: 112px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .step-grid,
+      .step.reverse .step-grid,
+      .login-layout,
+      .step-split,
+      .avatar-upload,
+      .review-layout,
+      .selected-genres,
+      .genre-results,
+      .board,
+      .palette {
+        grid-template-columns: 1fr !important;
+      }
+
+      .step-no {
+        font-size: 3rem !important;
+        letter-spacing: 0 !important;
+      }
+
+      .image-slot {
+        min-height: 180px;
+        border-radius: 8px;
+      }
+
+      .panel {
+        min-height: auto;
+        padding: 28px 18px;
+      }
+
+      .step-title {
+        white-space: normal !important;
+      }
+
+      .avatar-upload,
+      .review-layout {
+        justify-items: center;
+        text-align: center;
+      }
+
+      .review-row {
+        grid-template-columns: 1fr !important;
+        gap: 4px;
+      }
+
+      .answer-slot {
+        height: auto;
+        min-height: 58px;
+      }
+
+      .footer-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(128px, auto) !important;
+        align-items: stretch;
+        gap: 18px;
+      }
+
+      .footer-left {
+        grid-template-columns: 1fr !important;
+        gap: 18px;
+      }
+
+      .footer-brand {
+        align-items: flex-end;
+        justify-content: flex-end;
+        align-self: stretch;
+        text-align: right;
+      }
+
+      .footer-logo {
+        width: 128px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .quiz-row {
+        grid-template-columns: 1fr !important;
+      }
+
+      .quiz-cover {
+        width: 96px;
+      }
+
+      .answer-slot {
+        grid-template-columns: 18px 32px minmax(0, 1fr) !important;
+        gap: 8px;
+        padding: 8px 10px;
+      }
+
+      .slot-cover {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    @supports (height: 100dvh) {
+      .login-layout {
+        min-height: calc(100dvh - 63px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @supports (-webkit-touch-callout: none) {
+      input,
+      textarea,
+      select {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="photos/logo/logo.png" alt="славуј logo" />
+        <img class="brand-name" src="photos/logo/name.png" alt="славуј" />
+      </a>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div class="snake-page">
+      <section class="game-strip">
+        <div class="game-card">
+          <div class="hero-copy">
+            <div class="title-row">
+              <div>
+                <span class="eyebrow">Snake</span>
+                <h1>Playlist Snake.</h1>
+                <div class="hero-meta">Build a playlist by linking the last word of one song to the first word of the next.</div>
+              </div>
+              <div class="title-illustration">
+                <img src="photos/logo/logo_sticker.png" alt="Illustration placeholder" />
+                <span>Illustration later.</span>
+              </div>
+            </div>
+
+            <form class="seed-form" id="seed-form">
+              <span class="seed-label">Starting song</span>
+              <div class="seed-search">
+                <input class="seed-input" id="seed-input" type="text" autocomplete="off" value="go your" aria-label="Search starting song" />
+              </div>
+              <button class="seed-button" type="submit">Set song</button>
+              <div class="selected-song" aria-label="Selected starting song">
+                <img class="selected-cover" src="photos/snake/go_your_own_way.png" alt="Fleetwood Mac cover" />
+                <span class="selected-copy">
+                  <strong class="selected-title">Go Your Own Way</strong>
+                  <span class="selected-artist">Fleetwood Mac</span>
+                </span>
+              </div>
+            </form>
+
+            <div class="playlist-panel">
+              <span class="playlist-title">Playlist</span>
+              <ul class="playlist-list" id="playlist-list" aria-live="polite"></ul>
+            </div>
+          </div>
+
+          <div class="game-stage">
+            <div class="board-wrap">
+              <canvas id="snake-board" width="560" height="560" aria-label="Snake playlist board"></canvas>
+            </div>
+
+            <div class="current-word">
+              <span>Current word</span>
+              <strong id="target-label">Way</strong>
+            </div>
+            <p class="result-message" id="result-message" aria-live="polite"></p>
+
+            <div class="controls-row">
+              <button class="control-button" id="play-pause-button" type="button" aria-label="Start game">Play</button>
+              <button class="control-button is-dark" id="restart-button" type="button" aria-label="Restart game">Restart</button>
+            </div>
+
+            <div class="pad" aria-label="Touch controls">
+              <button class="pad-button" type="button" data-dir="up" aria-label="Move up">↑</button>
+              <button class="pad-button" type="button" data-dir="left" aria-label="Move left">←</button>
+              <button class="pad-button" type="button" data-dir="right" aria-label="Move right">→</button>
+              <button class="pad-button" type="button" data-dir="down" aria-label="Move down">↓</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="related">
+        <div class="section-head">
+          <div>
+            <h2>Keep the run going.</h2>
+          </div>
+        </div>
+
+        <div class="quiz-list">
+          <a class="quiz-row" href="top5.html">
+            <div class="quiz-cover">
+              <img src="photos/spotify/ekv.png" alt="EKV quiz cover" />
+            </div>
+            <div class="quiz-copy">
+              <span class="quiz-badge">Top 5</span>
+              <strong>Can you name EKV's top 5?</strong>
+              <div class="quiz-meta-line">Artist: Ekatarina Velika</div>
+            </div>
+          </a>
+
+          <a class="quiz-row" href="fancheck.html">
+            <div class="quiz-cover">
+              <img src="photos/spotify/haustor.png" alt="Haustor quiz cover" />
+            </div>
+            <div class="quiz-copy">
+              <span class="quiz-badge">Fan Check</span>
+              <strong>How well do you know Haustor?</strong>
+              <div class="quiz-meta-line">Artist: Haustor</div>
+            </div>
+          </a>
+
+          <a class="quiz-row" href="imposter.html">
+            <div class="quiz-cover">
+              <img src="photos/spotify/goblini.png" alt="Goblini quiz cover" />
+            </div>
+            <div class="quiz-copy">
+              <span class="quiz-badge">Imposter</span>
+              <strong>Which song is the imposter on Re Contra?</strong>
+              <div class="quiz-meta-line">Album: Re Contra</div>
+            </div>
+          </a>
+
+          <a class="quiz-row" href="fancheck.html">
+            <div class="quiz-cover">
+              <img src="photos/spotify/radiohead.png" alt="Radiohead quiz cover" />
+            </div>
+            <div class="quiz-copy">
+              <span class="quiz-badge">Fan Check</span>
+              <strong>Are you really a Radiohead fan?</strong>
+              <div class="quiz-meta-line">Artist: Radiohead</div>
+            </div>
+          </a>
+
+          <a class="quiz-row" href="top5.html">
+            <div class="quiz-cover">
+              <img src="photos/spotify/nirvana.png" alt="Nirvana quiz cover" />
+            </div>
+            <div class="quiz-copy">
+              <span class="quiz-badge">Top 5</span>
+              <strong>Can you name Nirvana's top 5?</strong>
+              <div class="quiz-meta-line">Artist: Nirvana</div>
+            </div>
+          </a>
+
+          <a class="quiz-row" href="imposter.html">
+            <div class="quiz-cover">
+              <img src="photos/spotify/paket.png" alt="Paket aranzman quiz cover" />
+            </div>
+            <div class="quiz-copy">
+              <span class="quiz-badge">Imposter</span>
+              <strong>Which track does not belong on Paket aranžman?</strong>
+              <div class="quiz-meta-line">Album: Paket aranžman</div>
+            </div>
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-left">
+        <div>
+          <h3>Project</h3>
+          <p>Univerzitet u Beogradu</p>
+          <p>Elektrotehnicki fakultet</p>
+          <p>Principi softverskog inženjerstva</p>
+        </div>
+        <div>
+          <h3>Team Slavujci</h3>
+          <ul>
+            <li>Dusan Korizma</li>
+            <li>Lea Irt</li>
+            <li>Marko Misovski</li>
+            <li>Mark Možarovski</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-brand">
+        <img class="footer-logo" src="photos/logo/logo_black.png" alt="slavuj black logo" />
+        <p class="footer-credit">Illustrations by Lea Irt</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    requestAnimationFrame(() => document.body.classList.add("is-ready"));
+
+    const currentFile = window.location.pathname.split("/").pop() || "index.html";
+
+    document.querySelectorAll('a[href]').forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      if (href.startsWith("#")) return;
+
+      link.addEventListener("click", (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+        if (link.classList.contains("brand") && currentFile === "index.html") {
+          event.preventDefault();
+          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+          return;
+        }
+
+        event.preventDefault();
+        document.body.classList.remove("is-ready");
+        document.body.classList.add("is-leaving");
+        window.setTimeout(() => {
+          window.location.href = link.href;
+        }, 180);
+      });
+    });
+
+    const canvas = document.querySelector("#snake-board");
+    const ctx = canvas.getContext("2d");
+    const playlistList = document.querySelector("#playlist-list");
+    const targetLabel = document.querySelector("#target-label");
+    const resultMessage = document.querySelector("#result-message");
+    const playPauseButton = document.querySelector("#play-pause-button");
+    const restartButton = document.querySelector("#restart-button");
+    const seedForm = document.querySelector("#seed-form");
+    const seedInput = document.querySelector("#seed-input");
+    const selectedSeed = {
+      title: "Go Your Own Way",
+      artist: "Fleetwood Mac",
+      cover: "photos/snake/go_your_own_way.png"
+    };
+
+    const flow = [
+      selectedSeed,
+      { title: "Way Down We Go", artist: "KALEO", cover: "photos/snake/way_down_we_go.png" },
+      { title: "Go to Sleep", artist: "Radiohead", cover: "photos/snake/go_to_sleep.png" },
+      { title: "Sleep Like a Baby Tonight", artist: "U2", cover: "photos/snake/sleep_like_a_baby_tonight.png" },
+      { title: "Tonight's the Night", artist: "Rod Stewart", cover: "photos/snake/tonight_s_the_night.png" },
+      { title: "Night Time", artist: "The xx", cover: "photos/snake/night_time.png" },
+      { title: "Time After Time", artist: "Cyndi Lauper", cover: "photos/snake/time_after_time.png" },
+      { title: "Time Is Running Out", artist: "Muse", cover: "photos/snake/time_is_running_out.png" },
+      { title: "Out of Time", artist: "The Weeknd", cover: "photos/snake/out_of_time.png" },
+      { title: "Time of the Season", artist: "The Zombies", cover: "photos/snake/time_of_the_season.png" }
+    ];
+
+    const optionCovers = flow.slice(1).map((track) => track.cover);
+    const catalog = flow;
+
+    const gridSize = 18;
+    const baseTempo = 380;
+    const images = new Map();
+    const directions = {
+      up: { x: 0, y: -1 },
+      down: { x: 0, y: 1 },
+      left: { x: -1, y: 0 },
+      right: { x: 1, y: 0 }
+    };
+    const opposite = { up: "down", down: "up", left: "right", right: "left" };
+    const silenceBlocks = [];
+
+    let snake;
+    let direction;
+    let queuedDirection;
+    let options;
+    let tempo;
+    let flowIndex;
+    let currentSong;
+    let neededWord;
+    let running;
+    let paused;
+    let finished;
+    let tickId;
+    let touchStart;
+
+    const loadImages = () => {
+      catalog.forEach((track) => {
+        const img = new Image();
+        img.src = track.cover;
+        img.onload = draw;
+        images.set(track.cover, img);
+      });
+    };
+
+    const sameCell = (a, b) => a.x === b.x && a.y === b.y;
+
+    const normalizeWord = (value) =>
+      value
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9\s]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    const wordsFor = (title) => normalizeWord(title).split(" ").filter(Boolean);
+
+    const firstWord = (title) => wordsFor(title)[0] || "";
+
+    const lastWord = (title) => {
+      const words = wordsFor(title);
+      return words[words.length - 1] || "";
+    };
+
+    const titleCaseWord = (word) => word ? word.charAt(0).toUpperCase() + word.slice(1) : "";
+
+    const isBlocked = (cell) =>
+      snake.some((segment) => sameCell(segment, cell)) ||
+      silenceBlocks.some((block) => sameCell(block, cell)) ||
+      options.some((option) => sameCell(option.cell, cell));
+
+    const randomCell = () => ({
+      x: Math.floor(Math.random() * gridSize),
+      y: Math.floor(Math.random() * gridSize)
+    });
+
+    const placeOption = (track) => {
+      let next = randomCell();
+      while (isBlocked(next)) {
+        next = randomCell();
+      }
+      return { ...track, cell: next };
+    };
+
+    const buildOptions = () => {
+      const nextTrack = flow[flowIndex + 1];
+      options = [];
+      if (!nextTrack) return 0;
+
+      const count = Math.min(5, Math.max(3, optionCovers.length));
+      optionCovers.slice(0, count).forEach((cover, index) => {
+        options.push(placeOption({
+          ...nextTrack,
+          cover,
+          visualIndex: index + 1
+        }));
+      });
+      return options.length;
+    };
+
+    const resetGame = () => {
+      window.clearInterval(tickId);
+      snake = [
+        { x: 8, y: 10 },
+        { x: 7, y: 10 },
+        { x: 6, y: 10 }
+      ];
+      direction = "right";
+      queuedDirection = "right";
+      tempo = baseTempo;
+      flowIndex = 0;
+      running = false;
+      paused = false;
+      finished = false;
+      playlistList.innerHTML = "";
+      currentSong = { ...selectedSeed };
+      neededWord = lastWord(currentSong.title) || "way";
+      addPlaylistItem(currentSong, false);
+      options = [];
+      const optionCount = buildOptions();
+      syncUi(optionCount ? "Ready" : "DeadEnd");
+      draw();
+    };
+
+    const syncUi = (mode) => {
+      targetLabel.textContent = titleCaseWord(neededWord);
+      const hasDeadEnd = mode === "DeadEnd";
+      resultMessage.classList.toggle("is-visible", hasDeadEnd);
+      resultMessage.textContent = hasDeadEnd ? `No song starts with ${titleCaseWord(neededWord)}.` : "";
+
+      const isPlaying = running && !paused;
+      playPauseButton.classList.toggle("is-playing", isPlaying);
+      playPauseButton.disabled = finished;
+      playPauseButton.textContent = isPlaying ? "Pause" : "Play";
+      playPauseButton.setAttribute("aria-label", isPlaying ? "Pause game" : "Play game");
+    };
+
+    const resizeCanvas = () => {
+      const rect = canvas.getBoundingClientRect();
+      const size = Math.max(1, Math.floor(rect.width));
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(size * dpr);
+      canvas.height = Math.floor(size * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw();
+    };
+
+    const drawCover = (track, x, y, size) => {
+      const img = images.get(track.cover);
+      if (img && img.complete) {
+        ctx.drawImage(img, x, y, size, size);
+        return;
+      }
+
+      ctx.fillStyle = "#dddddd";
+      ctx.fillRect(x, y, size, size);
+    };
+
+    const draw = () => {
+      if (!ctx || !snake || !options) return;
+
+      const size = canvas.getBoundingClientRect().width;
+      const cell = size / gridSize;
+
+      ctx.clearRect(0, 0, size, size);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, size, size);
+
+      ctx.strokeStyle = "#eeeeee";
+      ctx.lineWidth = 1;
+      for (let i = 1; i < gridSize; i += 1) {
+        const pos = i * cell;
+        ctx.beginPath();
+        ctx.moveTo(pos, 0);
+        ctx.lineTo(pos, size);
+        ctx.moveTo(0, pos);
+        ctx.lineTo(size, pos);
+        ctx.stroke();
+      }
+
+      silenceBlocks.forEach((block, index) => {
+        const pad = cell * 0.16;
+        ctx.fillStyle = index % 2 === 0 ? "#171717" : "#4a4a4a";
+        ctx.fillRect(block.x * cell + pad, block.y * cell + pad, cell - pad * 2, cell - pad * 2);
+      });
+
+      options.forEach((option) => {
+        const foodPad = cell * 0.08;
+        ctx.fillStyle = "#171717";
+        ctx.fillRect(option.cell.x * cell, option.cell.y * cell, cell, cell);
+        drawCover(option, option.cell.x * cell + foodPad, option.cell.y * cell + foodPad, cell - foodPad * 2);
+      });
+
+      snake.forEach((segment, index) => {
+        const pad = index === 0 ? cell * 0.08 : cell * 0.14;
+        ctx.fillStyle = index === 0 ? "#000000" : "#171717";
+        ctx.fillRect(segment.x * cell + pad, segment.y * cell + pad, cell - pad * 2, cell - pad * 2);
+
+        if (index === 0) {
+          ctx.fillStyle = "#ffffff";
+          const eye = cell * 0.13;
+          ctx.fillRect(segment.x * cell + cell * 0.3, segment.y * cell + cell * 0.3, eye, eye);
+          ctx.fillRect(segment.x * cell + cell * 0.57, segment.y * cell + cell * 0.3, eye, eye);
+        }
+      });
+    };
+
+    const addPlaylistItem = (track, trimList = true) => {
+      const item = document.createElement("li");
+      item.innerHTML = `
+        <img class="playlist-cover" src="${track.cover}" alt="${track.artist} cover" />
+        <span class="playlist-copy">
+          <span class="playlist-song">${track.title}</span>
+          <span class="playlist-artist">${track.artist}</span>
+        </span>
+      `;
+      playlistList.appendChild(item);
+
+      while (trimList && playlistList.children.length > 6) {
+        playlistList.removeChild(playlistList.firstElementChild);
+      }
+    };
+
+    const gameOver = (mode = "Over") => {
+      running = false;
+      paused = false;
+      finished = true;
+      window.clearInterval(tickId);
+      syncUi(mode);
+      draw();
+    };
+
+    const scheduleTick = () => {
+      window.clearInterval(tickId);
+      tickId = window.setInterval(moveSnake, tempo);
+    };
+
+    const moveSnake = () => {
+      if (!running || paused || finished) return;
+
+      direction = queuedDirection;
+      const vector = directions[direction];
+      const head = snake[0];
+      const next = {
+        x: (head.x + vector.x + gridSize) % gridSize,
+        y: (head.y + vector.y + gridSize) % gridSize
+      };
+
+      snake.unshift(next);
+
+      const collected = options.find((option) => sameCell(next, option.cell));
+
+      if (collected) {
+        tempo = Math.max(260, tempo - 20);
+        flowIndex += 1;
+        currentSong = flow[flowIndex];
+        neededWord = lastWord(currentSong.title) || firstWord(currentSong.title);
+        addPlaylistItem(currentSong);
+        options = [];
+        const optionCount = buildOptions();
+        if (!optionCount) {
+          running = false;
+          finished = true;
+          window.clearInterval(tickId);
+          syncUi("DeadEnd");
+          draw();
+          return;
+        }
+        scheduleTick();
+      } else {
+        snake.pop();
+      }
+
+      syncUi("Live");
+      draw();
+    };
+
+    const setDirection = (nextDirection) => {
+      if (!directions[nextDirection]) return;
+      if (opposite[nextDirection] === direction) return;
+      queuedDirection = nextDirection;
+    };
+
+    const startGame = () => {
+      if (finished) return;
+      if (running) return;
+      if (!playlistList.children.length) resetGame();
+      if (!options.length) {
+        syncUi("DeadEnd");
+        return;
+      }
+      running = true;
+      paused = false;
+      syncUi("Live");
+      scheduleTick();
+    };
+
+    const togglePause = () => {
+      if (!running || finished) return;
+      paused = !paused;
+      syncUi(paused ? "Paused" : "Live");
+    };
+
+    const togglePlayPause = () => {
+      if (running) {
+        togglePause();
+        return;
+      }
+
+      startGame();
+    };
+
+    seedForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      resetGame();
+      seedInput.blur();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.target === seedInput) return;
+
+      const keyMap = {
+        ArrowUp: "up",
+        ArrowDown: "down",
+        ArrowLeft: "left",
+        ArrowRight: "right",
+        w: "up",
+        s: "down",
+        a: "left",
+        d: "right"
+      };
+
+      if (event.key === " ") {
+        event.preventDefault();
+        togglePlayPause();
+        return;
+      }
+
+      const next = keyMap[event.key];
+      if (!next) return;
+      event.preventDefault();
+      setDirection(next);
+      startGame();
+    });
+
+    document.querySelectorAll(".pad-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        setDirection(button.dataset.dir);
+        startGame();
+      });
+    });
+
+    canvas.addEventListener("pointerdown", (event) => {
+      touchStart = { x: event.clientX, y: event.clientY };
+    });
+
+    canvas.addEventListener("pointerup", (event) => {
+      if (!touchStart) return;
+      const dx = event.clientX - touchStart.x;
+      const dy = event.clientY - touchStart.y;
+
+      if (Math.max(Math.abs(dx), Math.abs(dy)) < 18) {
+        touchStart = null;
+        return;
+      }
+
+      setDirection(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up"));
+      startGame();
+      touchStart = null;
+    });
+
+    playPauseButton.addEventListener("click", togglePlayPause);
+    restartButton.addEventListener("click", resetGame);
+    window.addEventListener("resize", resizeCanvas);
+
+    loadImages();
+    resetGame();
+    resizeCanvas();
+  </script>
+</body>
+</html>
