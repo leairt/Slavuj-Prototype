@@ -194,7 +194,7 @@
       align-items: center;
       min-height: 30px;
       padding: 0 10px;
-      border: 1px solid var(--text);
+      
       background: #ffffff;
       color: #171717;
       font-size: 0.76rem;
@@ -394,7 +394,7 @@
       width: 100%;
       min-height: 54px;
       padding: 0 18px;
-      border: 1px solid var(--text);
+      
       background: #ffffff;
       color: var(--text);
       font: inherit;
@@ -428,7 +428,7 @@
       height: 58px;
       min-height: 58px;
       padding: 0 16px;
-      border: 1px solid var(--line);
+      
       background: #ffffff;
       box-sizing: border-box;
       display: grid;
@@ -455,7 +455,7 @@
       width: 42px;
       height: 42px;
       object-fit: cover;
-      border: 1px solid var(--line);
+      
       flex: 0 0 auto;
       opacity: 0;
       transition: opacity 0.18s ease;
@@ -537,7 +537,7 @@
       gap: 14px;
       align-items: center;
       padding: 12px;
-      border: 1px solid var(--text);
+      
       transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
     }
 
@@ -551,7 +551,7 @@
     .quiz-cover {
       aspect-ratio: 1 / 1;
       overflow: hidden;
-      border: 1px solid var(--line);
+      
       background: var(--soft);
     }
 
@@ -1069,36 +1069,36 @@
                   <span class="slot-streams">2.200.741</span>
                 </div>
               </div>
-              <div class="answer-slot" data-answer="ti si sav moj bol" data-rank="2">
+              <div class="answer-slot" data-answer="zemlja" data-rank="2">
                 <span class="slot-index">2</span>
-                <img class="slot-cover" src="photos/spotify/ekv.png" alt="EKV cover" />
-                <div class="slot-copy">
-                  <span class="slot-title"><span class="slot-placeholder"></span></span>
-                  <span class="slot-streams">15.2M</span>
-                </div>
-              </div>
-              <div class="answer-slot" data-answer="ljubav" data-rank="3">
-                <span class="slot-index">3</span>
-                <img class="slot-cover" src="photos/spotify/ekv.png" alt="EKV cover" />
-                <div class="slot-copy">
-                  <span class="slot-title"><span class="slot-placeholder"></span></span>
-                  <span class="slot-streams">13.9M</span>
-                </div>
-              </div>
-              <div class="answer-slot" data-answer="zemlja" data-rank="4">
-                <span class="slot-index">4</span>
                 <img class="slot-cover" src="photos/spotify/ekv.png" alt="EKV cover" />
                 <div class="slot-copy">
                   <span class="slot-title"><span class="slot-placeholder"></span></span>
                   <span class="slot-streams">1.378.933</span>
                 </div>
               </div>
-              <div class="answer-slot" data-answer="oci boje meda" data-rank="5">
+              <div class="answer-slot" data-answer="srce" data-rank="3">
+                <span class="slot-index">3</span>
+                <img class="slot-cover" src="photos/spotify/ekv2.png" alt="EKV cover" />
+                <div class="slot-copy">
+                  <span class="slot-title"><span class="slot-placeholder"></span></span>
+                  <span class="slot-streams">1.198.596</span>
+                </div>
+              </div>
+              <div class="answer-slot" data-answer="par godina za nas" data-rank="4">
+                <span class="slot-index">4</span>
+                <img class="slot-cover" src="photos/spotify/ekv2.png" alt="EKV cover" />
+                <div class="slot-copy">
+                  <span class="slot-title"><span class="slot-placeholder"></span></span>
+                  <span class="slot-streams">919.394</span>
+                </div>
+              </div>
+              <div class="answer-slot" data-answer="ti si sav moj bol" data-rank="5">
                 <span class="slot-index">5</span>
                 <img class="slot-cover" src="photos/spotify/ekv.png" alt="EKV cover" />
                 <div class="slot-copy">
                   <span class="slot-title"><span class="slot-placeholder"></span></span>
-                  <span class="slot-streams">11.1M</span>
+                  <span class="slot-streams">692.618</span>
                 </div>
               </div>
             </div>
@@ -1219,10 +1219,10 @@
 
     const answers = [
       { rank: 1, label: "Krug", key: "krug" },
-      { rank: 2, label: "Ti si sav moj bol", key: "ti si sav moj bol" },
-      { rank: 3, label: "Ljubav", key: "ljubav" },
-      { rank: 4, label: "Zemlja", key: "zemlja" },
-      { rank: 5, label: "Oci boje meda", key: "oci boje meda", alt: ["oči boje meda"] }
+      { rank: 2, label: "Zemlja", key: "zemlja" },
+      { rank: 3, label: "Srce", key: "srce" },
+      { rank: 4, label: "Par godina za nas", key: "par godina za nas" },
+      { rank: 5, label: "Ti Si Sav Moj Bol", key: "ti si sav moj bol" }
     ];
 
     const guessInput = document.querySelector("#guess-input");
@@ -1245,7 +1245,7 @@
         .toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9\\s]/g, "")
+        .replace(/[^a-z0-9\s]/g, "")
         .replace(/\s+/g, " ")
         .trim();
 
@@ -1367,7 +1367,7 @@
 
         const match = answers.find((answer) => {
           const variants = [answer.key, ...(answer.alt || [])];
-          return variants.includes(value);
+          return variants.some((variant) => normalize(variant) === value);
         });
 
         if (!match || found.has(match.key)) return;

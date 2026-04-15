@@ -8,40 +8,27 @@
   <link rel="icon" type="image/png" sizes="192x192" href="photos/logo/logo_sticker.png" />
   <link rel="apple-touch-icon" href="photos/logo/logo_sticker.png" />
   <style>
-    :root { --container: min(1120px, calc(100% - 40px)); }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #fff; color: #000; font-family: Arial, Helvetica, sans-serif; opacity: 0; transform: translateY(12px); transition: opacity 0.22s ease, transform 0.22s ease; }
-    body.is-ready { opacity: 1; transform: translateY(0); }
-    body.is-leaving { opacity: 0; transform: translateY(12px); }
-    a { color: inherit; text-decoration: none; }
-    img { display: block; max-width: 100%; }
-    .topbar { position: sticky; top: 0; z-index: 20; background: #ffffff; border-bottom: 1px solid #ddd; }
-    .topbar-inner, .shell { width: var(--container); margin: 0 auto; }
-    .topbar-inner { display: flex; align-items: center; padding: 12px 0; }
-    .brand { display: flex; align-items: center; gap: 6px; line-height: 1; }
-    .brand-mark { width: 38px; height: 38px; object-fit: contain; }
-    .brand-name { height: 52px; transform: translateY(3px); }
-    .shell { padding: 36px 0 48px; }
-    .eyebrow { color: #666; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px; display: inline-block; }
-    h1 { font-size: clamp(3rem, 8vw, 6rem); line-height: 0.9; letter-spacing: -0.08em; margin-bottom: 12px; }
-    p, li { color: #666; }
-    .board { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 28px; }
-    .card { padding: 22px; border: 1px solid #000; min-height: 180px; }
-    .list { list-style: none; display: grid; gap: 12px; margin-top: 12px; }
-    .list li { padding-top: 12px; border-top: 1px solid #ddd; }
-    .button { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 16px; border: 1px solid #000; margin-top: 22px; }
-    @media (max-width: 860px) { .board { grid-template-columns: 1fr; } }
-    .footer { background: #171717; padding: 24px 0 36px; margin-top: 48px; }
-    .footer-grid { width: min(1120px, calc(100% - 40px)); margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; }
-    .footer-left { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .footer-grid h3 { font-size: 0.92rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; color: #ffffff; }
-    .footer-grid ul { list-style: none; display: grid; gap: 6px; }
-    .footer-grid p, .footer-grid li, .footer-credit { color: rgba(255,255,255,0.72); }
-    .footer-logo { width: 120px; height: auto; object-fit: contain; margin-bottom: 14px; }
-    .footer-brand { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 8px; text-align: right; }
-    .footer-credit { font-size: 0.9rem; }
-    @media (max-width: 860px) { .board, .footer-grid, .footer-left { grid-template-columns: 1fr; } .footer-brand { align-items: flex-start; text-align: left; } }
-    /* Cross-browser responsive safety layer */
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --muted: #666666;
+      --line: #dddddd;
+      --soft: #f5f5f5;
+      --soft-2: #f0f0f0;
+      --dark: #171717;
+      --group-bg: #3a3a3a;
+      --dark-line: rgba(255, 255, 255, 0.16);
+      --dark-muted: rgba(255, 255, 255, 0.68);
+      --container: min(1120px, calc(100% - 40px));
+      --flow-edge: max(20px, calc((100vw - 1120px) / 2));
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     html {
       -webkit-text-size-adjust: 100%;
       text-size-adjust: 100%;
@@ -50,12 +37,27 @@
     body {
       min-width: 320px;
       overflow-x: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
     }
 
-    *,
-    *::before,
-    *::after {
-      min-width: 0;
+    body.is-ready {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body.is-leaving {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
     button,
@@ -65,26 +67,70 @@
       font: inherit;
     }
 
-    img,
-    svg,
-    video,
-    canvas {
+    img {
+      display: block;
       max-width: 100%;
     }
 
-    canvas {
-      height: auto;
+    *,
+    *::before,
+    *::after {
+      min-width: 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
     }
 
     .topbar-inner,
-    .container,
-    .shell,
-    .footer-grid {
+    .shell {
+      width: var(--container);
+      margin: 0 auto;
       max-width: calc(100% - 40px);
     }
 
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
     .brand-name {
+      height: 52px;
+      width: auto;
       max-width: min(46vw, 220px);
+      object-fit: contain;
+      transform: translateY(3px);
+    }
+
+    .shell {
+      padding: 36px 0 0;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
     h1,
@@ -93,25 +139,835 @@
     p,
     li,
     strong,
-    span,
-    .game-title,
-    .quiz-copy strong,
-    .group-panel strong,
-    .hero-copy h1 {
+    span {
       overflow-wrap: break-word;
     }
-    @media (max-width: 760px) {
-      .topbar-inner {
-        gap: 12px;
-        flex-wrap: wrap;
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 6rem);
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+      margin-bottom: 12px;
+    }
+
+    p,
+    li {
+      color: var(--muted);
+    }
+
+    .intro {
+      max-width: 40rem;
+    }
+
+    .flow-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.9fr);
+      gap: 0;
+      margin-top: 28px;
+      align-items: stretch;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      background: var(--dark);
+    }
+
+    .panel {
+      border: 0;
+      position: relative;
+    }
+
+    .main-panel {
+      background: var(--dark);
+      color: #ffffff;
+      padding: 28px 28px 36px var(--flow-edge);
+    }
+
+    .side-panel {
+      background: var(--group-bg);
+      color: #ffffff;
+      padding: 28px var(--flow-edge) 72px 56px;
+    }
+
+    .main-panel p,
+    .main-panel li,
+    .main-panel .field-label,
+    .main-panel .aside-label,
+    .main-panel .mini-label,
+    .side-panel p,
+    .side-panel li,
+    .side-panel .aside-label {
+      color: var(--dark-muted);
+    }
+
+    .panel-title {
+      font-size: clamp(1.7rem, 3vw, 2.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .host-wizard {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 18px;
+      height: min(680px, calc(100vh - 190px));
+      min-height: 520px;
+    }
+
+    .host-wizard-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.24);
+    }
+
+    .progress-dot.is-active {
+      background: #ffffff;
+    }
+
+    .wizard-count {
+      color: var(--dark-muted);
+      font-size: 0.84rem;
+    }
+
+    .host-wizard-body {
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding-right: 8px;
+      scrollbar-width: thin;
+    }
+
+    .wizard-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 46px;
+      padding-top: 12px;
+      border-top: 1px solid var(--dark-line);
+      background: var(--dark);
+    }
+
+    .wizard-actions-left,
+    .wizard-actions-right {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid #ffffff;
+      background: transparent;
+      color: #ffffff;
+      font: inherit;
+      cursor: pointer;
+      font-size: 1.2rem;
+      line-height: 1;
+      border-radius: 0;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+      position: relative;
+    }
+
+    .nav-arrow.primary {
+      background: #ffffff;
+      color: var(--dark);
+    }
+
+    .nav-text-button {
+      min-width: 132px;
+      padding: 0 18px;
+      width: auto;
+      font-size: 0.92rem;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-text-button::before {
+      display: none;
+    }
+
+    .nav-arrow[disabled] {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    .nav-arrow::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      position: absolute;
+    }
+
+    .nav-arrow.prev::before {
+      transform: rotate(135deg);
+      margin-left: 4px;
+    }
+
+    .nav-arrow.next::before {
+      transform: rotate(-45deg);
+      margin-right: 4px;
+    }
+
+    .flow-step[hidden] {
+      display: none;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 3vw, 2.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      margin-bottom: 8px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .field-label,
+    .aside-label,
+    .mini-label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .text-input,
+    .round-input,
+    .select-input,
+    .link-input {
+      width: 100%;
+      border: 1px solid var(--dark-line);
+      background: transparent;
+      color: #ffffff;
+      min-height: 46px;
+      padding: 0 14px;
+    }
+
+    .select-input {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+    }
+
+    .text-input::placeholder,
+    .round-input::placeholder,
+    .select-input::placeholder,
+    .link-input::placeholder {
+      color: var(--dark-muted);
+    }
+
+    .select-input option {
+      color: var(--dark);
+      background: #ffffff;
+    }
+
+    .games-list,
+    .friend-list,
+    .summary-list,
+    .list {
+      list-style: none;
+    }
+
+    .games-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .game-row {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) auto auto;
+      gap: 14px;
+      align-items: center;
+      padding: 16px;
+      border: 1px solid var(--dark-line);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .game-row.is-selected {
+      border-color: #ffffff;
+      background: #ffffff;
+      color: var(--dark);
+    }
+
+    .game-row.is-selected p,
+    .game-row.is-selected .mini-label {
+      color: var(--muted);
+    }
+
+    .game-row.is-selected .round-input {
+      border-color: var(--line);
+      color: var(--dark);
+    }
+
+    .game-row.is-selected .switch-track {
+      border-color: var(--dark);
+      background: transparent;
+    }
+
+    .game-row.is-selected .switch-track::after {
+      background: var(--dark);
+    }
+
+    .game-row.is-disabled {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .game-row.is-disabled .game-copy,
+    .game-row.is-disabled .mini-label {
+      opacity: 0.6;
+    }
+
+    .game-logo {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+    }
+
+    .game-copy strong,
+    .summary-card strong,
+    .friend-copy strong,
+    .invite-panel strong {
+      display: block;
+      font-size: 1rem;
+      line-height: 1.05;
+      margin-bottom: 4px;
+    }
+
+    .game-copy p,
+    .friend-copy p,
+    .summary-card p,
+    .invite-panel p {
+      font-size: 0.92rem;
+    }
+
+    .game-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .round-box {
+      display: grid;
+      gap: 6px;
+      min-width: 86px;
+    }
+
+    .round-input {
+      width: 86px;
+      padding-right: 8px;
+    }
+
+    .round-input:disabled {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--dark-muted);
+      cursor: not-allowed;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      width: 56px;
+      height: 32px;
+      cursor: pointer;
+    }
+
+    .switch input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .switch-track {
+      position: relative;
+      width: 56px;
+      height: 32px;
+      border: 1px solid #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      transition: background 0.18s ease;
+    }
+
+    .switch-track::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 24px;
+      height: 24px;
+      background: #ffffff;
+      transition: transform 0.18s ease;
+    }
+
+    .switch input:checked + .switch-track {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .switch input:checked + .switch-track::after {
+      transform: translateX(24px);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .button,
+    .ghost-button,
+    .tab-button,
+    .friend-button,
+    .copy-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 16px;
+      border: 1px solid #ffffff;
+      background: transparent;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    .button {
+      background: #ffffff;
+      color: var(--dark);
+    }
+
+    .button[disabled],
+    .friend-button[disabled],
+    .copy-button[disabled],
+    .ghost-button[disabled],
+    .tab-button[disabled] {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .summary-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .summary-card {
+      padding: 16px;
+      border: 1px solid var(--dark-line);
+      background: transparent;
+    }
+
+    .summary-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .summary-list li {
+      padding-top: 10px;
+      border-top: 1px solid var(--dark-line);
+      color: #ffffff;
+    }
+
+    .summary-list li:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .mini-note {
+      font-size: 0.9rem;
+    }
+
+    .invite-summary {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .summary-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tabs {
+      display: inline-grid;
+      grid-auto-flow: column;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .tab-button {
+      border-color: var(--dark-line);
+      color: var(--dark-muted);
+    }
+
+    .tab-button.is-active {
+      border-color: #ffffff;
+      color: var(--dark);
+      background: #ffffff;
+    }
+
+    .tab-panel[hidden] {
+      display: none;
+    }
+
+    .friend-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .friend-row {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--dark-line);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .friend-avatar {
+      width: 52px;
+      height: 52px;
+      object-fit: cover;
+      border: 1px solid var(--dark-line);
+      border-radius: 999px;
+    }
+
+    .friend-button.is-sent {
+      background: #ffffff;
+      color: var(--dark);
+    }
+
+    .lobby-field {
+      width: min(220px, 100%);
+      margin-bottom: 0;
+    }
+
+    .invite-heading-row {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .invite-heading-row .section-title {
+      margin-bottom: 0;
+    }
+
+    .invite-panel {
+      display: grid;
+      gap: 14px;
+      padding: 16px;
+      border: 1px solid var(--dark-line);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .invite-link-actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 46px 46px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .invite-icon-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      border: 1px solid #ffffff;
+      background: #ffffff;
+      color: var(--dark);
+      cursor: pointer;
+    }
+
+    .invite-icon-button img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    .join-panel {
+      display: grid;
+      gap: 14px;
+      margin-top: 72px;
+    }
+
+    .join-panel .button {
+      width: min(180px, 72%);
+      justify-self: center;
+      margin-top: 18px;
+      animation: start-pulse 1.8s ease-out infinite;
+    }
+
+    .preview-list,
+    .preview-games,
+    .participant-list {
+      display: grid;
+      gap: 12px;
+      list-style: none;
+    }
+
+    .preview-list {
+      gap: 16px;
+    }
+
+    .preview-list li {
+      padding: 14px 16px;
+      border: none;
+      background: rgba(255, 255, 255, 0.03);
+      color: #ffffff;
+      border-radius: 8px;
+    }
+
+    .preview-list strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #ffffff;
+    }
+
+    .preview-block {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      border: none;
+      background: rgba(255, 255, 255, 0.03);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      border-radius: 8px;
+    }
+
+    .preview-block.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .preview-block h3 {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dark-muted);
+    }
+
+    .preview-room-name {
+      color: #ffffff;
+      font-size: clamp(1.5rem, 3vw, 2.35rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+    }
+
+    .preview-games {
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    }
+
+    .preview-game-card {
+      padding: 12px;
+      border: none;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+    }
+
+    .preview-game-card strong {
+      display: block;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .preview-game-card span {
+      color: var(--dark-muted);
+      font-size: 0.9rem;
+    }
+
+    .participant-list {
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+    }
+
+    .participant-card {
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+      padding: 14px 10px;
+      border: none;
+      background: rgba(255, 255, 255, 0.04);
+      text-align: center;
+      border-radius: 8px;
+    }
+
+    .participant-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid var(--dark-line);
+      object-fit: cover;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .participant-avatar.is-waiting {
+      background: rgba(255, 255, 255, 0.24);
+    }
+
+    .participant-card strong {
+      color: #ffffff;
+      font-size: 0.92rem;
+    }
+
+    .participant-card.is-waiting strong {
+      color: var(--dark-muted);
+    }
+
+    .lobby-note {
+      color: var(--dark-muted);
+      font-size: 0.92rem;
+    }
+
+    .start-game-button {
+      margin-top: 18px;
+      animation: start-pulse 1.8s ease-out infinite;
+    }
+
+    .start-game-button.is-disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      animation: none;
+      pointer-events: none;
+    }
+
+    @keyframes start-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.65); }
+      70% { box-shadow: 0 0 0 18px rgba(255, 255, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+    }
+
+    .link-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .footer {
+      background: #171717;
+      padding: 24px 0 36px;
+      margin-top: 0;
+    }
+
+    .footer-grid {
+      width: min(1120px, calc(100% - 40px));
+      max-width: calc(100% - 40px);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+    }
+
+    .footer-left {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .footer-grid h3 {
+      margin-bottom: 10px;
+      color: #ffffff;
+      font-size: 0.92rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .footer-grid ul {
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+
+    .footer-grid p,
+    .footer-grid li,
+    .footer-credit {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .footer-logo {
+      width: 120px;
+      height: auto;
+      object-fit: contain;
+      margin-bottom: 14px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 8px;
+      text-align: right;
+    }
+
+    .footer-credit {
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 900px) {
+      .flow-shell {
+        grid-template-columns: 1fr;
       }
 
+      .main-panel,
+      .side-panel {
+        padding: 28px max(24px, var(--flow-edge)) 52px;
+      }
+
+      .footer-grid,
+      .footer-left {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-brand {
+        align-items: flex-start;
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 760px) {
       .topbar-inner,
-      .container,
       .shell,
       .footer-grid {
         width: calc(100% - 24px);
         max-width: calc(100% - 24px);
+      }
+
+      .topbar-inner {
+        gap: 12px;
+        flex-wrap: wrap;
       }
 
       .brand-mark {
@@ -125,193 +981,98 @@
         max-width: min(54vw, 170px);
       }
 
-      .profile-trigger,
-      .topbar-user {
-        max-width: 100%;
+      h1 {
+        font-size: 2.15rem;
+        line-height: 1;
+        letter-spacing: 0;
       }
 
-      .user-name,
-      .user-label {
-        overflow: hidden;
-        text-overflow: ellipsis;
+      .main-panel {
+        padding: 28px 24px 48px;
       }
 
-      .top-modes,
-      .creative-grid,
-      .quiz-list,
-      .footer-grid,
-      .footer-left,
-      .stats-row {
-        grid-template-columns: 1fr !important;
+      .side-panel {
+        padding: 28px 24px 48px;
       }
 
-      .creative-section,
-      .group-section {
-        padding-left: max(12px, calc(50vw - min(560px, calc(100% - 24px)))) !important;
-        padding-right: max(12px, calc(50vw - min(560px, calc(100% - 24px)))) !important;
+      .game-row,
+      .friend-row,
+      .link-row,
+      .invite-link-actions {
+        grid-template-columns: 1fr;
       }
 
-      .game-card {
-        min-height: auto;
-        gap: 16px;
+      .game-logo {
+        justify-self: start;
       }
 
-      .game-illustration {
-        min-height: auto;
-        grid-template-columns: 38px minmax(0, 1fr);
+      .game-actions {
+        justify-content: space-between;
       }
 
-      .game-illustration img {
-        width: 38px;
-        height: 38px;
+      .round-box,
+      .round-input {
+        width: 100%;
       }
 
-      .quiz-row {
-        grid-template-columns: 96px minmax(0, 1fr) !important;
-        gap: 12px;
+      .tabs {
+        grid-auto-flow: row;
       }
 
-      .footer-brand {
-        align-items: flex-start;
-        text-align: left;
-      }
-
-      h1,
-      .hero-copy h1 {
-        font-size: 2.15rem !important;
-        line-height: 1 !important;
-        letter-spacing: 0 !important;
-        white-space: normal !important;
-      }
-
-      .game-title,
-      .section-head h2,
-      .group-panel strong,
-      .quiz-copy strong {
-        letter-spacing: 0 !important;
+      .invite-heading-row {
+        display: grid;
+        align-items: start;
       }
     }
 
     @media (max-width: 430px) {
       .topbar-inner,
-      .container,
       .shell,
       .footer-grid {
         width: calc(100% - 20px);
         max-width: calc(100% - 20px);
       }
 
-      .quiz-row {
-        grid-template-columns: 72px minmax(0, 1fr) !important;
-        padding: 10px;
+      h1 {
+        font-size: 1.85rem;
       }
 
-      h1,
-      .hero-copy h1 {
-        font-size: 1.85rem !important;
+      .main-panel,
+      .side-panel {
+        padding-left: 18px;
+        padding-right: 18px;
+        padding-top: 18px;
+        padding-bottom: 48px;
+      }
+
+      .actions {
+        display: grid;
+      }
+
+      .host-wizard {
+        height: auto;
+        min-height: auto;
+      }
+
+      .host-wizard-body {
+        overflow: visible;
+        padding-right: 0;
+      }
+
+      .wizard-actions {
+        display: grid;
+      }
+
+      .button,
+      .ghost-button,
+      .tab-button,
+      .friend-button,
+      .copy-button {
+        width: 100%;
       }
 
       .footer-logo {
         width: 112px;
-      }
-    }
-
-    @media (max-width: 760px) {
-      .step-grid,
-      .step.reverse .step-grid,
-      .login-layout,
-      .step-split,
-      .avatar-upload,
-      .review-layout,
-      .selected-genres,
-      .genre-results,
-      .board,
-      .palette {
-        grid-template-columns: 1fr !important;
-      }
-
-      .step-no {
-        font-size: 3rem !important;
-        letter-spacing: 0 !important;
-      }
-
-      .image-slot {
-        min-height: 180px;
-        border-radius: 8px;
-      }
-
-      .panel {
-        min-height: auto;
-        padding: 28px 18px;
-      }
-
-      .step-title {
-        white-space: normal !important;
-      }
-
-      .avatar-upload,
-      .review-layout {
-        justify-items: center;
-        text-align: center;
-      }
-
-      .review-row {
-        grid-template-columns: 1fr !important;
-        gap: 4px;
-      }
-
-      .answer-slot {
-        height: auto;
-        min-height: 58px;
-      }
-
-      .footer-grid {
-        grid-template-columns: minmax(0, 1fr) minmax(128px, auto) !important;
-        align-items: stretch;
-        gap: 18px;
-      }
-
-      .footer-left {
-        grid-template-columns: 1fr !important;
-        gap: 18px;
-      }
-
-      .footer-brand {
-        align-items: flex-end;
-        justify-content: flex-end;
-        align-self: stretch;
-        text-align: right;
-      }
-
-      .footer-logo {
-        width: 128px;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .quiz-row {
-        grid-template-columns: 1fr !important;
-      }
-
-      .quiz-cover {
-        width: 96px;
-      }
-
-      .answer-slot {
-        grid-template-columns: 18px 32px minmax(0, 1fr) !important;
-        gap: 8px;
-        padding: 8px 10px;
-      }
-
-      .slot-cover {
-        width: 32px;
-        height: 32px;
-      }
-    }
-
-    @supports (height: 100dvh) {
-      .login-layout {
-        min-height: calc(100dvh - 63px);
       }
     }
 
@@ -344,37 +1105,533 @@
       </a>
     </div>
   </header>
+
   <main class="shell">
-    <span class="eyebrow">Guest / Group play</span>
-    <h1>Join the room.</h1>
-    <p>Shared play with global songs.</p>
-    <section class="board">
-      <article class="card">
-        <strong>Mini-games</strong>
-        <ul class="list">
-          <li>Blitz</li>
-          <li>Hitster</li>
-          <li>Music Roulette</li>
-        </ul>
-      </article>
-      <article class="card">
-        <strong>Result</strong>
-        <ul class="list">
-          <li>One shared playlist</li>
-          <li>One winner</li>
-          <li>Global hit pool</li>
-        </ul>
-      </article>
+    <span class="eyebrow">Group play</span>
+    <h1>Play with friends.</h1>
+
+    <section class="flow-shell">
+      <div class="panel main-panel">
+          <h2 class="panel-title">Be the host.</h2>
+          <div class="host-wizard">
+            <div class="host-wizard-top">
+              <div class="progress" aria-label="Create room steps">
+                <span class="progress-dot is-active"></span>
+                <span class="progress-dot"></span>
+                <span class="progress-dot"></span>
+              </div>
+              <span class="wizard-count" id="wizard-count">1 / 3</span>
+            </div>
+
+            <div class="host-wizard-body">
+              <section class="flow-step" data-step="setup">
+                <h3 class="section-title">Create a room.</h3>
+
+                <label class="field" for="group-name">
+                  <span class="field-label">Room name</span>
+                  <input class="text-input" id="group-name" type="text" value="Friday listening room" />
+                </label>
+
+                <ul class="games-list">
+                  <li class="game-row">
+                    <img class="game-logo" src="photos/logo/logo_sticker.png" alt="" aria-hidden="true" />
+                    <div class="game-copy">
+                      <strong>Imposter</strong>
+                      <p>Spot the one song that does not belong.</p>
+                    </div>
+                    <label class="round-box" style="display: none;">
+                      <span class="mini-label">Rounds</span>
+                      <input class="round-input" type="number" min="1" max="10" value="5" data-rounds="Imposter" />
+                    </label>
+                    <div class="game-actions">
+                      <label class="switch" aria-label="Include Imposter">
+                        <input class="game-toggle" type="checkbox" data-game="Imposter" />
+                        <span class="switch-track" aria-hidden="true"></span>
+                      </label>
+                    </div>
+                  </li>
+
+                  <li class="game-row">
+                    <img class="game-logo" src="photos/logo/logo_sticker.png" alt="" aria-hidden="true" />
+                    <div class="game-copy">
+                      <strong>Hitster</strong>
+                      <p>Place tracks in the right year order.</p>
+                    </div>
+                    <label class="round-box" style="display: none;">
+                      <span class="mini-label">Rounds</span>
+                      <input class="round-input" type="number" min="1" max="10" value="5" data-rounds="Hitster" />
+                    </label>
+                    <div class="game-actions">
+                      <label class="switch" aria-label="Include Hitster">
+                        <input class="game-toggle" type="checkbox" data-game="Hitster" />
+                        <span class="switch-track" aria-hidden="true"></span>
+                      </label>
+                    </div>
+                  </li>
+
+                  <li class="game-row">
+                    <img class="game-logo" src="photos/logo/logo_sticker.png" alt="" aria-hidden="true" />
+                    <div class="game-copy">
+                      <strong>Music Roulette</strong>
+                      <p>Guess whose favorite song is playing.</p>
+                    </div>
+                    <label class="round-box" style="display: none;">
+                      <span class="mini-label">Rounds</span>
+                      <input class="round-input" type="number" min="1" max="10" value="5" data-rounds="Music Roulette" />
+                    </label>
+                    <div class="game-actions">
+                      <label class="switch" aria-label="Include Music Roulette">
+                        <input class="game-toggle" type="checkbox" data-game="Music Roulette" />
+                        <span class="switch-track" aria-hidden="true"></span>
+                      </label>
+                    </div>
+                  </li>
+
+                  <li class="game-row">
+                    <img class="game-logo" src="photos/logo/logo_sticker.png" alt="" aria-hidden="true" />
+                    <div class="game-copy">
+                      <strong>Quiz Blitz</strong>
+                      <p>Fast buzzer questions across global hits.</p>
+                    </div>
+                    <label class="round-box" style="display: none;">
+                      <span class="mini-label">Rounds</span>
+                      <input class="round-input" type="number" min="1" max="10" value="5" data-rounds="Quiz Blitz" />
+                    </label>
+                    <div class="game-actions">
+                      <label class="switch" aria-label="Include Quiz Blitz">
+                        <input class="game-toggle" type="checkbox" data-game="Quiz Blitz" />
+                        <span class="switch-track" aria-hidden="true"></span>
+                      </label>
+                    </div>
+                  </li>
+                </ul>
+
+              </section>
+
+              <section class="flow-step" data-step="invite" hidden>
+                <div class="invite-heading-row">
+                  <h2 class="section-title">Invite friends.</h2>
+
+                  <label class="field lobby-field" for="expected-players">
+                    <span class="field-label">Expected players</span>
+                    <select class="select-input" id="expected-players">
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4" selected>4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                      <option value="11">11</option>
+                      <option value="12">12</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="tabs" aria-label="Invite options">
+                  <button class="tab-button is-active" type="button" data-tab="friends">Friends</button>
+                  <button class="tab-button" type="button" data-tab="guests">Link</button>
+                </div>
+
+                <section class="tab-panel" data-panel="friends">
+                  <ul class="friend-list">
+                    <li class="friend-row">
+                      <img class="friend-avatar" src="photos/account/pfp1.jpg" alt="Nikola profile" />
+                      <div class="friend-copy">
+                        <strong>jovana</strong>
+                        <p>Recently played Hitster and Snake.</p>
+                      </div>
+                      <button class="friend-button" type="button" data-username="jovana" data-avatar="photos/account/pfp1.jpg">Send invite</button>
+                    </li>
+                    <li class="friend-row">
+                      <img class="friend-avatar" src="photos/account/pfp2.jpg" alt="Jovana profile" />
+                      <div class="friend-copy">
+                        <strong>korizma</strong>
+                        <p>Listens to indie and alternate playlists.</p>
+                      </div>
+                      <button class="friend-button" type="button" data-username="korizma" data-avatar="photos/account/pfp2.jpg">Send invite</button>
+                    </li>
+                    <li class="friend-row">
+                      <img class="friend-avatar" src="photos/account/pfp3.jpg" alt="Marko profile" />
+                      <div class="friend-copy">
+                        <strong>misa</strong>
+                        <p>Often joins fast quiz rounds.</p>
+                      </div>
+                      <button class="friend-button" type="button" data-username="misa" data-avatar="photos/account/pfp3.jpg">Send invite</button>
+                    </li>
+                    <li class="friend-row">
+                      <img class="friend-avatar" src="photos/account/pfp4.jpg" alt="Anakov profile" />
+                      <div class="friend-copy">
+                        <strong>anakov</strong>
+                        <p>Ready for longer group rounds.</p>
+                      </div>
+                      <button class="friend-button" type="button" data-username="anakov" data-avatar="photos/account/pfp4.jpg">Send invite</button>
+                    </li>
+                  </ul>
+                </section>
+
+                <section class="tab-panel" data-panel="guests" hidden>
+                  <div class="invite-panel">
+                    <div>
+                      <strong>Room link</strong>
+                      <p>Share it with guests.</p>
+                    </div>
+                    <div class="invite-link-actions">
+                      <input class="link-input" id="guest-link" type="text" readonly value="4c84Hdhi" aria-label="Room invite code" />
+                      <button class="invite-icon-button" type="button" id="copy-link" aria-label="Copy invite link">
+                        <img src="photos/link.png" alt="" aria-hidden="true" />
+                      </button>
+                      <button class="invite-icon-button" type="button" id="share-link" aria-label="Share invite link">
+                        <img src="photos/share.png" alt="" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </div>
+                </section>
+
+              </section>
+
+              <section class="flow-step" data-step="preview" hidden>
+                <h2 class="section-title">Preview.</h2>
+                <ul class="preview-list" id="preview-list"></ul>
+              </section>
+            </div>
+
+            <div class="wizard-actions">
+              <div class="wizard-actions-left">
+                <button class="nav-arrow prev" id="previous-step" type="button" disabled aria-label="Previous step"></button>
+              </div>
+              <div class="wizard-actions-right">
+                <button class="nav-arrow primary next" id="next-step" type="button" aria-label="Next step"></button>
+                <a class="nav-arrow nav-text-button primary finish start-game-button" id="finish-step" href="group-rounds.html" style="display:none;" aria-label="Start game">Start game</a>
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <aside class="panel side-panel">
+        <h2 class="panel-title">...or join a game.</h2>
+        <div class="join-panel">
+          <input class="link-input" id="invite-link" type="text" inputmode="text" placeholder="94bGf34rC" />
+          <a class="button" href="group-rounds.html">Join</a>
+        </div>
+      </aside>
     </section>
-    <a class="button" href="guest.html">Back to games</a>
   </main>
-  <footer class="footer"><div class="footer-grid"><div class="footer-left"><div><h3>Project</h3><p>Univerzitet u Beogradu</p><p>Elektrotehnicki fakultet</p><p>Principi softverskog inženjerstva</p></div><div><h3>Team Slavujci</h3><ul><li>Dusan Korizma</li><li>Lea Irt</li><li>Marko Misovski</li><li>Mark Možarovski</li></ul></div></div><div class="footer-brand"><img class="footer-logo" src="photos/logo/logo_black.png" alt="slavuj black logo" /><p class="footer-credit">Illustrations by Lea Irt</p></div></div></footer>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-left">
+        <div>
+          <h3>Project</h3>
+          <p>Univerzitet u Beogradu</p>
+          <p>Elektrotehnicki fakultet</p>
+          <p>Principi softverskog inzenjerstva</p>
+        </div>
+        <div>
+          <h3>Team Slavujci</h3>
+          <ul>
+            <li>Dusan Korizma</li>
+            <li>Lea Irt</li>
+            <li>Marko Misovski</li>
+            <li>Mark Mozarovski</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-brand">
+        <img class="footer-logo" src="photos/logo/logo_black.png" alt="slavuj black logo" />
+        <p class="footer-credit">Illustrations by Lea Irt</p>
+      </div>
+    </div>
+  </footer>
+
   <script>
     requestAnimationFrame(() => {
       document.body.classList.add("is-ready");
     });
 
     const currentFile = window.location.pathname.split("/").pop() || "index.html";
+    const steps = document.querySelectorAll("[data-step]");
+    const tabs = document.querySelectorAll("[data-tab]");
+    const panels = document.querySelectorAll("[data-panel]");
+    const toggles = document.querySelectorAll(".game-toggle");
+    const roundInputs = document.querySelectorAll(".round-input");
+    const roomNameInput = document.getElementById("group-name");
+    const expectedPlayersInput = document.getElementById("expected-players");
+    const previewList = document.getElementById("preview-list");
+    const previousButton = document.getElementById("previous-step");
+    const nextButton = document.getElementById("next-step");
+    const finishButton = document.getElementById("finish-step");
+    const stepDots = document.querySelectorAll(".progress-dot");
+    const stepCount = document.getElementById("wizard-count");
+    const copyButton = document.getElementById("copy-link");
+    const guestLinkInput = document.getElementById("guest-link");
+    const stepOrder = ["setup", "invite", "preview"];
+    let currentStep = "setup";
+    let roomLocked = false;
+    let previewTimerIds = [];
+
+    function showStep(stepName) {
+      currentStep = stepName;
+
+      steps.forEach((step) => {
+        step.hidden = step.dataset.step !== stepName;
+      });
+
+      if (stepName === "preview") {
+        renderPreview();
+      } else {
+        previewTimerIds.forEach((id) => window.clearTimeout(id));
+        previewTimerIds = [];
+      }
+
+      updateStepNav();
+    }
+
+    function updateStepNav() {
+      const index = stepOrder.indexOf(currentStep);
+      const games = getSelectedGames();
+
+      stepDots.forEach((dot, dotIndex) => {
+        dot.classList.toggle("is-active", dotIndex === index);
+      });
+
+      if (stepCount) {
+        stepCount.textContent = (index + 1) + " / " + stepOrder.length;
+      }
+
+      previousButton.disabled = index <= 0;
+      previousButton.style.visibility = index <= 0 ? "hidden" : "visible";
+
+      const isLast = index >= stepOrder.length - 1;
+      nextButton.disabled = currentStep === "setup" && games.length === 0;
+      nextButton.style.display = isLast ? "none" : "inline-flex";
+      finishButton.style.display = isLast ? "inline-flex" : "none";
+    }
+
+    function goToNextStep() {
+      const index = stepOrder.indexOf(currentStep);
+      if (index < stepOrder.length - 1 && !nextButton.disabled) {
+        showStep(stepOrder[index + 1]);
+      }
+    }
+
+    function goToPreviousStep() {
+      const index = stepOrder.indexOf(currentStep);
+      if (index > 0) {
+        showStep(stepOrder[index - 1]);
+      }
+    }
+
+    function showTab(tabName) {
+      tabs.forEach((tab) => {
+        tab.classList.toggle("is-active", tab.dataset.tab === tabName);
+      });
+
+      panels.forEach((panel) => {
+        panel.hidden = panel.dataset.panel !== tabName;
+      });
+    }
+
+    function getSelectedGames() {
+      return Array.from(toggles)
+        .filter((toggle) => toggle.checked)
+        .map((toggle) => {
+          const roundsInput = document.querySelector('[data-rounds="' + toggle.dataset.game + '"]');
+          return {
+            name: toggle.dataset.game,
+            rounds: Number(roundsInput.value) || 0
+          };
+        });
+    }
+
+    function getExpectedPlayers() {
+      return Math.max(2, Math.min(12, Number(expectedPlayersInput.value) || 2));
+    }
+
+    function getJoinedParticipants() {
+      const joined = [
+        { username: "host", avatar: "photos/guest/guest_profile.png" }
+      ];
+
+      document.querySelectorAll(".friend-button.is-sent").forEach((button) => {
+        joined.push({
+          username: button.dataset.username || "friend",
+          avatar: button.dataset.avatar || "photos/account/pfp4.jpg"
+        });
+      });
+
+      return joined.slice(0, getExpectedPlayers());
+    }
+
+    function renderSummary() {
+      const games = getSelectedGames();
+
+      toggles.forEach((toggle) => {
+        const roundsInput = document.querySelector('[data-rounds="' + toggle.dataset.game + '"]');
+        const row = toggle.closest(".game-row");
+        const roundBox = row.querySelector(".round-box");
+
+        if (roundBox) {
+          roundBox.style.display = toggle.checked ? "grid" : "none";
+        }
+
+        roundsInput.disabled = !toggle.checked;
+        row.classList.toggle("is-disabled", !toggle.checked);
+        row.classList.toggle("is-selected", toggle.checked);
+      });
+
+      updateStepNav();
+    }
+
+    function renderPreview() {
+      if (!previewList) return;
+
+      const roomName = roomNameInput.value.trim() || "Untitled room";
+      const games = getSelectedGames();
+      const expectedPlayers = getExpectedPlayers();
+      const joined = getJoinedParticipants();
+      const participantSlots = Array.from({ length: expectedPlayers }, (_, index) => joined[index] || null);
+      const allJoined = joined.length >= expectedPlayers;
+
+      previewList.innerHTML = "";
+
+      const roomBlock = document.createElement("li");
+      roomBlock.className = "preview-block";
+      roomBlock.innerHTML = '<h3>Room</h3><div class="preview-room-name">' + roomName + '</div>';
+      previewList.appendChild(roomBlock);
+
+      const gamesBlock = document.createElement("li");
+      gamesBlock.className = "preview-block";
+      gamesBlock.innerHTML = '<h3>Games</h3><div class="preview-games">' + games.map((game) => (
+        '<div class="preview-game-card"><strong>' + game.name + '</strong><span>' + game.rounds + (game.rounds === 1 ? " round" : " rounds") + '</span></div>'
+      )).join("") + '</div>';
+      previewList.appendChild(gamesBlock);
+
+      const playersBlock = document.createElement("li");
+      playersBlock.className = "preview-block";
+      playersBlock.id = "players-preview-block";
+      playersBlock.innerHTML = '<h3>Participants</h3><div class="participant-list">' + participantSlots.map((player) => {
+        if (!player) {
+          return '<div class="participant-card is-waiting"><span class="participant-avatar is-waiting" aria-hidden="true"></span><strong>waiting...</strong></div>';
+        }
+        return '<div class="participant-card"><img class="participant-avatar" src="' + player.avatar + '" alt="' + player.username + ' avatar" /><strong>' + player.username + '</strong></div>';
+      }).join("") + '</div><p class="lobby-note lobby-note-text">' + (allJoined ? "Everyone is in. Starting locks the room." : "The game starts when every expected player joins.") + '</p>';
+      previewList.appendChild(playersBlock);
+
+      finishButton.classList.toggle("is-disabled", !allJoined);
+      finishButton.setAttribute("aria-disabled", allJoined ? "false" : "true");
+      revealPreviewBlocks();
+
+      if (!allJoined) {
+        const joinTimer = window.setTimeout(() => {
+          const waitingCards = document.querySelectorAll(".participant-card.is-waiting");
+          const fakeUsers = [
+            { username: "gost1", avatar: "photos/guest/guest_profile.png" },
+            { username: "gost2", avatar: "photos/guest/guest_profile.png" },
+            { username: "gost3", avatar: "photos/guest/guest_profile.png" },
+            { username: "gost4", avatar: "photos/guest/guest_profile.png" },
+            { username: "gost5", avatar: "photos/guest/guest_profile.png" }
+          ];
+
+          waitingCards.forEach((card, index) => {
+            const user = fakeUsers[index % fakeUsers.length];
+            card.classList.remove("is-waiting");
+            card.innerHTML = '<img class="participant-avatar" src="' + user.avatar + '" alt="' + user.username + ' avatar" /><strong>' + user.username + '</strong>';
+          });
+          
+          document.querySelector(".lobby-note-text").textContent = "Everyone is in. Starting locks the room.";
+          finishButton.classList.remove("is-disabled");
+          finishButton.setAttribute("aria-disabled", "false");
+        }, 3000);
+        previewTimerIds.push(joinTimer);
+      }
+    }
+
+    function revealPreviewBlocks() {
+      previewTimerIds.forEach((id) => window.clearTimeout(id));
+      previewTimerIds = [];
+
+      const previewBlocks = Array.from(previewList.querySelectorAll(".preview-block"));
+      previewBlocks.forEach((block) => block.classList.remove("is-visible"));
+      previewBlocks.forEach((block, index) => {
+        const timerId = window.setTimeout(() => {
+          block.classList.add("is-visible");
+        }, index * 120);
+        previewTimerIds.push(timerId);
+      });
+    }
+
+    async function copyGuestLink() {
+      const value = guestLinkInput.value;
+
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(value);
+        } else {
+          guestLinkInput.removeAttribute("readonly");
+          guestLinkInput.select();
+          document.execCommand("copy");
+          guestLinkInput.setAttribute("readonly", "readonly");
+        }
+
+      } catch (error) {
+        guestLinkInput.focus();
+      }
+    }
+
+    roomNameInput.addEventListener("input", renderSummary);
+    toggles.forEach((toggle) => toggle.addEventListener("change", renderSummary));
+    roundInputs.forEach((input) => {
+      input.addEventListener("input", () => {
+        const value = Math.max(1, Math.min(10, Number(input.value) || 1));
+        input.value = String(value);
+        renderSummary();
+      });
+    });
+    expectedPlayersInput.addEventListener("change", () => {
+      if (currentStep === "preview") {
+        renderPreview();
+      }
+    });
+
+    nextButton.addEventListener("click", goToNextStep);
+    previousButton.addEventListener("click", goToPreviousStep);
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        showTab(tab.dataset.tab);
+      });
+    });
+
+    document.querySelectorAll(".friend-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (roomLocked) return;
+        button.textContent = "Sent";
+        button.classList.add("is-sent");
+        button.disabled = true;
+        if (currentStep === "preview") {
+          renderPreview();
+        }
+      });
+    });
+
+    copyButton.addEventListener("click", copyGuestLink);
+    finishButton.addEventListener("click", (event) => {
+      if (finishButton.getAttribute("aria-disabled") === "true") {
+        event.preventDefault();
+        return;
+      }
+
+      roomLocked = true;
+      document.querySelectorAll(".friend-button:not(.is-sent)").forEach((button) => {
+        button.disabled = true;
+      });
+    });
+    renderSummary();
+    showStep("setup");
+    showTab("friends");
 
     document.querySelectorAll('a[href]').forEach((link) => {
       const href = link.getAttribute("href") || "";
@@ -382,6 +1639,10 @@
 
       link.addEventListener("click", (event) => {
         if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        if (link.getAttribute("aria-disabled") === "true") {
+          event.preventDefault();
+          return;
+        }
 
         if (link.classList.contains("brand") && currentFile === "index.html") {
           event.preventDefault();
@@ -399,7 +1660,6 @@
         }, 180);
       });
     });
-
   </script>
 </body>
 </html>

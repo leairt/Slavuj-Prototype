@@ -224,7 +224,7 @@
     .creative-section {
       background: var(--dark);
       color: #ffffff;
-      padding: 28px 28px calc(28px + 1px) calc(50vw - min(560px, calc(100% - 20px)));
+      padding: 28px;
     }
 
     .creative-section .section-label {
@@ -242,20 +242,14 @@
       background: rgba(255, 255, 255, 0.06);
     }
 
-    .creative-section .game-number,
-    .creative-section .game-card p,
-    .creative-section .game-meta span {
+    .creative-section .game-card p {
       color: var(--dark-muted);
-    }
-
-    .creative-section .game-meta {
-      border-top-color: var(--dark-line);
     }
 
     .group-section {
       background: #4a4a4a;
       color: #ffffff;
-      padding: 28px calc(50vw - min(560px, calc(100% - 20px))) calc(28px + 1px) 56px;
+      padding: 28px;
     }
 
     .group-section .section-label {
@@ -280,7 +274,8 @@
       background: var(--bg);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
+      gap: 18px;
       transition: transform 0.2s ease, background 0.2s ease;
     }
 
@@ -290,33 +285,25 @@
       background: var(--soft);
     }
 
-    .game-number {
-      font-size: 0.78rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
     .game-illustration {
-      min-height: 82px;
-      padding: 12px;
-      border: 1px solid var(--dark-line);
+      min-height: 152px;
+      padding: 10px 0;
       display: grid;
-      grid-template-columns: 44px 1fr;
-      gap: 12px;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.05);
+      gap: 10px;
+      justify-items: center;
+      align-content: center;
+      text-align: center;
     }
 
     .game-illustration img {
-      width: 44px;
-      height: 44px;
+      width: 104px;
+      height: 104px;
       object-fit: contain;
     }
 
     .game-illustration span {
       color: var(--dark-muted);
-      font-size: 0.78rem;
+      font-size: 0.64rem;
       line-height: 1.2;
     }
 
@@ -328,18 +315,13 @@
     }
 
     .game-card p,
-    .game-meta span,
     .quiz-meta-line {
       color: var(--muted);
     }
 
-    .game-meta {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding-top: 14px;
-      border-top: 1px solid var(--line);
-      font-size: 0.88rem;
+    .game-card p {
+      font-size: 0.82rem;
+      line-height: 1.25;
     }
 
     .group-panel {
@@ -566,7 +548,7 @@
 
       .creative-section,
       .group-section {
-        padding: 28px calc(50vw - min(560px, calc(100% - 20px)));
+        padding: 24px;
       }
     }
 
@@ -687,8 +669,8 @@
 
       .creative-section,
       .group-section {
-        padding-left: max(12px, calc(50vw - min(560px, calc(100% - 24px)))) !important;
-        padding-right: max(12px, calc(50vw - min(560px, calc(100% - 24px)))) !important;
+        padding-left: 18px !important;
+        padding-right: 18px !important;
       }
 
       .game-card {
@@ -697,18 +679,37 @@
       }
 
       .game-illustration {
-        min-height: auto;
-        grid-template-columns: 38px minmax(0, 1fr);
+        min-height: 132px;
       }
 
       .game-illustration img {
-        width: 38px;
-        height: 38px;
+        width: 88px;
+        height: 88px;
       }
 
       .quiz-row {
         grid-template-columns: 96px minmax(0, 1fr) !important;
         gap: 12px;
+      }
+
+      .quiz-cover {
+        width: 96px;
+      }
+
+      .quiz-copy {
+        padding-top: 0;
+      }
+
+      .quiz-copy strong {
+        margin-top: 8px;
+        margin-bottom: 6px;
+        font-size: 1rem !important;
+        line-height: 1.08;
+      }
+
+      .quiz-meta-line {
+        margin-top: 8px;
+        font-size: 0.76rem;
       }
 
       .footer-brand {
@@ -743,7 +744,18 @@
 
       .quiz-row {
         grid-template-columns: 72px minmax(0, 1fr) !important;
+        gap: 10px;
         padding: 10px;
+      }
+
+      .quiz-cover {
+        width: 72px;
+      }
+
+      .quiz-badge {
+        min-height: 22px;
+        padding: 0 6px;
+        font-size: 0.62rem;
       }
 
       h1,
@@ -830,11 +842,12 @@
 
     @media (max-width: 380px) {
       .quiz-row {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: 64px minmax(0, 1fr) !important;
+        gap: 10px;
       }
 
       .quiz-cover {
-        width: 96px;
+        width: 64px;
       }
 
       .answer-slot {
@@ -907,50 +920,35 @@
             </div>
             <div class="creative-grid">
               <a class="game-card" href="guest-paint.html">
-                <span class="game-number">01</span>
                 <div class="game-illustration">
-                  <img src="photos/logo/logo.png" alt="славуј logo placeholder" />
-                  <span>Ovde dolazi druga ilustracija.</span>
+                  <img src="photos/logo/logo_sticker.png" alt="Slavuj illustration placeholder" />
+                  <span>Illustration placeholder. Final artwork will go here.</span>
                 </div>
                 <div>
                   <h2 class="game-title">Paint</h2>
-                  <p>Choose a rock mood. Build a set.</p>
-                </div>
-                <div class="game-meta">
-                  <span>Rock</span>
-                  <span>Play</span>
+                  <p>Choose a color. Match album covers.</p>
                 </div>
               </a>
 
               <a class="game-card" href="snake.html">
-                <span class="game-number">02</span>
                 <div class="game-illustration">
-                  <img src="photos/logo/logo.png" alt="славуј logo placeholder" />
-                  <span>Ovde dolazi druga ilustracija.</span>
+                  <img src="photos/logo/logo_sticker.png" alt="Slavuj illustration placeholder" />
+                  <span>Illustration placeholder. Final artwork will go here.</span>
                 </div>
                 <div>
                   <h2 class="game-title">Snake</h2>
-                  <p>Chain titles into one guitar-heavy line.</p>
-                </div>
-                <div class="game-meta">
-                  <span>Titles</span>
-                  <span>Play</span>
+                  <p>Match first words to last words.</p>
                 </div>
               </a>
 
-              <a class="game-card" href="guest-paint.html">
-                <span class="game-number">03</span>
+              <a class="game-card" href="guest-secret.html">
                 <div class="game-illustration">
-                  <img src="photos/logo/logo.png" alt="славуј logo placeholder" />
-                  <span>Ovde dolazi druga ilustracija.</span>
+                  <img src="photos/logo/logo_sticker.png" alt="Slavuj illustration placeholder" />
+                  <span>Illustration placeholder. Final artwork will go here.</span>
                 </div>
                 <div>
                   <h2 class="game-title">Secret Message</h2>
-                  <p>Hide a note inside a rock playlist.</p>
-                </div>
-                <div class="game-meta">
-                  <span>Message</span>
-                  <span>Play</span>
+                  <p>Spell a message with song initials.</p>
                 </div>
               </a>
             </div>

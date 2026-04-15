@@ -189,7 +189,9 @@
     .seed-form {
       display: grid;
       gap: 10px;
-      width: min(100%, 430px);
+      width: 100%;
+      justify-items: start;
+      margin-right: auto;
     }
 
     .seed-label {
@@ -197,10 +199,12 @@
       font-size: 0.76rem;
       letter-spacing: 0;
       text-transform: uppercase;
+      text-align: left;
     }
 
     .seed-search {
       position: relative;
+      width: 100%;
     }
 
     .seed-search::before {
@@ -259,21 +263,24 @@
     }
 
     .selected-song {
-      min-height: 66px;
+      width: 100%;
+      min-height: 78px;
       padding: 8px;
       border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
       display: grid;
-      grid-template-columns: 50px minmax(0, 1fr);
-      gap: 12px;
+      grid-template-columns: 62px minmax(0, 1fr);
+      gap: 10px;
       align-items: center;
+      justify-self: start;
     }
 
     .selected-cover {
-      width: 50px;
-      height: 50px;
+      width: 62px;
+      height: 62px;
       object-fit: cover;
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      border: 0;
     }
 
     .selected-copy {
@@ -293,7 +300,7 @@
 
     .selected-artist {
       color: rgba(255, 255, 255, 0.68);
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       line-height: 1.1;
       white-space: nowrap;
       overflow: hidden;
@@ -303,6 +310,7 @@
     .playlist-panel {
       display: grid;
       gap: 8px;
+      width: 100%;
     }
 
     .playlist-title {
@@ -319,6 +327,7 @@
     }
 
     .playlist-list li {
+      width: 100%;
       min-height: 54px;
       padding: 8px;
       border: 1px solid rgba(255, 255, 255, 0.18);
@@ -359,15 +368,208 @@
       white-space: nowrap;
     }
 
-    .game-stage {
+    .save-playlist-button {
+      min-height: 46px;
+      padding: 0 12px;
+      border: 1px solid #ffffff;
+      background: #ffffff;
+      color: #171717;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+      width: fit-content;
+      justify-self: center;
+      margin-top: 22px;
+      transform: translateY(8px) scale(0.96);
+      transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+    }
+
+    .save-playlist-button.is-visible {
+      display: inline-flex;
+      transform: translateY(0) scale(1);
+      animation: save-pulse 1.8s ease-out infinite;
+    }
+
+    .save-playlist-button:hover,
+    .save-playlist-button:focus-visible {
+      background: #171717;
+      color: #ffffff;
+      outline: 1px solid #ffffff;
+      outline-offset: -1px;
+    }
+
+    .save-icon {
+      width: 15px;
+      height: 15px;
+      flex: 0 0 auto;
+      object-fit: contain;
+      mix-blend-mode: multiply;
+    }
+
+    .save-playlist-button:hover .save-icon,
+    .save-playlist-button:focus-visible .save-icon {
+      filter: invert(1);
+      mix-blend-mode: screen;
+    }
+
+    @keyframes save-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.65); }
+      70% { box-shadow: 0 0 0 18px rgba(255, 255, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+    }
+
+    .save-dialog {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: none;
+      place-items: center;
+      align-items: center;
+      justify-content: center;
+      justify-items: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.62);
+      overflow: auto;
+    }
+
+    .save-dialog.is-open {
+      display: grid;
+    }
+
+    .save-dialog-card {
+      width: min(420px, 100%);
+      border: 1px solid #ffffff;
+      background: #171717;
+      color: #ffffff;
+      padding: 16px;
       display: grid;
       gap: 12px;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.36);
+      position: relative;
+      margin: auto;
+      max-height: calc(100dvh - 40px);
+      overflow: auto;
+    }
+
+    .save-dialog-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+      padding-right: 40px;
+    }
+
+    .save-dialog-head h2 {
+      font-size: 1.25rem;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .save-close {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      background: transparent;
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 1.2rem;
+      line-height: 1;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    .save-name {
+      display: grid;
+      gap: 6px;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+    }
+
+    .save-name input {
+      height: 46px;
+      min-width: 0;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
+      padding: 0 12px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .save-actions {
+      display: grid;
+      grid-template-columns: minmax(46px, 1fr) minmax(0, 2fr) minmax(46px, 1fr);
+      gap: 8px;
+    }
+
+    .save-action {
+      min-height: 46px;
+      border: 1px solid #ffffff;
+      background: #ffffff;
+      color: #171717;
+      cursor: pointer;
+      padding: 0 10px;
+      font-size: 0.78rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .save-action:hover,
+    .save-action:focus-visible {
+      transform: translateY(-1px);
+      outline: 1px solid #ffffff;
+      outline-offset: -1px;
+    }
+
+    .save-action-icon {
+      width: 18px;
+      height: 18px;
+      display: block;
+      flex: 0 0 auto;
+      object-fit: contain;
+    }
+
+    .save-action-icon-only {
+      padding: 0;
+    }
+
+    .spotify-save-action {
+      white-space: nowrap;
+    }
+
+    .spotify-save-icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    .save-status {
+      min-height: 18px;
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 0.78rem;
+      line-height: 1.25;
+    }
+
+    .game-stage {
+      display: grid;
+      gap: 14px;
       justify-items: center;
       min-width: 0;
     }
 
     .board-wrap {
-      width: min(560px, 100%);
+      width: min(440px, 100%);
       aspect-ratio: 1 / 1;
       border: 1px solid rgba(255, 255, 255, 0.28);
       background: #ffffff;
@@ -383,7 +585,7 @@
     }
 
     .current-word {
-      width: min(560px, 100%);
+      width: min(440px, 100%);
       min-height: 44px;
       padding: 10px 12px;
       border: 1px solid rgba(255, 255, 255, 0.24);
@@ -405,35 +607,66 @@
     }
 
     .result-message {
-      width: min(560px, 100%);
-      min-height: 0;
-      padding: 12px 14px;
-      border: 1px solid #ffffff;
-      border-radius: 8px;
-      background: #ffffff;
-      color: #111111;
-      font-size: 0.86rem;
-      line-height: 1.25;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: min(260px, calc(100% - 40px));
+      min-height: 120px;
+      padding: 18px;
+      border: 1px solid #000000;
+      background: #000000;
+      color: #ffffff;
       display: none;
+      place-items: center;
+      text-align: center;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+      transform: translate(-50%, -50%);
+      z-index: 2;
     }
 
     .result-message.is-visible {
+      display: grid;
+    }
+
+    .result-title {
       display: block;
+      color: #ffffff;
+      font-size: 2rem;
+      line-height: 0.95;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .result-copy {
+      display: block;
+      margin-top: 8px;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.86rem;
+      line-height: 1.25;
+    }
+
+    .result-copy strong {
+      color: #ffffff;
+      font-weight: 700;
     }
 
     .controls-row {
-      width: min(560px, 100%);
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
+      width: min(440px, 100%);
+      min-height: 58px;
+      padding: 8px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
       justify-items: center;
     }
 
     .control-button {
-      width: 42px;
-      height: 42px;
-      min-height: 42px;
+      width: 48px;
+      height: 48px;
+      min-height: 48px;
       padding: 0;
       border: 0;
       background: transparent;
@@ -503,7 +736,7 @@
       background-image: url("photos/snake/icon.png");
       background-position: center;
       background-repeat: no-repeat;
-      background-size: 24px 24px;
+      background-size: 28px 28px;
     }
 
     .pad {
@@ -728,7 +961,6 @@
       }
 
       .stats-row,
-      .controls-row,
       .quiz-list,
       .quiz-row {
         grid-template-columns: 1fr;
@@ -837,6 +1069,7 @@
       .top-modes,
       .creative-grid,
       .quiz-list,
+      .save-actions,
       .footer-grid,
       .footer-left,
       .stats-row {
@@ -861,6 +1094,16 @@
 
       .seed-form {
         grid-template-columns: 1fr;
+      }
+
+      .selected-song {
+        width: 100%;
+        grid-template-columns: 58px minmax(0, 1fr);
+      }
+
+      .selected-cover {
+        width: 58px;
+        height: 58px;
       }
 
       .title-row {
@@ -1092,23 +1335,27 @@
             <div class="playlist-panel">
               <span class="playlist-title">Playlist</span>
               <ul class="playlist-list" id="playlist-list" aria-live="polite"></ul>
+              <button class="save-playlist-button" id="save-playlist-button" type="button">
+                <img class="save-icon" src="photos/save.png" alt="" aria-hidden="true" />
+                Save playlist
+              </button>
             </div>
           </div>
 
           <div class="game-stage">
+            <div class="controls-row">
+              <button class="control-button" id="play-pause-button" type="button" aria-label="Start game">Play</button>
+              <button class="control-button is-dark" id="restart-button" type="button" aria-label="Restart game">Restart</button>
+            </div>
+
             <div class="board-wrap">
               <canvas id="snake-board" width="560" height="560" aria-label="Snake playlist board"></canvas>
+              <p class="result-message" id="result-message" aria-live="polite"></p>
             </div>
 
             <div class="current-word">
               <span>Current word</span>
               <strong id="target-label">Way</strong>
-            </div>
-            <p class="result-message" id="result-message" aria-live="polite"></p>
-
-            <div class="controls-row">
-              <button class="control-button" id="play-pause-button" type="button" aria-label="Start game">Play</button>
-              <button class="control-button is-dark" id="restart-button" type="button" aria-label="Restart game">Restart</button>
             </div>
 
             <div class="pad" aria-label="Touch controls">
@@ -1199,6 +1446,25 @@
     </div>
   </main>
 
+  <div class="save-dialog" id="save-dialog" role="dialog" aria-modal="true" aria-labelledby="save-dialog-title">
+    <div class="save-dialog-card">
+      <div class="save-dialog-head">
+        <h2 id="save-dialog-title">Save playlist</h2>
+        <button class="save-close" id="save-close" type="button" aria-label="Close">×</button>
+      </div>
+      <label class="save-name" for="playlist-name">
+        Playlist name
+        <input id="playlist-name" type="text" value="Playlist snake" />
+      </label>
+      <div class="save-actions">
+        <button class="save-action save-action-icon-only" id="copy-playlist-link" type="button" aria-label="Copy link"><img class="save-action-icon" src="photos/link.png" alt="" aria-hidden="true" /></button>
+        <button class="save-action spotify-save-action" id="save-to-spotify" type="button"><img class="save-action-icon spotify-save-icon" src="photos/spotify.png" alt="" aria-hidden="true" /><span>Save to Spotify</span></button>
+        <button class="save-action save-action-icon-only" id="share-playlist" type="button" aria-label="Share"><img class="save-action-icon" src="photos/share.png" alt="" aria-hidden="true" /></button>
+      </div>
+      <p class="save-status" id="save-status" aria-live="polite"></p>
+    </div>
+  </div>
+
   <footer class="footer">
     <div class="footer-grid">
       <div class="footer-left">
@@ -1263,6 +1529,14 @@
     const restartButton = document.querySelector("#restart-button");
     const seedForm = document.querySelector("#seed-form");
     const seedInput = document.querySelector("#seed-input");
+    const saveButton = document.querySelector("#save-playlist-button");
+    const saveDialog = document.querySelector("#save-dialog");
+    const closeSaveDialog = document.querySelector("#save-close");
+    const playlistName = document.querySelector("#playlist-name");
+    const copyPlaylistLink = document.querySelector("#copy-playlist-link");
+    const saveToSpotify = document.querySelector("#save-to-spotify");
+    const sharePlaylist = document.querySelector("#share-playlist");
+    const saveStatus = document.querySelector("#save-status");
     const selectedSeed = {
       title: "Go Your Own Way",
       artist: "Fleetwood Mac",
@@ -1402,15 +1676,23 @@
 
     const syncUi = (mode) => {
       targetLabel.textContent = titleCaseWord(neededWord);
-      const hasDeadEnd = mode === "DeadEnd";
-      resultMessage.classList.toggle("is-visible", hasDeadEnd);
-      resultMessage.textContent = hasDeadEnd ? `No song starts with ${titleCaseWord(neededWord)}.` : "";
+      const gameOverMessages = {
+        DeadEnd: `No song starts with <strong>${titleCaseWord(neededWord)}</strong>.`,
+        Edge: "You hit the edge.",
+        Over: "Run finished."
+      };
+      const gameOverCopy = gameOverMessages[mode] || "";
+      resultMessage.classList.toggle("is-visible", Boolean(gameOverCopy));
+      resultMessage.innerHTML = gameOverCopy
+        ? `<span><span class="result-title">Game over</span><span class="result-copy">${gameOverCopy}</span></span>`
+        : "";
 
       const isPlaying = running && !paused;
       playPauseButton.classList.toggle("is-playing", isPlaying);
       playPauseButton.disabled = finished;
       playPauseButton.textContent = isPlaying ? "Pause" : "Play";
       playPauseButton.setAttribute("aria-label", isPlaying ? "Pause game" : "Play game");
+      saveButton.classList.toggle("is-visible", finished);
     };
 
     const resizeCanvas = () => {
@@ -1494,9 +1776,6 @@
       `;
       playlistList.appendChild(item);
 
-      while (trimList && playlistList.children.length > 6) {
-        playlistList.removeChild(playlistList.firstElementChild);
-      }
     };
 
     const gameOver = (mode = "Over") => {
@@ -1520,9 +1799,14 @@
       const vector = directions[direction];
       const head = snake[0];
       const next = {
-        x: (head.x + vector.x + gridSize) % gridSize,
-        y: (head.y + vector.y + gridSize) % gridSize
+        x: head.x + vector.x,
+        y: head.y + vector.y
       };
+
+      if (next.x < 0 || next.x >= gridSize || next.y < 0 || next.y >= gridSize) {
+        gameOver("Edge");
+        return;
+      }
 
       snake.unshift(next);
 
@@ -1596,6 +1880,7 @@
 
     document.addEventListener("keydown", (event) => {
       if (event.target === seedInput) return;
+      if (saveDialog.classList.contains("is-open")) return;
 
       const keyMap = {
         ArrowUp: "up",
@@ -1649,6 +1934,55 @@
 
     playPauseButton.addEventListener("click", togglePlayPause);
     restartButton.addEventListener("click", resetGame);
+
+    const openSaveDialog = () => {
+      saveDialog.classList.add("is-open");
+      saveStatus.textContent = "";
+      window.setTimeout(() => playlistName.focus({ preventScroll: true }), 0);
+    };
+
+    const closeDialog = () => {
+      saveDialog.classList.remove("is-open");
+      saveButton.focus();
+    };
+
+    const playlistLink = () =>
+      `${window.location.origin}${window.location.pathname}#playlist=${encodeURIComponent(playlistName.value || "Playlist")}`;
+
+    saveButton.addEventListener("click", openSaveDialog);
+    closeSaveDialog.addEventListener("click", closeDialog);
+    saveDialog.addEventListener("click", (event) => {
+      if (event.target === saveDialog) closeDialog();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && saveDialog.classList.contains("is-open")) closeDialog();
+    });
+    copyPlaylistLink.addEventListener("click", async () => {
+      const link = playlistLink();
+      try {
+        await navigator.clipboard.writeText(link);
+        saveStatus.textContent = "Playlist link copied.";
+      } catch (error) {
+        saveStatus.textContent = link;
+      }
+    });
+    saveToSpotify.addEventListener("click", () => {
+      saveStatus.textContent = "Spotify save preview. Account connection comes next.";
+    });
+    sharePlaylist.addEventListener("click", async () => {
+      const shareData = { title: playlistName.value || "Playlist", url: playlistLink() };
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+          saveStatus.textContent = "Share sheet opened.";
+        } catch (error) {
+          saveStatus.textContent = "Share cancelled.";
+        }
+        return;
+      }
+      saveStatus.textContent = "Share preview ready.";
+    });
+
     window.addEventListener("resize", resizeCanvas);
 
     loadImages();
